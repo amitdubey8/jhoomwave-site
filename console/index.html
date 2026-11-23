@@ -241,46 +241,143 @@ body.compact .np-title{font-size:clamp(34px,6vw,64px)}
   .pitch input{height:130px}
 }
 @media (prefers-reduced-motion:reduce){.ai .bot.live{animation:none}}
+
+/* ===== booth layout: one screen, no page scrolling on laptops; tabs on phones ===== */
+body{display:flex;flex-direction:column;min-height:100dvh}
+.topbar{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:#07020e;padding-top:env(safe-area-inset-top,0px)}
+.topbar #viz{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none}
+.tb-in{position:relative;display:flex;align-items:center;gap:14px;padding:10px max(14px,env(safe-area-inset-right,0px)) 6px max(14px,env(safe-area-inset-left,0px))}
+.tb-in .back small{display:none}
+.np{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.np-row{display:flex;align-items:center;gap:10px;min-width:0}
+.np-row .bot{width:28px;height:28px;border-radius:8px;background:var(--wave);display:grid;place-items:center;font:800 11px var(--display);flex:none}
+.np-row .bot.live{animation:glow 1.2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 5px rgb(255 46 136/.25)}}
+.np-title{font:900 clamp(20px,2.6vw,30px)/1 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.np-head{font:700 10px var(--mono);letter-spacing:.14em;color:var(--mute);white-space:nowrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips span{padding:3px 9px;border-radius:999px;background:rgb(255 255 255/.08);border:1px solid rgb(255 255 255/.1);font:700 11px var(--mono)}
+#np-up{color:var(--ok)}
+.np-bar{height:4px;border-radius:9px;background:rgb(255 255 255/.12);overflow:hidden}
+.np-bar i{display:block;height:100%;width:0;background:var(--wave)}
+.ctl{display:flex;gap:8px}
+.cb{border:1px solid var(--line);background:rgb(20 10 34/.85);border-radius:14px;width:66px;height:58px;font-size:20px;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.cb b{font:800 11px var(--display)}
+.cb:active{transform:scale(.95)}
+.cb.hype{background:linear-gradient(135deg,#6b1243,#3a0f2a);border-color:#8d1f5a}
+.cb.chill{background:linear-gradient(135deg,#123a5e,#0d1f33);border-color:#1f5a8d}
+.mode{margin-left:0}
+.logline{position:relative;display:flex;align-items:center;gap:10px;padding:0 max(14px,env(safe-area-inset-right,0px)) 8px max(14px,env(safe-area-inset-left,0px));font-size:13px;color:var(--mute);min-width:0}
+.logline #ai-log{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.logline .meter{flex:none;width:90px;height:8px;border-radius:99px;background:var(--panel-2);overflow:hidden;border:1px solid var(--line)}
+.logline .meter i{display:block;height:100%;width:50%;background:var(--wave);transition:width .4s}
+.booth{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:10px max(14px,env(safe-area-inset-right,0px)) 12px max(14px,env(safe-area-inset-left,0px));max-width:1500px;width:100%;margin:0 auto}
+.booth .console{margin:0;flex:1;min-height:0;grid-template-columns:1fr minmax(260px,300px) 1fr}
+.deck,.mixer{padding:12px}
+.wave{height:46px;margin-top:8px}
+.dmid{margin-top:8px;gap:10px}
+.platter{max-width:min(170px,22vh)}
+.pitch input{height:min(130px,16vh)}
+.time{margin-top:6px}
+.dbtns{margin-top:8px}.dbtns button{padding:11px 6px}
+.faders{margin-top:8px}.fader input{height:min(100px,12vh)}.vu{height:min(100px,12vh)}
+.xf,.filter{margin-top:8px}
+.pads{margin-top:10px}.pads button{padding:12px 6px}
+.bpm{margin-top:6px}.bpm b{font-size:22px}
+.booth .mixer .bpm{display:none}
+.booth .mixer{overflow:auto}
+.dock{display:grid;grid-template-columns:1.1fr 1fr 1.2fr;gap:10px;height:clamp(190px,26vh,250px);flex:none}
+.dock .view{min-height:0;min-width:0;display:flex}
+.dock .view>section{flex:1;min-width:0;margin:0;overflow:auto}
+.prompt .now{font-size:clamp(18px,2vw,26px);min-height:0;margin:4px 0 8px}
+#sl{max-height:none}
+.entries .ph span{display:none}
+.namebox{grid-template-columns:1fr auto auto}
+.ent-btns{grid-template-columns:repeat(3,1fr)}
+.ent{padding:9px 8px}.ent b{font-size:13px}
+.note{margin:12px 0 0;text-align:left;font-size:12px}
+.tabs{display:none}
+@media (min-width:1101px) and (min-height:700px){body{height:100dvh;overflow:hidden}}
+@media (max-width:1100px){
+  .booth .console{grid-template-columns:1fr 1fr}
+  .booth .console .mixer{grid-column:1/-1;grid-row:2}
+  .mixer-in{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .dock{grid-template-columns:1fr 1fr;height:auto}
+  .dock .view[data-view="moments"]{grid-column:1/-1}
+  body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+  .booth .view{display:none}
+  body[data-tab="decks"] .view[data-view="decks"]{display:grid}
+  body[data-tab="show"] .view[data-view="show"],body[data-tab="moments"] .view[data-view="moments"]{display:flex}
+  .dock{display:flex;flex-direction:column;height:auto}
+  .dock .view>section{overflow:visible}
+  .tabs{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgb(11 4 20/.95);backdrop-filter:blur(10px);border-top:1px solid var(--line);
+    padding:6px max(10px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
+  .tabs button{border:0;background:none;color:var(--mute);font-size:20px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border-radius:12px}
+  .tabs b{font:700 11px var(--display)}
+  .tabs button[aria-pressed="true"]{color:var(--ink);background:rgb(255 255 255/.07)}
+}
+@media (max-width:760px){
+  .tb-in{flex-wrap:wrap;gap:8px 8px;padding-top:8px}
+  .tb-in .back{display:none}
+  .np{order:1;flex:1 1 0}
+  .mode{order:2;align-self:flex-start}.mode button{padding:7px 9px;font-size:12px}
+  .np-head,#np-tag,#np-key{display:none}.np-title{font-size:20px}
+  .ctl{order:3;width:100%;display:grid;grid-template-columns:repeat(4,1fr)}
+  .cb{width:auto;height:50px}
+  .booth{padding-top:8px}
+  #sl{max-height:none}
+  .booth .console{grid-template-columns:1fr 1fr;gap:8px}
+  .deck{padding:9px}
+  .dtitle select{font-size:14px}.dmeta{gap:6px;font-size:10px}
+  .wave{height:26px;margin-top:6px}
+  .dmid{grid-template-columns:1fr}
+  .platter{max-width:92px}
+  .pitch{flex-direction:row;justify-content:center}.pitch span,.pitch b{display:none}
+  .pitch input{writing-mode:horizontal-tb;direction:ltr;width:100%;height:20px}
+  .dbtns{grid-template-columns:1fr 1.3fr 1fr;gap:5px}.dbtns button{padding:10px 2px;font-size:10px;white-space:nowrap}
+  .dmeta{white-space:nowrap}.dmeta span:last-child{display:none}
+  .time{font-size:11px}
+  .mixer-in{display:block}
+  .faders,.mixer h2,.filter{display:none}
+  .mixer{padding:10px}
+  .knob{grid-template-columns:28px 1fr}
+  .eqcol{gap:2px}
+  .pads{grid-template-columns:repeat(4,1fr);gap:6px}.pads button{padding:12px 2px;font-size:11px}
+  .eqs{gap:8px}
+  .ent-btns{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
+<header class="topbar">
+  <canvas id="viz" aria-hidden="true"></canvas>
+  <div class="tb-in">
     <a class="back" href="/" aria-label="Back to JHOOMWAVE">
       <svg viewBox="0 0 260 240" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2FF7"/><stop offset=".55" stop-color="#FF2E88"/><stop offset="1" stop-color="#FF8A00"/></linearGradient></defs><path d="M68 52 V150 a27 27 0 0 1 -54 0" fill="none" stroke="url(#g)" stroke-width="30" stroke-linecap="round"/><rect x="100" y="45" width="22" height="150" rx="11" fill="url(#g)"/><rect x="132" y="70" width="22" height="100" rx="11" fill="url(#g)"/><rect x="164" y="52" width="22" height="136" rx="11" fill="url(#g)"/><rect x="196" y="83" width="22" height="74" rx="11" fill="url(#g)"/><rect x="228" y="65" width="22" height="110" rx="11" fill="url(#g)"/></svg>
       JHOOMWAVE <small>CONSOLE</small>
     </a>
-    <button class="protog" id="protog" type="button" aria-expanded="true">🎛 Console: ON</button>
-  </div>
-</header>
-
-<main class="wrap">
-  <section class="stage" aria-label="Now playing">
-    <canvas id="viz" aria-hidden="true"></canvas>
-    <div class="stage-in">
-      <div class="st-top"><span class="bot" id="bot">AI</span><b id="ai-head">AI DJ · READY</b></div>
-      <h1 class="np-title" id="np-title">Dhol Dhamaka</h1>
+    <div class="np">
+      <div class="np-row"><span class="bot" id="bot">AI</span><b class="np-title" id="np-title">Dhol Dhamaka</b><span class="np-head" id="ai-head">AI DJ · READY</span></div>
       <div class="chips"><span id="np-bpm">100 BPM</span><span id="np-key">6A</span><span id="np-tag">Desi dhol</span><span id="np-up">Next: —</span></div>
       <div class="np-bar"><i id="np-prog"></i></div>
-      <p class="np-log" id="ai-log">Press start. I'll read the vibe and run the night.</p>
     </div>
-  </section>
-  <div class="big">
-    <button type="button" class="bb chill" id="chill">😌<b>Chill</b></button>
-    <button type="button" class="bb hype" id="hype">🔥<b>Hype</b></button>
-    <button type="button" class="bb" id="nextnow">⏭<b>Next song</b></button>
-    <button type="button" class="bb" id="pp">⏯<b>Pause</b></button>
+    <div class="ctl">
+      <button type="button" class="cb chill" id="chill" title="Chill">😌<b>Chill</b></button>
+      <button type="button" class="cb hype" id="hype" title="Hype">🔥<b>Hype</b></button>
+      <button type="button" class="cb" id="nextnow" title="Next song">⏭<b>Next</b></button>
+      <button type="button" class="cb" id="pp" title="Play / pause">⏯<b>Pause</b></button>
+    </div>
+    <div class="mode" role="group" aria-label="Who is mixing">
+      <button type="button" id="m-ai" aria-pressed="true">🤖 AI</button>
+      <button type="button" id="m-you" aria-pressed="false">🎛 Me</button>
+    </div>
   </div>
-  <div class="vibewrap"><span>CROWD VIBE</span><div class="meter"><i id="vibe"></i></div></div>
-  <section class="pro" id="pro" aria-label="DJ console">
-    <div class="pro-head"><b>🎛 AI DJ CONSOLE</b><span class="watch" id="watch">Watch the AI work the decks: it loads, syncs, swaps the bass and moves the fader.</span>
-      <div class="mode" role="group" aria-label="Who is mixing">
-        <button type="button" id="m-ai" aria-pressed="true">🤖 AI mixes</button>
-        <button type="button" id="m-you" aria-pressed="false">🎛 I mix</button>
-      </div>
-    </div>
-  <div class="console">
+  <div class="logline"><span class="meter" title="Crowd vibe"><i id="vibe"></i></span><span id="ai-log">Press start. I'll read the vibe and run the night.</span></div>
+</header>
+
+<main class="booth" id="booth">
+  <div class="console view" data-view="decks">
     <section class="deck a" id="deck-a" aria-label="Deck A">
       <div class="dtop"><span class="dl">A</span><div class="dtitle"><select id="sel-a" aria-label="Track on deck A"></select><div class="dmeta"><span id="bpm-a">— BPM</span><span class="key" id="key-a">—</span><span id="pct-a">±0.0%</span></div></div></div>
       <canvas class="wave" id="wave-a" aria-label="Deck A waveform, tap to jump"></canvas>
@@ -291,7 +388,6 @@ body.compact .np-title{font-size:clamp(34px,6vw,64px)}
       <div class="time"><span id="t-a">0:00</span><span id="r-a">-0:00</span></div>
       <div class="dbtns"><button type="button" id="cue-a">CUE</button><button type="button" class="play" id="play-a" aria-pressed="false">▶ PLAY</button><button type="button" class="sync" id="sync-a" aria-pressed="false">SYNC</button></div>
     </section>
-
     <section class="mixer" aria-label="Mixer">
       <h2>MIXER</h2>
       <div class="mixer-in">
@@ -327,7 +423,6 @@ body.compact .np-title{font-size:clamp(34px,6vw,64px)}
         </div>
       </div>
     </section>
-
     <section class="deck b" id="deck-b" aria-label="Deck B">
       <div class="dtop"><span class="dl">B</span><div class="dtitle"><select id="sel-b" aria-label="Track on deck B"></select><div class="dmeta"><span id="bpm-b">— BPM</span><span class="key" id="key-b">—</span><span id="pct-b">±0.0%</span></div></div></div>
       <canvas class="wave" id="wave-b" aria-label="Deck B waveform, tap to jump"></canvas>
@@ -339,21 +434,17 @@ body.compact .np-title{font-size:clamp(34px,6vw,64px)}
       <div class="dbtns"><button type="button" id="cue-b">CUE</button><button type="button" class="play" id="play-b" aria-pressed="false">▶ PLAY</button><button type="button" class="sync" id="sync-b" aria-pressed="false">SYNC</button></div>
     </section>
   </div>
-
-  </section>
-  <div class="show">
-    <section class="prompt" aria-label="DJ teleprompter">
+  <div class="dock">
+    <div class="view" data-view="show"><section class="prompt" aria-label="DJ teleprompter">
       <div class="ph"><b>TELEPROMPTER</b><span id="pr-where">Before the night</span></div>
       <p class="now" id="mc" aria-live="polite">Lights low, phones up. JHOOMWAVE is in the booth.</p>
       <div class="nextline"><span class="in" id="pr-in">NEXT</span><span id="pr-next">Press start and the script follows the set.</span></div>
-    </section>
-    <section class="setlist" aria-label="AI set list">
+    </section></div>
+    <div class="view" data-view="show"><section class="setlist" aria-label="AI set list">
       <div class="ph"><b>AI SET LIST</b><span id="sl-info">9 tracks · planned live</span></div>
       <ol id="sl"></ol>
-    </section>
-  </div>
-
-  <section class="entries" aria-label="Entry moments">
+    </section></div>
+    <div class="view" data-view="moments"><section class="entries" aria-label="Entry moments">
     <div class="ph"><b>🎬 MOMENTS</b><span>Save a name, then tap a moment. The AI announces it out loud.</span></div>
     <div class="namebox">
       <input id="ent-name" type="text" maxlength="40" placeholder="Type a name, e.g. Rahul &amp; Priya" aria-label="Name to announce">
@@ -364,11 +455,15 @@ body.compact .np-title{font-size:clamp(34px,6vw,64px)}
     <div class="ent-btns" id="ent-btns"></div>
     <div class="ph bd-h"><b>🎂 BIRTHDAY</b><span>Beat + lyrics on screen + the AI calls out the name</span></div>
     <div class="ent-btns" id="bd-btns"></div>
-  </section>
-
-
-  <p class="note">The console plays original JHOOMWAVE tracks. Mixing happens live in your browser. <a href="/">Back to jhoomwave.com</a> · <a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a></p>
+    <p class="note">The console plays original JHOOMWAVE tracks. Mixing happens live in your browser. <a href="/">Back to jhoomwave.com</a> · <a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a></p>
+  </section></div>
+  </div>
 </main>
+<nav class="tabs" aria-label="Views">
+  <button type="button" data-tab="decks" aria-pressed="true">🎛<b>Decks</b></button>
+  <button type="button" data-tab="show" aria-pressed="false">🎤<b>Show</b></button>
+  <button type="button" data-tab="moments" aria-pressed="false">🎬<b>Moments</b></button>
+</nav>
 
 <div class="start" id="start">
   <div class="card">
@@ -670,9 +765,10 @@ setInterval(()=>{const e=entryOn; if(!e) return; const t=entEl.currentTime;
 },50);
 
 // ---------- party view: stage, big buttons, saved name + voice ----------
-function showPro(on){const pr=$('pro'); pr.hidden=!on; $('protog').setAttribute('aria-expanded',on); $('protog').textContent=on?'🎛 Console: ON':'🎛 Console: OFF'; document.body.classList.toggle('compact',on); if(on){drawWave('a');drawWave('b')} try{localStorage.setItem('jw_console',on?'1':'0')}catch(e){}}
-let proPref=true; try{proPref=localStorage.getItem('jw_console')!=='0'}catch(e){} showPro(proPref);
-$('protog').addEventListener('click',()=>showPro($('pro').hidden));
+// phone tabs: one screen per view instead of one long page
+function setTab(v){document.body.dataset.tab=v; document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tab===v)); if(v==='decks'){drawWave('a');drawWave('b')} try{localStorage.setItem('jw_tab',v)}catch(e){} }
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+let tab0='decks'; try{tab0=localStorage.getItem('jw_tab')||'decks'}catch(e){} setTab(tab0);
 $('nextnow').addEventListener('click',()=>{ if(!ac){$('go').click();return} if(blending||entryOn) return; if(!aiOn) setMode(true); log('AI DJ · NEXT','Skipping ahead: blending into the next song now.'); blend(); track('console_next')});
 $('pp').addEventListener('click',()=>{ if(!ac){$('go').click();return} const d=decks[live()]; setPlay(live(),d.el.paused); });
 let NAME=''; try{NAME=localStorage.getItem('jw_name')||''}catch(e){}
