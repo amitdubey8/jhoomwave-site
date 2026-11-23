@@ -80,7 +80,7 @@ nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-
 nav .wrap{display:flex;align-items:center;gap:24px;padding-block:14px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:900 20px/1 var(--display);letter-spacing:.02em}
 .brand svg{width:34px;height:34px}
-.links{display:flex;gap:22px;margin-left:auto;font-size:15px}
+.links{display:flex;gap:20px;margin-left:auto;font-size:15px;white-space:nowrap}
 .links a{text-decoration:none;color:var(--mute)}
 .links a:hover{color:var(--ink)}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;font:600 15px/1 var(--display);text-decoration:none;border:1px solid var(--line);white-space:nowrap;transition:transform .15s}
@@ -88,7 +88,8 @@ nav .wrap{display:flex;align-items:center;gap:24px;padding-block:14px}
 .drop{background:transparent;color:var(--ink);cursor:pointer}
 .drop[aria-pressed="true"]{border-color:var(--pink);box-shadow:0 0 0 4px color-mix(in srgb,var(--pink) 25%,transparent)}
 .btn.hot{background:var(--wave);border:0;color:#fff}
-@media (max-width:760px){.links{display:none}nav .btn{margin-left:auto;padding:10px 16px}}
+@media (max-width:1000px){.links{display:none}}
+@media (max-width:1000px){nav .btn{margin-left:auto;padding:10px 16px}}
 
 /* hero */
 .hero{position:relative;overflow:hidden;padding-block:clamp(64px,11vw,140px) clamp(56px,8vw,110px)}
@@ -135,8 +136,8 @@ section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
 .pk{font:500 10px var(--mono)!important;letter-spacing:.14em;color:var(--pink)!important}.pk.soon{color:var(--gold)!important}
 @media (max-width:900px){.plat{grid-template-columns:1fr 1fr}}@media (max-width:560px){.plat{grid-template-columns:1fr}}
 /* hear */
-.hear{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
-.hc{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--night-2);color:var(--ink);cursor:pointer;min-width:0}
+.hear{display:flex;flex-wrap:wrap;gap:12px}
+.hc{flex:1 1 300px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--night-2);color:var(--ink);cursor:pointer;min-width:0}
 .hc:hover{border-color:color-mix(in srgb,var(--pink) 60%,var(--line))}
 .hp{width:46px;height:46px;border-radius:50%;background:var(--wave);display:grid;place-items:center;font-size:16px;color:#fff;flex:none}
 .hc.on{border-color:var(--pink);box-shadow:0 0 0 3px color-mix(in srgb,var(--pink) 25%,transparent)}
@@ -293,7 +294,7 @@ footer a{color:var(--ink)}
       </svg>
       JHOOMWAVE
     </a>
-    <div class="links"><a href="#platform">Platform</a><a href="/console/">DJ Console</a><a href="/studio/">Studio</a><a href="#hear">Hear it</a><a href="#everywhere">Events</a><a href="#what">What we do</a><a href="#how">How it works</a><a href="#next">Vision</a><a href="#book">Book</a></div>
+    <div class="links"><a href="#platform">Platform</a><a href="/console/">DJ Console</a><a href="/studio/">Studio</a><a href="#hear">Hear it</a><a href="#everywhere">Events</a><a href="#book">Book</a></div>
     <a class="btn hot" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a>
   </div>
 </nav>
@@ -347,7 +348,6 @@ footer a{color:var(--ink)}
       <button class="hc" type="button" data-src="audio/showcase/corporate_awards_announcer_english.mp3"><span class="hp">▶</span><span class="ht"><b>Awards Night opener</b><small>Movie-trailer voice for corporate stages</small></span><span class="tag2">AI HOST</span></button>
       <button class="hc" type="button" data-src="audio/showcase/jhoomu_elephant_hindi.mp3"><span class="hp">▶</span><span class="ht"><b>Jhoomu 🐘 says happy birthday</b><small>Our own kids character · Hindi</small></span><span class="tag2">CHARACTER</span></button>
       <button class="hc" type="button" data-src="audio/showcase/tappu_frog_english.mp3"><span class="hp">▶</span><span class="ht"><b>Tappu 🐸 the frog DJ</b><small>A 1st-birthday message · English</small></span><span class="tag2">CHARACTER</span></button>
-      <button class="hc" type="button" data-src="audio/showcase/jhoomwave_dj_voice_male_arjun.mp3"><span class="hp">▶</span><span class="ht"><b>The couple entry</b><small>Our AI host counts the room down</small></span><span class="tag2">AI HOST</span></button>
     </div>
     <p class="fine">AI vocals and voices made with licensed AI tools on original lyrics we wrote. We label AI audio wherever platforms ask.</p>
   </div>
@@ -389,20 +389,6 @@ footer a{color:var(--ink)}
   </div>
 </section>
 
-<section id="booth">
-  <div class="wrap">
-    <a class="booth" href="/console/">
-      <img src="img/og-console.jpg" alt="JHOOMWAVE Console: two decks and a mixer" width="1200" height="630" loading="lazy">
-      <div class="booth-txt">
-        <span class="eyebrow">New · JHOOMWAVE Console</span>
-        <h2>take the booth.</h2>
-        <p>Two decks, sync, EQ, FX pads and an AI DJ that picks, beatmatches and blends on its own. Hit 🔥 Hype and feel the night change.</p>
-        <span class="btn hot">🎛 Play the AI DJ</span>
-      </div>
-    </a>
-  </div>
-</section>
-
 <section id="everywhere">
   <div class="wrap">
     <div class="head">
@@ -418,21 +404,6 @@ footer a{color:var(--ink)}
       <figure class="evc"><img src="img/events/cafe.jpg" alt="Cafe sign with warm lights" loading="lazy"><figcaption><b>Cafés</b><span>The right energy for every hour of the day</span></figcaption></figure>
       <figure class="evc"><img src="img/events/hotel.jpg" alt="Hotel pool at dusk" loading="lazy"><figcaption><b>Hotels &amp; resorts</b><span>Poolside, banquet and destination events</span></figcaption></figure>
       <figure class="evc wide"><img src="img/events/confetti.jpg" alt="Confetti over a concert crowd" loading="lazy"><figcaption><b>Festivals &amp; fests</b><span>Holi, Lohri, Navratri, Diwali, college fests</span></figcaption></figure>
-    </div>
-  </div>
-</section>
-
-<section id="what">
-  <div class="wrap">
-    <div class="head">
-      <h2>Music that brings people to life.</h2>
-      <p>One sound, four ways to feel it.</p>
-    </div>
-    <div class="pillars">
-      <div class="pillar"><span class="tag">Sessions</span><h3>Global party sound</h3><p>House, EDM, trance and desi fusion mixes, cut for the moment the room lifts.</p><span class="for">Instagram · YouTube</span></div>
-      <div class="pillar"><span class="tag">Live</span><h3>Private events</h3><p>An AI DJ and MC that plans the night around your crowd: weddings, villa parties, rooftops, birthdays.</p><span class="for">Hosts · planners · families</span></div>
-      <div class="pillar"><span class="tag">Studio</span><h3>Songs & anthems</h3><p>Birthday songs sung for one person, launch music, walk-on tracks and a sound your team recognises in two seconds.</p><span class="for">Birthdays · companies · launches · award nights</span></div>
-      <div class="pillar"><span class="tag">Playlists</span><h3>Venue sound <span class="soon">SOON</span></h3><p>The right energy for every hour of the day, from morning café to late-night lounge.</p><span class="for">Cafés · hotels · gyms · offices</span></div>
     </div>
   </div>
 </section>
