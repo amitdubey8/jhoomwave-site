@@ -277,26 +277,53 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-bet
 footer a{color:var(--ink)}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}.hero canvas{opacity:.35}}
+
+/* ===== shared nav ===== */
+.jn{position:sticky;top:0;z-index:30;background:rgb(14 5 24/.72);backdrop-filter:saturate(1.4) blur(16px);-webkit-backdrop-filter:saturate(1.4) blur(16px);border-bottom:1px solid rgb(255 255 255/.07);padding-top:env(safe-area-inset-top,0px);font-family:"Inter",system-ui,sans-serif}
+.jn-in{max-width:1180px;margin:0 auto;height:64px;display:flex;align-items:center;gap:28px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.jn-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#F6F1FF;font:900 18px/1 "Poppins",system-ui,sans-serif;letter-spacing:.02em;flex:none}
+.jn-brand svg{width:30px;height:30px}.jn-brand em{font:500 11px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.16em;color:#B3A6CC;padding:4px 8px;border:1px solid rgb(255 255 255/.12);border-radius:6px}
+.jn-links{display:flex;align-items:center;gap:4px}
+.jn-l{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:8px;color:#C9BFE0;text-decoration:none;font:500 14.5px "Inter",system-ui,sans-serif;background:none;border:0;cursor:pointer;white-space:nowrap}
+.jn-l:hover,.jn-dd:focus-within .jn-ddb{color:#fff;background:rgb(255 255 255/.06)}
+.jn-l svg{width:12px;height:12px;transition:transform .2s}
+.jn-dd{position:relative}
+.jn-menu{position:absolute;top:calc(100% + 10px);left:-8px;width:340px;padding:8px;border-radius:16px;background:#160A27;border:1px solid rgb(255 255 255/.09);box-shadow:0 24px 60px rgb(0 0 0/.55);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s,transform .16s,visibility .16s}
+.jn-dd:hover .jn-menu,.jn-dd.open .jn-menu{opacity:1;visibility:visible;transform:none}
+.jn-dd:hover .jn-ddb svg,.jn-dd.open .jn-ddb svg{transform:rotate(180deg)}
+.jn-di{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:10px;text-decoration:none;color:#F6F1FF}
+.jn-di:hover{background:rgb(255 255 255/.06)}.jn-ic{font-size:20px;line-height:1.2}
+.jn-di b{display:block;font:600 14.5px "Inter",system-ui,sans-serif}.jn-di small{display:block;color:#9F92BA;font-size:13px;margin-top:2px}
+.jn-cta{margin-left:auto;display:flex;align-items:center;gap:10px}
+.jn-ghost,.jn-pri{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:10px;font:600 14px "Inter",system-ui,sans-serif;text-decoration:none;white-space:nowrap}
+.jn-ghost{color:#F6F1FF;border:1px solid rgb(255 255 255/.14)}.jn-ghost:hover{background:rgb(255 255 255/.06)}
+.jn-pri{color:#fff;background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00);box-shadow:0 6px 20px rgb(255 46 136/.28)}.jn-pri:hover{filter:brightness(1.08)}
+.jn-burger{display:none;margin-left:auto;width:40px;height:40px;border-radius:10px;border:1px solid rgb(255 255 255/.14);background:none;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+.jn-burger i{display:block;width:16px;height:2px;border-radius:2px;background:#F6F1FF;transition:transform .2s}
+.jn.open .jn-burger i:first-child{transform:translateY(3.5px) rotate(45deg)}.jn.open .jn-burger i:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+.jn-sheet{padding:8px max(20px,env(safe-area-inset-right,0px)) 20px max(20px,env(safe-area-inset-left,0px));border-top:1px solid rgb(255 255 255/.07)}
+.jn-sheet a:not(.jn-ghost):not(.jn-pri){display:flex;gap:12px;align-items:center;padding:13px 4px;border-bottom:1px solid rgb(255 255 255/.06);color:#F6F1FF;text-decoration:none;font:600 16px "Inter",system-ui,sans-serif}
+.jn-sheet a span{width:24px;text-align:center}
+.jn-sc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.jn-sc a{justify-content:center;height:44px}
+.jn :focus-visible{outline:2px solid #FF2E88;outline-offset:2px}
+@media (max-width:980px){.jn-links,.jn-cta{display:none}.jn-burger{display:flex}}
+@media (prefers-reduced-motion:reduce){.jn-menu,.jn-l svg,.jn-burger i{transition:none}}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="#top" aria-label="JHOOMWAVE home">
-      <svg viewBox="0 0 250 240" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2FF7"/><stop offset=".55" stop-color="#FF2E88"/><stop offset="1" stop-color="#FF8A00"/></linearGradient></defs>
-        <path d="M68 52 V150 a27 27 0 0 1 -54 0" fill="none" stroke="url(#g)" stroke-width="30" stroke-linecap="round"/>
-        <rect x="100" y="45" width="22" height="150" rx="11" fill="url(#g)" transform="rotate(-6 111 120)"/>
-        <rect x="132" y="70" width="22" height="100" rx="11" fill="url(#g)" transform="rotate(-3 143 120)"/>
-        <rect x="164" y="52" width="22" height="136" rx="11" fill="url(#g)"/>
-        <rect x="196" y="83" width="22" height="74" rx="11" fill="url(#g)" transform="rotate(3 207 120)"/>
-        <rect x="228" y="65" width="22" height="110" rx="11" fill="url(#g)" transform="rotate(6 239 120)"/>
-      </svg>
-      JHOOMWAVE
-    </a>
-    <div class="links"><a href="#platform">Platform</a><a href="/console/">DJ Console</a><a href="/studio/">Studio</a><a href="#hear">Hear it</a><a href="#everywhere">Events</a><a href="#book">Book</a></div>
-    <a class="btn hot" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a>
+<nav class="jn" aria-label="Main">
+  <div class="jn-in">
+    <a class="jn-brand" href="/" aria-label="JHOOMWAVE home"><svg viewBox="0 0 260 240" aria-hidden="true"><defs><linearGradient id="jng" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2FF7"/><stop offset=".55" stop-color="#FF2E88"/><stop offset="1" stop-color="#FF8A00"/></linearGradient></defs><path d="M68 52 V150 a27 27 0 0 1 -54 0" fill="none" stroke="url(#jng)" stroke-width="30" stroke-linecap="round"/><rect x="100" y="45" width="22" height="150" rx="11" fill="url(#jng)"/><rect x="132" y="70" width="22" height="100" rx="11" fill="url(#jng)"/><rect x="164" y="52" width="22" height="136" rx="11" fill="url(#jng)"/><rect x="196" y="83" width="22" height="74" rx="11" fill="url(#jng)"/><rect x="228" y="65" width="22" height="110" rx="11" fill="url(#jng)"/></svg><span>JHOOMWAVE</span></a>
+    <div class="jn-links">
+      <div class="jn-dd"><button class="jn-l jn-ddb" type="button" aria-expanded="false" aria-haspopup="true">Product <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        <div class="jn-menu" role="menu"><a class="jn-di" href="/console/" role="menuitem"><span class="jn-ic">🎛</span><span><b>AI DJ Console</b><small>Two decks the AI mixes and hosts live</small></span></a><a class="jn-di" href="/studio/" role="menuitem"><span class="jn-ic">🎂</span><span><b>Studio</b><small>Songs, voices and moments for your people</small></span></a><a class="jn-di" href="/studio/#kids" role="menuitem"><span class="jn-ic">🐘</span><span><b>JHOOMWAVE Kids</b><small>Characters that wish kids by name</small></span></a><a class="jn-di" href="/studio/#corporate" role="menuitem"><span class="jn-ic">🏢</span><span><b>Brands & corporate</b><small>Anthems, award nights, brand voice</small></span></a></div></div>
+      <a class="jn-l" href="/#hear">Hear it</a><a class="jn-l" href="/#everywhere">Use cases</a><a class="jn-l" href="/#next">Vision</a>
+    </div>
+    <div class="jn-cta"><a class="jn-ghost" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">Book a demo</a><a class="jn-pri" href="/console/">Try the AI DJ</a></div>
+    <button class="jn-burger" type="button" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
   </div>
+  <div class="jn-sheet" hidden><a href="/console/"><span>🎛</span>AI DJ Console</a><a href="/studio/"><span>🎂</span>Studio</a><a href="/studio/#kids"><span>🐘</span>JHOOMWAVE Kids</a><a href="/studio/#corporate"><span>🏢</span>Brands & corporate</a><a href="/#hear"><span>·</span>Hear it</a><a href="/#everywhere"><span>·</span>Use cases</a><a href="/#next"><span>·</span>Vision</a><div class="jn-sc"><a class="jn-ghost" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">Book a demo</a><a class="jn-pri" href="/console/">Try the AI DJ</a></div></div>
 </nav>
 
 <header class="hero" id="top">
@@ -683,6 +710,15 @@ document.addEventListener('click',e=>{const l=e.target.closest('a[href*="instagr
  b.addEventListener('click',()=>{ if(!a.paused){a.pause();return} const m=document.getElementById('audio'); if(m&&!m.paused) m.pause();
    a.src='audio/showcase/intro_'+g+'.mp3'; g=g==='f'?'m':'f'; a.play().catch(()=>{}); track('intro_play') });
  a.addEventListener('play',()=>b.textContent='❚❚ Listening…'); a.addEventListener('pause',()=>b.textContent='▶ Hear who we are'); a.addEventListener('ended',()=>b.textContent='▶ Hear it again');
+})();
+</script>
+<script>
+(function(){const n=document.querySelector('.jn'); if(!n) return; const dd=n.querySelector('.jn-dd'), b=n.querySelector('.jn-ddb'), bg=n.querySelector('.jn-burger'), sh=n.querySelector('.jn-sheet');
+ b.addEventListener('click',e=>{e.stopPropagation(); const o=!dd.classList.contains('open'); dd.classList.toggle('open',o); b.setAttribute('aria-expanded',o)});
+ document.addEventListener('click',e=>{if(!dd.contains(e.target)){dd.classList.remove('open'); b.setAttribute('aria-expanded',false)}});
+ addEventListener('keydown',e=>{if(e.key==='Escape'){dd.classList.remove('open'); b.setAttribute('aria-expanded',false); n.classList.remove('open'); sh.hidden=true; bg.setAttribute('aria-expanded',false)}});
+ bg.addEventListener('click',()=>{const o=sh.hidden; sh.hidden=!o; n.classList.toggle('open',o); bg.setAttribute('aria-expanded',o)});
+ sh.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{sh.hidden=true; n.classList.remove('open'); bg.setAttribute('aria-expanded',false)}));
 })();
 </script>
 </body>
