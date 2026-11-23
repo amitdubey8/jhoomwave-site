@@ -78,7 +78,13 @@ header .wrap{display:flex;align-items:center;gap:12px}
 #name-save{background:var(--wave);border-color:transparent}
 .namechip{margin:8px 0 12px;font-size:13px;color:var(--mute)}
 .namechip b{color:var(--ok)}
-.pro{margin-top:14px}
+.pro{margin-top:12px}
+.pro-head{flex-wrap:wrap}
+.watch{flex:1 1 260px;font:500 12px var(--body);letter-spacing:0;color:var(--mute);text-align:right}
+body.compact .stage,body.compact .stage-in{min-height:220px}
+body.compact .np-title{font-size:clamp(34px,6vw,64px)}
+.deck.ai-move{transition:box-shadow .3s}
+@media (max-width:640px){.watch{text-align:left}}
 .pro-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font:700 12px var(--mono);letter-spacing:.14em;color:var(--mute)}
 @media (max-width:640px){.big{grid-template-columns:1fr 1fr}.namebox{grid-template-columns:1fr 1fr}.namebox input{grid-column:1/-1;padding:12px}.namebox button{padding:12px}}
 /* AI bar */
@@ -245,7 +251,7 @@ header .wrap{display:flex;align-items:center;gap:12px}
       <svg viewBox="0 0 260 240" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2FF7"/><stop offset=".55" stop-color="#FF2E88"/><stop offset="1" stop-color="#FF8A00"/></linearGradient></defs><path d="M68 52 V150 a27 27 0 0 1 -54 0" fill="none" stroke="url(#g)" stroke-width="30" stroke-linecap="round"/><rect x="100" y="45" width="22" height="150" rx="11" fill="url(#g)"/><rect x="132" y="70" width="22" height="100" rx="11" fill="url(#g)"/><rect x="164" y="52" width="22" height="136" rx="11" fill="url(#g)"/><rect x="196" y="83" width="22" height="74" rx="11" fill="url(#g)"/><rect x="228" y="65" width="22" height="110" rx="11" fill="url(#g)"/></svg>
       JHOOMWAVE <small>CONSOLE</small>
     </a>
-    <button class="protog" id="protog" type="button" aria-expanded="false">🎛 Pro decks</button>
+    <button class="protog" id="protog" type="button" aria-expanded="true">🎛 Console: ON</button>
   </div>
 </header>
 
@@ -267,33 +273,8 @@ header .wrap{display:flex;align-items:center;gap:12px}
     <button type="button" class="bb" id="pp">⏯<b>Pause</b></button>
   </div>
   <div class="vibewrap"><span>CROWD VIBE</span><div class="meter"><i id="vibe"></i></div></div>
-  <div class="show">
-    <section class="prompt" aria-label="DJ teleprompter">
-      <div class="ph"><b>TELEPROMPTER</b><span id="pr-where">Before the night</span></div>
-      <p class="now" id="mc" aria-live="polite">Lights low, phones up. JHOOMWAVE is in the booth.</p>
-      <div class="nextline"><span class="in" id="pr-in">NEXT</span><span id="pr-next">Press start and the script follows the set.</span></div>
-    </section>
-    <section class="setlist" aria-label="AI set list">
-      <div class="ph"><b>AI SET LIST</b><span id="sl-info">9 tracks · planned live</span></div>
-      <ol id="sl"></ol>
-    </section>
-  </div>
-
-  <section class="entries" aria-label="Entry moments">
-    <div class="ph"><b>🎬 MOMENTS</b><span>Save a name, then tap a moment. The AI announces it out loud.</span></div>
-    <div class="namebox">
-      <input id="ent-name" type="text" maxlength="40" placeholder="Type a name, e.g. Rahul &amp; Priya" aria-label="Name to announce">
-      <button type="button" id="name-save">Save</button>
-      <button type="button" id="name-test">🔊 Hear it</button>
-    </div>
-    <p class="namechip" id="namechip">No name saved yet. The AI will say "the couple" or "birthday star".</p>
-    <div class="ent-btns" id="ent-btns"></div>
-    <div class="ph bd-h"><b>🎂 BIRTHDAY</b><span>Beat + lyrics on screen + the AI calls out the name</span></div>
-    <div class="ent-btns" id="bd-btns"></div>
-  </section>
-
-  <section class="pro" id="pro" hidden>
-    <div class="pro-head"><b>PRO DECKS</b>
+  <section class="pro" id="pro" aria-label="DJ console">
+    <div class="pro-head"><b>🎛 AI DJ CONSOLE</b><span class="watch" id="watch">Watch the AI work the decks: it loads, syncs, swaps the bass and moves the fader.</span>
       <div class="mode" role="group" aria-label="Who is mixing">
         <button type="button" id="m-ai" aria-pressed="true">🤖 AI mixes</button>
         <button type="button" id="m-you" aria-pressed="false">🎛 I mix</button>
@@ -360,6 +341,31 @@ header .wrap{display:flex;align-items:center;gap:12px}
   </div>
 
   </section>
+  <div class="show">
+    <section class="prompt" aria-label="DJ teleprompter">
+      <div class="ph"><b>TELEPROMPTER</b><span id="pr-where">Before the night</span></div>
+      <p class="now" id="mc" aria-live="polite">Lights low, phones up. JHOOMWAVE is in the booth.</p>
+      <div class="nextline"><span class="in" id="pr-in">NEXT</span><span id="pr-next">Press start and the script follows the set.</span></div>
+    </section>
+    <section class="setlist" aria-label="AI set list">
+      <div class="ph"><b>AI SET LIST</b><span id="sl-info">9 tracks · planned live</span></div>
+      <ol id="sl"></ol>
+    </section>
+  </div>
+
+  <section class="entries" aria-label="Entry moments">
+    <div class="ph"><b>🎬 MOMENTS</b><span>Save a name, then tap a moment. The AI announces it out loud.</span></div>
+    <div class="namebox">
+      <input id="ent-name" type="text" maxlength="40" placeholder="Type a name, e.g. Rahul &amp; Priya" aria-label="Name to announce">
+      <button type="button" id="name-save">Save</button>
+      <button type="button" id="name-test">🔊 Hear it</button>
+    </div>
+    <p class="namechip" id="namechip">No name saved yet. The AI will say "the couple" or "birthday star".</p>
+    <div class="ent-btns" id="ent-btns"></div>
+    <div class="ph bd-h"><b>🎂 BIRTHDAY</b><span>Beat + lyrics on screen + the AI calls out the name</span></div>
+    <div class="ent-btns" id="bd-btns"></div>
+  </section>
+
 
   <p class="note">The console plays original JHOOMWAVE tracks. Mixing happens live in your browser. <a href="/">Back to jhoomwave.com</a> · <a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a></p>
 </main>
@@ -367,7 +373,7 @@ header .wrap{display:flex;align-items:center;gap:12px}
 <div class="start" id="start">
   <div class="card">
     <h1>you're in the <span>booth.</span></h1>
-    <p>The AI DJ runs the night. You just steer: <b>🔥 Hype</b>, <b>😌 Chill</b>, <b>⏭ Next</b>, entries and birthdays. Want the real decks? Open <b>🎛 Pro decks</b>.</p>
+    <p>The AI DJ runs two real decks right in front of you. Steer the night with <b>🔥 Hype</b>, <b>😌 Chill</b> and <b>⏭ Next</b>, or switch to <b>🎛 I mix</b> and take over.</p>
     <button class="go" id="go" type="button">▶ Start the night</button>
     <small>Turn the volume up. Headphones hit different.</small>
   </div>
@@ -664,7 +670,9 @@ setInterval(()=>{const e=entryOn; if(!e) return; const t=entEl.currentTime;
 },50);
 
 // ---------- party view: stage, big buttons, saved name + voice ----------
-$('protog').addEventListener('click',()=>{const pr=$('pro'); pr.hidden=!pr.hidden; $('protog').setAttribute('aria-expanded',!pr.hidden); if(!pr.hidden){drawWave('a');drawWave('b'); pr.scrollIntoView({behavior:'smooth',block:'start'})}});
+function showPro(on){const pr=$('pro'); pr.hidden=!on; $('protog').setAttribute('aria-expanded',on); $('protog').textContent=on?'🎛 Console: ON':'🎛 Console: OFF'; document.body.classList.toggle('compact',on); if(on){drawWave('a');drawWave('b')} try{localStorage.setItem('jw_console',on?'1':'0')}catch(e){}}
+let proPref=true; try{proPref=localStorage.getItem('jw_console')!=='0'}catch(e){} showPro(proPref);
+$('protog').addEventListener('click',()=>showPro($('pro').hidden));
 $('nextnow').addEventListener('click',()=>{ if(!ac){$('go').click();return} if(blending||entryOn) return; if(!aiOn) setMode(true); log('AI DJ · NEXT','Skipping ahead: blending into the next song now.'); blend(); track('console_next')});
 $('pp').addEventListener('click',()=>{ if(!ac){$('go').click();return} const d=decks[live()]; setPlay(live(),d.el.paused); });
 let NAME=''; try{NAME=localStorage.getItem('jw_name')||''}catch(e){}
