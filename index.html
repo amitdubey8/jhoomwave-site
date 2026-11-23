@@ -153,6 +153,28 @@ section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
 .kinds{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
 .kinds span{padding:8px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px}
 
+/* player */
+.mix.on .art{outline:2px solid var(--pink);outline-offset:3px}
+.mix.on .play::before{border:0;width:14px;height:16px;margin:0;background:linear-gradient(90deg,#fff 0 35%,transparent 35% 65%,#fff 65%)}
+.list{margin-top:28px;border:1px solid var(--line);border-radius:18px;background:var(--night-2);padding:20px clamp(16px,3vw,28px)}
+.list ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:2px}
+.list li{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:baseline;padding:9px 10px;border-radius:10px;cursor:pointer;min-width:0}
+.list li:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.list li.cur{background:color-mix(in srgb,var(--pink) 16%,transparent)}
+.list .ts{font:500 12px var(--mono);color:var(--mute);font-variant-numeric:tabular-nums}
+.list .tt{min-width:0;overflow-wrap:anywhere}.list .tt small{display:block;color:var(--mute);font-size:13px}
+.list .lic{font:500 10px var(--mono);letter-spacing:.08em;color:var(--gold);white-space:nowrap}
+.list a{color:var(--mute)}
+.fine a{color:var(--mute)}
+.player{position:fixed;left:0;right:0;bottom:0;z-index:8;background:color-mix(in srgb,var(--night-2) 92%,transparent);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.player .wrap{display:flex;align-items:center;gap:14px;padding-block:10px}
+.player img{width:48px;height:48px;border-radius:8px;object-fit:cover;flex:none}
+.pp{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:var(--wave);color:#fff;font:700 14px/1 var(--display);cursor:pointer}
+.p-mid{flex:1;min-width:0}
+.p-now{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}.p-now span{color:var(--mute)}
+#p-seek{width:100%;accent-color:var(--pink);margin:6px 0 0}
+.p-time{font:500 12px var(--mono);color:var(--mute);font-variant-numeric:tabular-nums;flex:none}
+body.playing footer{padding-bottom:110px}
 footer{padding-block:40px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
 footer a{color:var(--ink)}
@@ -203,17 +225,17 @@ footer a{color:var(--ink)}
       <p>Continuous mixes built by the AI DJ and curated by hand. A new volume every Friday, with no last one planned.</p>
     </div>
     <div class="sessions">
-      <a class="mix" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">
+      <a class="mix" href="#sessions" data-vol="1" aria-label="Play JHOOM Sessions Vol. 1">
         <div class="art"><img src="img/vol1.jpg" alt="JHOOM Sessions Vol. 1 cover: Neon Nights" width="800" height="800" fetchpriority="high"><span class="play"></span></div>
         <div class="meta"><span>VOL. 01</span><span>11:03</span><span>7 TRACKS</span></div>
         <h3>Neon Nights</h3>
       </a>
-      <a class="mix" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">
+      <a class="mix" href="#sessions" data-vol="2" aria-label="Play JHOOM Sessions Vol. 2">
         <div class="art"><img src="img/vol2.jpg" alt="JHOOM Sessions Vol. 2 cover: After Dark" width="800" height="800" loading="lazy"><span class="play"></span></div>
         <div class="meta"><span>VOL. 02</span><span>10:47</span><span>7 TRACKS</span></div>
         <h3>After Dark</h3>
       </a>
-      <a class="mix" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">
+      <a class="mix" href="#sessions" data-vol="3" aria-label="Play JHOOM Sessions Vol. 3">
         <div class="art"><img src="img/vol3.jpg" alt="JHOOM Sessions Vol. 3 cover: Desi Fusion" width="800" height="800" loading="lazy"><span class="play"></span></div>
         <div class="meta"><span>VOL. 03</span><span>9:43</span><span>7 TRACKS</span></div>
         <h3>Desi Fusion</h3>
@@ -224,7 +246,11 @@ footer a{color:var(--ink)}
         <h3>Follow for the next one</h3>
       </a>
     </div>
-    <p class="fine">Sessions mix tracks released under CC BY 3.0 on ccmixter.org, with full artist credits in every post, plus original JHOOMWAVE tracks.</p>
+    <div class="list" id="list" hidden>
+      <div class="list-head"><span class="eyebrow" id="list-title">Tracklist</span></div>
+      <ol id="tracks"></ol>
+    </div>
+    <p class="fine">Tap a cover to play the full mix right here. Sessions mix tracks released under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a> on ccmixter.org (each artist is credited in the tracklist), tempo-matched, EQ'd and mixed by JHOOMWAVE, plus original JHOOMWAVE tracks.</p>
   </div>
 </section>
 
@@ -292,6 +318,20 @@ footer a{color:var(--ink)}
   </div>
 </footer>
 
+<div class="player" id="player" hidden>
+  <div class="wrap">
+    <img id="p-cover" src="img/vol1.jpg" alt="" width="48" height="48">
+    <button class="pp" id="p-toggle" type="button" aria-label="Pause">❚❚</button>
+    <div class="p-mid">
+      <div class="p-now"><b id="p-title">JHOOM Sessions</b> <span id="p-track"></span></div>
+      <input id="p-seek" type="range" min="0" max="1000" value="0" aria-label="Seek">
+    </div>
+    <span class="p-time" id="p-time">0:00</span>
+  </div>
+</div>
+<audio id="audio" preload="none"></audio>
+<script type="application/json" id="mixes">[{"vol": 1, "name": "Neon Nights", "src": "audio/jhoom-sessions-vol1.mp3", "cover": "img/vol1.jpg", "tracks": [{"t": 0, "title": "Come Up For Air", "by": "SackJo22 ft. Alex, Anchor Mejans, Snowflake, Magic Moon", "url": "https://ccmixter.org/files/SackJo22/30285", "note": "CC BY 3.0"}, {"t": 96, "title": "Lifted Up.The Alex Beroza / Loveshadow Filter Fest", "by": "Loveshadow ft. Snowflake & Alex Beroza", "url": "https://ccmixter.org/files/Loveshadow/29664", "note": "CC BY 3.0"}, {"t": 192, "title": "The New Music", "by": "AlexBeroza ft. Spinningmerkaba", "url": "https://ccmixter.org/files/AlexBeroza/30513", "note": "CC BY 3.0"}, {"t": 288, "title": "Straight To The Light", "by": "AlexBeroza ft. Snowflake", "url": "https://ccmixter.org/files/AlexBeroza/29630", "note": "CC BY 3.0"}, {"t": 384, "title": "In Peace, The Love & Happiness Mix", "by": "djlang59 ft. Snowflake", "url": "https://ccmixter.org/files/djlang59/33696", "note": "CC BY 3.0"}, {"t": 481, "title": "pROgraM vs. Us3R", "by": "morgantj", "url": "https://ccmixter.org/files/morgantj/30328", "note": "CC BY 3.0"}, {"t": 570, "title": "Let's Sing (ft. George Ellinas with Snowflake)", "by": "SackJo22 ft. George Ellinas, Snowflake", "url": "https://ccmixter.org/files/SackJo22/38362", "note": "CC BY 3.0"}]}, {"vol": 2, "name": "After Dark", "src": "audio/jhoom-sessions-vol2.mp3", "cover": "img/vol2.jpg", "tracks": [{"t": 0, "title": "Let's Sing (ft. George Ellinas with Snowflake)", "by": "SackJo22 ft. George Ellinas, Snowflake", "url": "https://ccmixter.org/files/SackJo22/38362", "note": "CC BY 3.0"}, {"t": 88, "title": "Turning Into Normal (What Once Felt Strange)", "by": "SackJo22 ft. Analog by Nature, Haskel (HE31)", "url": "https://ccmixter.org/files/SackJo22/43036", "note": "CC BY 3.0"}, {"t": 177, "title": "pROgraM vs. Us3R", "by": "morgantj", "url": "https://ccmixter.org/files/morgantj/30328", "note": "CC BY 3.0"}, {"t": 273, "title": "Lifted Up.The Alex Beroza / Loveshadow Filter Fest", "by": "Loveshadow ft. Snowflake & Alex Beroza", "url": "https://ccmixter.org/files/Loveshadow/29664", "note": "CC BY 3.0"}, {"t": 370, "title": "The New Music", "by": "AlexBeroza ft. Spinningmerkaba", "url": "https://ccmixter.org/files/AlexBeroza/30513", "note": "CC BY 3.0"}, {"t": 466, "title": "Straight To The Light", "by": "AlexBeroza ft. Snowflake", "url": "https://ccmixter.org/files/AlexBeroza/29630", "note": "CC BY 3.0"}, {"t": 554, "title": "In Peace, The Love & Happiness Mix", "by": "djlang59 ft. Snowflake", "url": "https://ccmixter.org/files/djlang59/33696", "note": "CC BY 3.0"}]}, {"vol": 3, "name": "Desi Fusion", "src": "audio/jhoom-sessions-vol3.mp3", "cover": "img/vol3.jpg", "tracks": [{"t": 0, "title": "Give it up", "by": "Carosone ft. Snowflake", "url": "https://ccmixter.org/files/Carosone/32007", "note": "CC BY 3.0"}, {"t": 83, "title": "Mehndi Groove", "by": "JHOOMWAVE", "note": "Original"}, {"t": 161, "title": "Sangeet Nights", "by": "JHOOMWAVE", "note": "Original"}, {"t": 238, "title": "Baraat Express", "by": "JHOOMWAVE", "note": "Original"}, {"t": 315, "title": "Dhol Dhamaka", "by": "JHOOMWAVE", "note": "Original"}, {"t": 391, "title": "Shaadi Anthem", "by": "JHOOMWAVE", "note": "Original"}, {"t": 486, "title": "Tabla Rasa (free music for film or meditation / yoga, influenced by John Carpenter and Bollywood music)", "by": "geoffpeters", "url": "https://ccmixter.org/files/geoffpeters/59774", "note": "CC BY 3.0"}]}]</script>
+
 <script>
 // Hero: a field of gradient bars that sway like a crowd (the J-Wave logo, stretched across the floor).
 (function(){
@@ -332,6 +372,48 @@ footer a{color:var(--ink)}
     btn.textContent='■ Stop the beat';btn.setAttribute('aria-pressed','true');requestAnimationFrame(draw);
   });
   size(); addEventListener('resize',size); requestAnimationFrame(draw);
+})();
+</script>
+<script>
+// Sessions player: full mixes on the page, tracklist + per-track credits follow the playhead.
+(function(){
+  const M=JSON.parse(document.getElementById('mixes').textContent), a=document.getElementById('audio');
+  const $=id=>document.getElementById(id), bar=$('player'), list=$('list'), ol=$('tracks');
+  let cur=null, rows=[];
+  const fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+  function renderList(m){
+    $('list-title').textContent='Vol. '+String(m.vol).padStart(2,'0')+' · '+m.name+' · tracklist & credits';
+    ol.textContent=''; rows=m.tracks.map(tr=>{
+      const li=document.createElement('li'), ts=document.createElement('span'), tt=document.createElement('span'), lic=document.createElement('span'), by=document.createElement('small');
+      ts.className='ts';ts.textContent=fmt(tr.t);tt.className='tt';tt.textContent=tr.title;
+      if(tr.url){const l=document.createElement('a');l.href=tr.url;l.target='_blank';l.rel='noopener';l.textContent=tr.by;l.addEventListener('click',e=>e.stopPropagation());by.append('by ',l)}else by.textContent='by '+tr.by;
+      tt.append(by);lic.className='lic';lic.textContent=tr.note;li.append(ts,tt,lic);
+      li.addEventListener('click',()=>{a.currentTime=tr.t;a.play()});ol.append(li);return li});
+    list.hidden=false;
+  }
+  function load(v){
+    const m=M.find(x=>x.vol===v); if(!m) return;
+    if(cur!==m){cur=m;a.src=m.src;$('p-cover').src=m.cover;$('p-title').textContent='Vol. '+String(v).padStart(2,'0')+' · '+m.name;renderList(m)}
+    document.querySelectorAll('.mix[data-vol]').forEach(el=>el.classList.toggle('on',+el.dataset.vol===v));
+    const d=$('drop'); if(d&&d.getAttribute('aria-pressed')==='true') d.click();
+    bar.hidden=false;document.body.classList.add('playing');a.play().catch(()=>{});
+  }
+  document.querySelectorAll('.mix[data-vol]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();
+    const v=+el.dataset.vol; if(cur&&cur.vol===v){a.paused?a.play():a.pause()} else load(v)}));
+  $('p-toggle').addEventListener('click',()=>a.paused?a.play():a.pause());
+  const sync=()=>{const p=a.paused;$('p-toggle').textContent=p?'▶':'❚❚';$('p-toggle').setAttribute('aria-label',p?'Play':'Pause')};
+  a.addEventListener('play',sync);a.addEventListener('pause',sync);
+  let seeking=false; const seek=$('p-seek');
+  seek.addEventListener('input',()=>{seeking=true;if(a.duration)$('p-time').textContent=fmt(seek.value/1000*a.duration)});
+  seek.addEventListener('change',()=>{if(a.duration)a.currentTime=seek.value/1000*a.duration;seeking=false});
+  a.addEventListener('timeupdate',()=>{
+    if(!cur) return; const t=a.currentTime;
+    if(!seeking&&a.duration){seek.value=t/a.duration*1000;$('p-time').textContent=fmt(t)+' / '+fmt(a.duration)}
+    let i=0; cur.tracks.forEach((tr,k)=>{if(t>=tr.t)i=k});
+    rows.forEach((r,k)=>r.classList.toggle('cur',k===i)); const tr=cur.tracks[i];
+    $('p-track').textContent='· '+tr.title+' – '+tr.by;
+  });
+  a.addEventListener('ended',()=>{const n=M.find(x=>x.vol===cur.vol+1); if(n) load(n.vol)});
 })();
 </script>
 </body>
