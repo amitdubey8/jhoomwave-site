@@ -124,6 +124,14 @@ section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
 @media (max-width:960px){.sessions{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.sessions{grid-template-columns:1fr}}
 
+/* booth */
+.booth{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(20px,4vw,48px);align-items:center;text-decoration:none;color:inherit}
+.booth img{border-radius:20px;border:1px solid var(--line);width:100%;height:auto;transition:transform .4s}
+.booth:hover img{transform:scale(1.02)}
+.booth h2{font-weight:900;font-size:clamp(36px,6vw,68px);line-height:1;text-transform:lowercase;margin:12px 0}
+.booth p{color:var(--mute);margin:0 0 22px;max-width:30em}
+@media (max-width:760px){.booth{grid-template-columns:1fr}}
+
 /* pillars */
 .pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
 .pillar{background:var(--night-2);padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -243,7 +251,7 @@ footer a{color:var(--ink)}
       </svg>
       JHOOMWAVE
     </a>
-    <div class="links"><a href="#sessions">Sessions</a><a href="#what">What we do</a><a href="#how">How it works</a><a href="#next">Vision</a><a href="#book">Book</a></div>
+    <div class="links"><a href="#sessions">Sessions</a><a href="/console/">Console</a><a href="#what">What we do</a><a href="#how">How it works</a><a href="#next">Vision</a><a href="#book">Book</a></div>
     <a class="btn hot" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a>
   </div>
 </nav>
@@ -297,6 +305,20 @@ footer a{color:var(--ink)}
       <ol id="tracks"></ol>
     </div>
     <p class="fine">Tap a cover to play the full mix right here. Sessions mix tracks released under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC BY 3.0</a> on ccmixter.org (each artist is credited in the tracklist), tempo-matched, EQ'd and mixed by JHOOMWAVE, plus original JHOOMWAVE tracks.</p>
+  </div>
+</section>
+
+<section id="booth">
+  <div class="wrap">
+    <a class="booth" href="/console/">
+      <img src="img/og-console.jpg" alt="JHOOMWAVE Console: two decks and a mixer" width="1200" height="630" loading="lazy">
+      <div class="booth-txt">
+        <span class="eyebrow">New · JHOOMWAVE Console</span>
+        <h2>take the booth.</h2>
+        <p>Two decks, sync, EQ, FX pads and an AI DJ that picks, beatmatches and blends on its own. Hit 🔥 Hype and feel the night change.</p>
+        <span class="btn hot">🎛 Play the AI DJ</span>
+      </div>
+    </a>
   </div>
 </section>
 
