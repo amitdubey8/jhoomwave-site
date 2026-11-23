@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>JHOOMWAVE</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="JHOOMWAVE is an AI DJ that reads the room and runs the night. Global party sound, private events and brand anthems.">
+<meta property="og:title" content="JHOOMWAVE · AI DJ">
+<meta property="og:description" content="We don't play songs. We start nights.">
+<meta property="og:image" content="img/vol1.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one dark night-club scroll — giant swaying waveform hero, then sessions, pillars, how it works, booking. */
+:root{
+  --night:#0E0518; --night-2:#170A28; --line:#2C1C44; --ink:#F6F1FF; --mute:#B3A6CC;
+  --violet:#7B2FF7; --pink:#FF2E88; --amber:#FF8A00; --gold:#C9A86A;
+  --wave:linear-gradient(100deg,var(--violet),var(--pink) 55%,var(--amber));
+  --display:"Poppins",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.02em}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.grad{background:var(--wave);-webkit-background-clip:text;background-clip:text;color:transparent}
+:focus-visible{outline:2px solid var(--pink);outline-offset:3px;border-radius:6px}
+
+/* nav */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--night) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:24px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:900 20px/1 var(--display);letter-spacing:.02em}
+.brand svg{width:34px;height:34px}
+.links{display:flex;gap:22px;margin-left:auto;font-size:15px}
+.links a{text-decoration:none;color:var(--mute)}
+.links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;font:600 15px/1 var(--display);text-decoration:none;border:1px solid var(--line);white-space:nowrap;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.drop{background:transparent;color:var(--ink);cursor:pointer}
+.drop[aria-pressed="true"]{border-color:var(--pink);box-shadow:0 0 0 4px color-mix(in srgb,var(--pink) 25%,transparent)}
+.btn.hot{background:var(--wave);border:0;color:#fff}
+@media (max-width:760px){.links{display:none}nav .btn{margin-left:auto;padding:10px 16px}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding-block:clamp(64px,11vw,140px) clamp(56px,8vw,110px)}
+.hero canvas{position:absolute;inset:auto 0 0 0;width:100%;height:34%;opacity:.5;pointer-events:none}
+.hero .ticker{padding-bottom:clamp(60px,10vw,140px)}
+.hero .wrap{position:relative}
+.hero h1{font-weight:900;font-size:clamp(46px,9.2vw,124px);line-height:.95;text-transform:lowercase;max-width:11ch}
+.hero p{max-width:34em;color:var(--mute);font-size:clamp(17px,2vw,20px);margin:28px 0 34px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.ticker{margin-top:56px;display:flex;flex-wrap:wrap;gap:10px 28px;font:500 13px/1 var(--mono);color:var(--mute)}
+.ticker b{color:var(--ink);font-weight:500}
+
+section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;margin-bottom:40px}
+.head h2{font-weight:800;font-size:clamp(32px,5vw,56px);line-height:1.02;max-width:14ch}
+.head p{color:var(--mute);max-width:30em;margin:0}
+
+/* sessions */
+.sessions{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.mix.next .art{display:grid;place-items:center;border:1.5px dashed var(--line);background:var(--night-2);text-align:center}
+.mix.next .big{font:900 clamp(56px,7vw,84px)/1 var(--display)}
+.mix.next small{display:block;font:500 12px/1.4 var(--mono);letter-spacing:.12em;color:var(--mute);margin-top:8px}
+.mix{text-decoration:none;display:flex;flex-direction:column;gap:14px}
+.mix .art{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:1;max-width:100%}
+.mix img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.mix:hover img{transform:scale(1.04)}
+.mix .play{position:absolute;right:14px;bottom:14px;width:52px;height:52px;border-radius:50%;background:var(--wave);display:grid;place-items:center;box-shadow:0 8px 24px rgb(0 0 0/.45)}
+.mix .play::before{content:"";border-left:15px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.mix h3{font-weight:800;font-size:22px}
+.meta{font:500 12px/1 var(--mono);letter-spacing:.06em;color:var(--mute);display:flex;gap:14px}
+.fine{color:var(--mute);font-size:13px;margin-top:22px}
+@media (max-width:960px){.sessions{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.sessions{grid-template-columns:1fr}}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.pillar{background:var(--night-2);padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:12px;min-width:0}
+.pillar .tag{font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.pillar h3{font-weight:800;font-size:clamp(24px,3vw,32px)}
+.pillar p{color:var(--mute);margin:0}
+.pillar .for{font-size:14px;color:var(--ink);margin-top:auto;padding-top:10px}
+.soon{display:inline-block;margin-left:8px;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font:500 10px/1.2 var(--mono);color:var(--mute);vertical-align:middle;letter-spacing:.1em}
+@media (max-width:700px){.pillars{grid-template-columns:1fr}}
+
+/* how */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;counter-reset:s}
+.step{border-top:2px solid var(--line);padding-top:18px;min-width:0}
+.step:first-child{border-image:var(--wave) 1}
+.step .k{font:500 12px/1 var(--mono);color:var(--pink);letter-spacing:.1em}
+.step h3{font-weight:800;font-size:20px;margin:10px 0 8px}
+.step p{color:var(--mute);margin:0;font-size:15px}
+.step code{font:500 13px var(--mono);color:var(--ink)}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* road */
+.road{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.stop{position:relative;padding:26px 22px;border:1px solid var(--line);border-radius:18px;background:var(--night-2);min-width:0}
+.stop.now{border-color:transparent;background:linear-gradient(var(--night-2),var(--night-2)) padding-box,var(--wave) border-box;border:1.5px solid transparent}
+.stop .k{font:500 11px/1 var(--mono);letter-spacing:.16em;color:var(--gold)}
+.stop.now .k{color:var(--pink)}
+.stop h3{font-weight:800;font-size:21px;margin:12px 0 8px}
+.stop p{color:var(--mute);font-size:15px;margin:0}
+@media (max-width:960px){.road{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.road{grid-template-columns:1fr}}
+
+/* book */
+.book{position:relative;border-radius:28px;padding:clamp(32px,6vw,72px);background:var(--night-2);border:1px solid var(--line);overflow:hidden}
+.book::after{content:"";position:absolute;inset:auto -10% -60% 30%;height:120%;background:radial-gradient(closest-side,color-mix(in srgb,var(--pink) 30%,transparent),transparent);pointer-events:none}
+.book > *{position:relative;z-index:1}
+.book h2{font-weight:900;font-size:clamp(34px,6vw,72px);line-height:1;max-width:13ch;text-transform:lowercase}
+.book p{color:var(--mute);max-width:36em;margin:20px 0 30px}
+.kinds{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
+.kinds span{padding:8px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px}
+
+footer{padding-block:40px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+footer a{color:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}.hero canvas{opacity:.35}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="JHOOMWAVE home">
+      <svg viewBox="0 0 250 240" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2FF7"/><stop offset=".55" stop-color="#FF2E88"/><stop offset="1" stop-color="#FF8A00"/></linearGradient></defs>
+        <path d="M68 52 V150 a27 27 0 0 1 -54 0" fill="none" stroke="url(#g)" stroke-width="30" stroke-linecap="round"/>
+        <rect x="100" y="45" width="22" height="150" rx="11" fill="url(#g)" transform="rotate(-6 111 120)"/>
+        <rect x="132" y="70" width="22" height="100" rx="11" fill="url(#g)" transform="rotate(-3 143 120)"/>
+        <rect x="164" y="52" width="22" height="136" rx="11" fill="url(#g)"/>
+        <rect x="196" y="83" width="22" height="74" rx="11" fill="url(#g)" transform="rotate(3 207 120)"/>
+        <rect x="228" y="65" width="22" height="110" rx="11" fill="url(#g)" transform="rotate(6 239 120)"/>
+      </svg>
+      JHOOMWAVE
+    </a>
+    <div class="links"><a href="#sessions">Sessions</a><a href="#what">What we do</a><a href="#how">How it works</a><a href="#next">Vision</a><a href="#book">Book</a></div>
+    <a class="btn hot" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="wave" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="eyebrow">AI DJ · Global party sound</div>
+    <h1 style="margin-top:22px">we don't play songs. we <span class="grad">start nights.</span></h1>
+    <p>JHOOMWAVE is an AI DJ that reads the room and runs the night: the music, the moments and the mic. Built in India, made for every dance floor.</p>
+    <div class="cta">
+      <a class="btn hot" href="#sessions">▶ Listen to the Sessions</a>
+      <button class="btn drop" id="drop" type="button" aria-pressed="false">🔊 Drop the beat</button>
+      <a class="btn" href="#book">Book a private event</a>
+    </div>
+    <div class="ticker"><span><b>99–128</b> BPM</span><span><b>16 / 32</b>-beat blends</span><span><b>Camelot</b> key matching</span><span><b>Hinglish</b> MC cues</span></div>
+  </div>
+</header>
+
+<section id="sessions">
+  <div class="wrap">
+    <div class="head">
+      <h2>JHOOM Sessions</h2>
+      <p>Continuous mixes built by the AI DJ and curated by hand. A new volume every Friday, with no last one planned.</p>
+    </div>
+    <div class="sessions">
+      <a class="mix" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">
+        <div class="art"><img src="img/vol1.jpg" alt="JHOOM Sessions Vol. 1 cover: Neon Nights" width="800" height="800"><span class="play"></span></div>
+        <div class="meta"><span>VOL. 01</span><span>11:03</span><span>7 TRACKS</span></div>
+        <h3>Neon Nights</h3>
+      </a>
+      <a class="mix" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">
+        <div class="art"><img src="img/vol2.jpg" alt="JHOOM Sessions Vol. 2 cover: After Dark" width="800" height="800" loading="lazy"><span class="play"></span></div>
+        <div class="meta"><span>VOL. 02</span><span>10:47</span><span>7 TRACKS</span></div>
+        <h3>After Dark</h3>
+      </a>
+      <a class="mix" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">
+        <div class="art"><img src="img/vol3.jpg" alt="JHOOM Sessions Vol. 3 cover: Desi Fusion" width="800" height="800" loading="lazy"><span class="play"></span></div>
+        <div class="meta"><span>VOL. 03</span><span>9:43</span><span>7 TRACKS</span></div>
+        <h3>Desi Fusion</h3>
+      </a>
+      <a class="mix next" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">
+        <div class="art"><div><div class="big grad">04</div><small>DROPPING FRIDAY</small></div></div>
+        <div class="meta"><span>VOL. 04 → ∞</span></div>
+        <h3>Follow for the next one</h3>
+      </a>
+    </div>
+    <p class="fine">Sessions mix tracks released under CC BY 3.0 on ccmixter.org, with full artist credits in every post, plus original JHOOMWAVE tracks.</p>
+  </div>
+</section>
+
+<section id="what">
+  <div class="wrap">
+    <div class="head">
+      <h2>Music that brings people to life.</h2>
+      <p>One sound, four ways to feel it.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><span class="tag">Sessions</span><h3>Global party sound</h3><p>House, EDM, trance and desi fusion mixes, cut for the moment the room lifts.</p><span class="for">Instagram · YouTube</span></div>
+      <div class="pillar"><span class="tag">Live</span><h3>Private events</h3><p>An AI DJ and MC that plans the night around your crowd: weddings, villa parties, rooftops, birthdays.</p><span class="for">Hosts · planners · families</span></div>
+      <div class="pillar"><span class="tag">Studio</span><h3>Brand anthems</h3><p>Launch music, walk-on tracks and a sound your team recognises in two seconds.</p><span class="for">Companies · launches · award nights</span></div>
+      <div class="pillar"><span class="tag">Playlists</span><h3>Venue sound <span class="soon">SOON</span></h3><p>The right energy for every hour of the day, from morning café to late-night lounge.</p><span class="for">Cafés · hotels · gyms · offices</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="head">
+      <h2>How the AI DJ runs a night</h2>
+      <p>Machine precision for the mixing. A human in charge of the vibe.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="k">LISTEN</span><h3>Reads every track</h3><p>Tempo, beat grid, musical key and energy, measured from the audio itself.</p></div>
+      <div class="step"><span class="k">PLAN</span><h3>Shapes the night</h3><p>Warm-up, build, peak, cool-down. Big moments get the right song at the right time.</p></div>
+      <div class="step"><span class="k">MIX</span><h3>Blends like a pro</h3><p>Beatmatched <code>16/32</code>-beat transitions, bass swaps and harmonic key matching.</p></div>
+      <div class="step"><span class="k">HOST</span><h3>Runs the mic</h3><p>Hinglish MC cues for entries, toasts and countdowns. You can change anything, any time.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="next">
+  <div class="wrap">
+    <div class="head">
+      <h2>Where the wave goes next</h2>
+      <p>Our roadmap. The first step is live today; the rest is what we're building.</p>
+    </div>
+    <div class="road">
+      <div class="stop now"><span class="k">NOW</span><h3>AI DJ Sessions</h3><p>Real beatmatched mixes, planned and played by the AI, curated by a human.</p></div>
+      <div class="stop"><span class="k">NEXT</span><h3>Live Mode</h3><p>The set reacts to the floor in real time. Hosts tap "hype" or "chill"; an optional camera reads only how much the floor moves. No faces, off by default at private events.</p></div>
+      <div class="stop"><span class="k">THEN</span><h3>The JHOOMWAVE booth</h3><p>A DJ booth that runs the whole night by itself, from first song to last call: music, lights cues and the mic.</p></div>
+      <div class="stop"><span class="k">ONE DAY</span><h3>Every room, worldwide</h3><p>From a sangeet in Jaipur to a rooftop in London. Same wave, any city.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="book">
+  <div class="wrap">
+    <div class="book">
+      <div class="eyebrow">Private events &amp; brand anthems</div>
+      <h2 style="margin-top:18px">your night, <span class="grad">our wave.</span></h2>
+      <p>Tell us the date, the city and the crowd. We'll come back with a plan for the music, the moments and the mic.</p>
+      <div class="kinds"><span>Weddings &amp; sangeet</span><span>Private parties</span><span>Corporate nights</span><span>Brand launches</span></div>
+      <a class="btn hot" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">DM @jhoomwave on Instagram</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 JHOOMWAVE · curated by <a href="https://www.instagram.com/the_amit_dubey/" target="_blank" rel="noopener">@the_amit_dubey</a></span>
+    <span>Music credits in every post · Photos: Unsplash License</span>
+  </div>
+</footer>
+
+<script>
+// Hero: a field of gradient bars that sway like a crowd (the J-Wave logo, stretched across the floor).
+(function(){
+  const c=document.getElementById('wave'); if(!c) return;
+  const x=c.getContext('2d'), still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let w,h,dpr,pulse=0,ac=null,timer=null,nextT=0,step=0;
+  const BPM=124, SPB=60/BPM;
+  function size(){dpr=Math.min(devicePixelRatio||1,2);w=c.clientWidth;h=c.clientHeight;c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0)}
+  function draw(t){
+    x.clearRect(0,0,w,h);
+    const g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,'#7B2FF7');g.addColorStop(.55,'#FF2E88');g.addColorStop(1,'#FF8A00');
+    x.fillStyle=g;
+    const bw=Math.max(6,w/110), gap=bw*.9, n=Math.ceil(w/(bw+gap));
+    for(let i=0;i<n;i++){
+      const p=i/n, a=pulse*.55*Math.exp(-Math.pow((p-.5)*2.2,2))+.5+.5*Math.sin(p*9+t*.0012)*Math.sin(p*3.1-t*.0007)+.15*Math.sin(p*31+t*.003);
+      const bh=Math.max(bw,(a*.85+.1)*h), bx=i*(bw+gap), by=(h-bh)/2+h*.08;
+      x.beginPath(); x.roundRect ? x.roundRect(bx,by,bw,bh,bw/2) : x.rect(bx,by,bw,bh); x.fill();
+    }
+    pulse*=.92;
+    if(!still||ac) requestAnimationFrame(draw);
+  }
+  // "Drop the beat": a 124 BPM four-on-the-floor groove synthesized live (no samples), bars pulse on every kick.
+  function kick(t){const o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);
+    g.gain.setValueAtTime(.9,t);g.gain.exponentialRampToValueAtTime(.001,t+.35);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+.36);
+    setTimeout(()=>{pulse=1},Math.max(0,(t-ac.currentTime)*1000))}
+  function hat(t){const b=ac.createBuffer(1,ac.sampleRate*.05,ac.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=b;f.type='highpass';f.frequency.value=7000;
+    g.gain.setValueAtTime(.18,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);s.connect(f).connect(g).connect(ac.destination);s.start(t)}
+  function bass(t,n){const o=ac.createOscillator(),f=ac.createBiquadFilter(),g=ac.createGain();o.type='sawtooth';o.frequency.value=n;f.type='lowpass';f.frequency.value=420;
+    g.gain.setValueAtTime(.22,t);g.gain.exponentialRampToValueAtTime(.001,t+SPB*.45);o.connect(f).connect(g).connect(ac.destination);o.start(t);o.stop(t+SPB*.5)}
+  const LINE=[55,55,65.4,49];
+  function sched(){while(nextT<ac.currentTime+.2){const beat=step%4;kick(nextT);hat(nextT+SPB/2);bass(nextT+SPB/2,LINE[Math.floor(step/4)%4]);nextT+=SPB;step++}}
+  const btn=document.getElementById('drop');
+  btn&&btn.addEventListener('click',()=>{
+    if(timer){clearInterval(timer);timer=null;ac.close();ac=null;btn.textContent='🔊 Drop the beat';btn.setAttribute('aria-pressed','false');return}
+    try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){btn.textContent='Sound not available here';return}
+    nextT=ac.currentTime+.05;step=0;timer=setInterval(sched,50);sched();
+    btn.textContent='■ Stop the beat';btn.setAttribute('aria-pressed','true');requestAnimationFrame(draw);
+  });
+  size(); addEventListener('resize',size); requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
