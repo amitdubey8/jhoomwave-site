@@ -127,6 +127,13 @@ section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
 @media (max-width:960px){.sessions{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.sessions{grid-template-columns:1fr}}
 
+/* platform */
+.plat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pc{display:flex;flex-direction:column;gap:8px;padding:22px;border-radius:20px;background:var(--night-2);border:1px solid var(--line);text-decoration:none;color:var(--ink);transition:transform .2s,border-color .2s;min-width:0}
+.pc:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--pink) 60%,var(--line))}
+.pc b{font:800 21px var(--display)}.pc span{color:var(--mute);font-size:15px}.pc i{font-style:normal;margin-top:auto;padding-top:6px;color:var(--ink);font:700 14px var(--display)}
+.pk{font:500 10px var(--mono)!important;letter-spacing:.14em;color:var(--pink)!important}.pk.soon{color:var(--gold)!important}
+@media (max-width:900px){.plat{grid-template-columns:1fr 1fr}}@media (max-width:560px){.plat{grid-template-columns:1fr}}
 /* hear */
 .hear{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
 .hc{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--night-2);color:var(--ink);cursor:pointer;min-width:0}
@@ -286,7 +293,7 @@ footer a{color:var(--ink)}
       </svg>
       JHOOMWAVE
     </a>
-    <div class="links"><a href="#hear">Hear it</a><a href="#everywhere">Events</a><a href="#sessions">Sessions</a><a href="/console/">Console</a><a href="#what">What we do</a><a href="#how">How it works</a><a href="#next">Vision</a><a href="#book">Book</a></div>
+    <div class="links"><a href="#platform">Platform</a><a href="/console/">DJ Console</a><a href="/studio/">Studio</a><a href="#hear">Hear it</a><a href="#everywhere">Events</a><a href="#what">What we do</a><a href="#how">How it works</a><a href="#next">Vision</a><a href="#book">Book</a></div>
     <a class="btn hot" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a>
   </div>
 </nav>
@@ -298,7 +305,7 @@ footer a{color:var(--ink)}
     <h1 style="margin-top:22px">we don't play songs. we <span class="grad">start nights.</span></h1>
     <p>JHOOMWAVE runs the whole celebration: it mixes the music, hosts the mic in a real voice, and writes and sings songs for the people in the room. Built in India, made for every party on earth.</p>
     <div class="cta">
-      <a class="btn hot" href="#sessions">▶ Listen to the Sessions</a>
+      <button class="btn hot" id="intro" type="button">▶ Hear who we are</button>
       <button class="btn drop" id="drop" type="button" aria-pressed="false">🔊 Drop the beat</button>
       <a class="btn" href="#book">Book a private event</a>
     </div>
@@ -306,6 +313,23 @@ footer a{color:var(--ink)}
     <div class="ticker"><span><b>9</b> AI-sung songs</span><span><b>4</b> kids characters</span><span><b>14</b> original beats</span><span><b>Hinglish · Punjabi · English</b></span></div>
   </div>
 </header>
+
+<section id="platform">
+  <div class="wrap">
+    <div class="head">
+      <h2>One platform for the whole celebration</h2>
+      <p>The AI DJ is where we started. JHOOMWAVE now mixes, hosts, sings, entertains kids and builds brand sound, all in one place.</p>
+    </div>
+    <div class="plat">
+      <a class="pc" href="/console/"><span class="pk">LIVE</span><b>🎛 AI DJ Console</b><span>Two decks the AI mixes in front of you. Hype, chill, next, entries with countdowns and a host in a real voice.</span><i>Open the console →</i></a>
+      <a class="pc" href="/studio/"><span class="pk">LIVE</span><b>🎂 Songs for one person</b><span>Birthday songs for kids, seniors, founders, developers, doctors, teachers and traders. Your name, your story.</span><i>Open the studio →</i></a>
+      <a class="pc" href="/studio/#kids"><span class="pk">LIVE</span><b>🐘 JHOOMWAVE Kids</b><span>Our own characters, Jhoomu, Mithi, Tappu and Sunny, wish kids by name, sing learning songs and read bedtime poems.</span><i>Meet the gang →</i></a>
+      <a class="pc" href="/studio/#corporate"><span class="pk">LIVE</span><b>🏢 Brand &amp; corporate</b><span>Company anthems, award-night openers and announcements in your brand's voice.</span><i>Hear an anthem →</i></a>
+      <a class="pc" href="/studio/#announce"><span class="pk">LIVE</span><b>✈️ Fun announcements</b><span>Airline cabin crew, railway station, cricket commentary: written for your event, with your names.</span><i>Hear one →</i></a>
+      <a class="pc" href="#next"><span class="pk soon">NEXT</span><b>📡 Live Mode &amp; the booth</b><span>Songs with your name made on the spot, a floor-reading Live Mode, and one day a JHOOMWAVE booth that runs the night.</span><i>See the vision →</i></a>
+    </div>
+  </div>
+</section>
 
 <section id="hear">
   <div class="wrap">
@@ -681,6 +705,13 @@ document.addEventListener('click',e=>{const l=e.target.closest('a[href*="instagr
  a.addEventListener('play',()=>{cur.classList.add('on');cur.querySelector('.hp').textContent='❚❚'});
  a.addEventListener('pause',()=>{if(cur){cur.querySelector('.hp').textContent='▶'}});
  a.addEventListener('ended',()=>{if(cur){cur.classList.remove('on')}});
+})();
+</script>
+<script>
+(function(){const b=document.getElementById('intro'); if(!b) return; const a=new Audio(); a.preload='none'; let g=Math.random()<.5?'f':'m';
+ b.addEventListener('click',()=>{ if(!a.paused){a.pause();return} const m=document.getElementById('audio'); if(m&&!m.paused) m.pause();
+   a.src='audio/showcase/intro_'+g+'.mp3'; g=g==='f'?'m':'f'; a.play().catch(()=>{}); track('intro_play') });
+ a.addEventListener('play',()=>b.textContent='❚❚ Listening…'); a.addEventListener('pause',()=>b.textContent='▶ Hear who we are'); a.addEventListener('ended',()=>b.textContent='▶ Hear it again');
 })();
 </script>
 </body>
