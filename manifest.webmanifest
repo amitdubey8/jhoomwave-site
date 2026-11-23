@@ -1,0 +1,15 @@
+{
+  "name": "JHOOMWAVE · AI DJ",
+  "short_name": "JHOOMWAVE",
+  "description": "We don't play songs. We start nights. AI DJ sessions, private events and brand anthems.",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0E0518",
+  "theme_color": "#0E0518",
+  "icons": [
+    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

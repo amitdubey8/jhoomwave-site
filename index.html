@@ -14,6 +14,11 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="JHOOMWAVE">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="JHOOMWAVE">
 <meta property="og:url" content="https://jhoomwave.com/">
@@ -182,6 +187,33 @@ section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
 #p-seek{width:100%;accent-color:var(--pink);margin:6px 0 0}
 .p-time{font:500 12px var(--mono);color:var(--mute);font-variant-numeric:tabular-nums;flex:none}
 body.playing footer{padding-bottom:110px}
+.player .p-mid,.player img{cursor:pointer}
+/* now-playing sheet (app-style play mode) */
+.np{position:fixed;inset:0;z-index:20;overflow:hidden;background:var(--night);animation:up .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.np-bg{position:absolute;inset:-20%;background-size:cover;background-position:center;filter:blur(60px) saturate(1.4);opacity:.55;transform:scale(1.1)}
+.np-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgb(14 5 24/.35),var(--night) 85%)}
+.np-in{position:relative;height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:14px;
+  padding:calc(env(safe-area-inset-top,0px) + 14px) max(22px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 22px) max(22px,env(safe-area-inset-left,0px))}
+.np-top{display:flex;align-items:center;justify-content:space-between}
+.np-x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgb(255 255 255/.06);color:var(--ink);font:700 18px/1 var(--display);display:grid;place-items:center;text-decoration:none;cursor:pointer}
+a.np-x{font-size:12px}
+.np-art{flex:1 1 auto;min-height:0;display:grid;place-items:center}
+.np-art img{width:min(100%,46vh);height:auto;max-height:100%;aspect-ratio:1;object-fit:cover;border-radius:22px;box-shadow:0 30px 80px rgb(0 0 0/.6),0 0 0 1px rgb(255 255 255/.06);transition:transform .5s}
+.np.paused .np-art img{transform:scale(.9)}
+.np-viz{width:100%;height:46px;flex:none}
+.np-meta{min-width:0}
+.np-meta h2{font-weight:800;font-size:clamp(22px,6vw,28px);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-meta p{margin:4px 0 6px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-meta .lic{font:500 10px var(--mono);letter-spacing:.08em;color:var(--gold)}
+#np-seek{width:100%;accent-color:var(--pink);margin:0}
+.np-times{display:flex;justify-content:space-between;font:500 12px var(--mono);color:var(--mute);font-variant-numeric:tabular-nums;margin-top:4px}
+.np-ctl{display:flex;align-items:center;justify-content:center;gap:34px}
+.np-ctl button{border:0;background:none;color:var(--ink);font-size:26px;cursor:pointer;width:52px;height:52px;border-radius:50%}
+.np-ctl .np-play{width:76px;height:76px;background:var(--wave);font:800 22px/1 var(--display);box-shadow:0 12px 40px color-mix(in srgb,var(--pink) 45%,transparent)}
+.np-up{margin:0;text-align:center;color:var(--mute);font-size:13px;min-height:1.3em}
+body.np-open{overflow:hidden}
+@media (prefers-reduced-motion:reduce){.np{animation:none}}
 footer{padding-block:40px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
 footer a{color:var(--ink)}
@@ -325,6 +357,34 @@ footer a{color:var(--ink)}
   </div>
 </footer>
 
+<div class="np" id="np" hidden role="dialog" aria-modal="true" aria-label="Now playing">
+  <div class="np-bg" id="np-bg"></div>
+  <div class="np-in">
+    <div class="np-top">
+      <button class="np-x" id="np-close" type="button" aria-label="Close player">⌄</button>
+      <span class="eyebrow" id="np-vol">Now playing</span>
+      <a class="np-x" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener" aria-label="JHOOMWAVE on Instagram">IG</a>
+    </div>
+    <div class="np-art"><img id="np-cover" src="img/vol1.jpg" alt="" width="800" height="800"></div>
+    <canvas class="np-viz" id="np-viz" aria-hidden="true"></canvas>
+    <div class="np-meta">
+      <h2 id="np-track">—</h2>
+      <p id="np-by">JHOOMWAVE</p>
+      <span class="lic" id="np-lic"></span>
+    </div>
+    <div class="np-seek">
+      <input id="np-seek" type="range" min="0" max="1000" value="0" aria-label="Seek">
+      <div class="np-times"><span id="np-t">0:00</span><span id="np-d">0:00</span></div>
+    </div>
+    <div class="np-ctl">
+      <button type="button" id="np-prev" aria-label="Previous track">⏮</button>
+      <button type="button" class="np-play" id="np-play" aria-label="Pause">❚❚</button>
+      <button type="button" id="np-next" aria-label="Next track">⏭</button>
+    </div>
+    <p class="np-up" id="np-up"></p>
+  </div>
+</div>
+
 <div class="player" id="player" hidden>
   <div class="wrap">
     <img id="p-cover" src="img/vol1.jpg" alt="" width="48" height="48">
@@ -424,7 +484,65 @@ footer a{color:var(--ink)}
     rows.forEach((r,k)=>r.classList.toggle('cur',k===i)); const tr=cur.tracks[i];
     $('p-track').textContent='· '+tr.title+' – '+tr.by;
   });
+  window.JW={get cur(){return cur},load,M};
   a.addEventListener('ended',()=>{track('mix_complete',{volume:cur.vol});const n=M.find(x=>x.vol===cur.vol+1); if(n) load(n.vol)});
+})();
+</script>
+<script>
+// App-style "play mode": full-screen now playing, lock-screen controls, installable app.
+(function(){
+  const a=document.getElementById('audio'), np=document.getElementById('np'), $=id=>document.getElementById(id);
+  const fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+  const idx=()=>{const c=JW.cur;let i=0;c.tracks.forEach((t,k)=>{if(a.currentTime>=t.t-.5)i=k});return i};
+  let shownTrack=-1, autoOpened=false, raf=0;
+  function open(){if(!JW.cur)return;np.hidden=false;document.body.classList.add('np-open');paint(true);loop()}
+  function close(){np.hidden=true;document.body.classList.remove('np-open');cancelAnimationFrame(raf)}
+  $('np-close').addEventListener('click',close);
+  document.getElementById('player').addEventListener('click',e=>{if(!e.target.closest('button,input'))open()});
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!np.hidden)close()});
+  let y0=null; np.addEventListener('touchstart',e=>{if(!e.target.closest('input'))y0=e.touches[0].clientY},{passive:true});
+  np.addEventListener('touchend',e=>{if(y0!==null&&e.changedTouches[0].clientY-y0>110)close();y0=null});
+  const toggle=()=>a.paused?a.play():a.pause();
+  $('np-play').addEventListener('click',toggle);
+  function jump(d){const c=JW.cur;if(!c)return;let i=idx();
+    if(d<0&&a.currentTime-c.tracks[i].t>5){a.currentTime=c.tracks[i].t;return}
+    i+=d; if(i<0){a.currentTime=0;return}
+    if(i>=c.tracks.length){const n=JW.M.find(x=>x.vol===c.vol+1); if(n) JW.load(n.vol); return}
+    a.currentTime=c.tracks[i].t; a.play();}
+  $('np-prev').addEventListener('click',()=>jump(-1)); $('np-next').addEventListener('click',()=>jump(1));
+  const seek=$('np-seek'); let sk=false;
+  seek.addEventListener('input',()=>{sk=true;if(a.duration)$('np-t').textContent=fmt(seek.value/1000*a.duration)});
+  seek.addEventListener('change',()=>{if(a.duration)a.currentTime=seek.value/1000*a.duration;sk=false});
+  function paint(force){
+    const c=JW.cur; if(!c)return; const i=idx(), tr=c.tracks[i];
+    np.classList.toggle('paused',a.paused); $('np-play').textContent=a.paused?'▶':'❚❚'; $('np-play').setAttribute('aria-label',a.paused?'Play':'Pause');
+    if(!sk&&a.duration){seek.value=a.currentTime/a.duration*1000;$('np-t').textContent=fmt(a.currentTime);$('np-d').textContent=fmt(a.duration)}
+    if(i!==shownTrack||force){shownTrack=i;
+      $('np-vol').textContent='JHOOM Sessions · Vol. '+String(c.vol).padStart(2,'0');
+      $('np-cover').src=c.cover; $('np-bg').style.backgroundImage='url('+c.cover+')';
+      $('np-track').textContent=tr.title; $('np-by').textContent=tr.by; $('np-lic').textContent=tr.note;
+      const nx=c.tracks[i+1]; $('np-up').textContent=nx?'Up next · '+nx.title+' – '+nx.by:'Up next · '+(JW.M.find(x=>x.vol===c.vol+1)?.name||'the end of the night');
+      media(c,tr);}
+  }
+  function media(c,tr){ if(!('mediaSession' in navigator))return;
+    try{navigator.mediaSession.metadata=new MediaMetadata({title:tr.title,artist:tr.by+' · mixed by JHOOMWAVE',album:'JHOOM Sessions Vol. '+c.vol+' · '+c.name,
+      artwork:[{src:new URL(c.cover,location.href).href,sizes:'800x800',type:'image/jpeg'}]})}catch(e){} }
+  if('mediaSession' in navigator){const ms=navigator.mediaSession,s=(k,f)=>{try{ms.setActionHandler(k,f)}catch(e){}};
+    s('play',()=>a.play());s('pause',()=>a.pause());s('previoustrack',()=>jump(-1));s('nexttrack',()=>jump(1));
+    s('seekto',d=>{a.currentTime=d.seekTime});}
+  // visualiser: gradient bars that breathe with the 124-ish BPM pulse while playing
+  const cv=$('np-viz'), x=cv.getContext('2d');
+  function loop(){raf=requestAnimationFrame(loop); const w=cv.clientWidth,h=cv.clientHeight,d=Math.min(devicePixelRatio||1,2);
+    if(cv.width!==w*d){cv.width=w*d;cv.height=h*d} x.setTransform(d,0,0,d,0,0); x.clearRect(0,0,w,h);
+    const g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,'#7B2FF7');g.addColorStop(.55,'#FF2E88');g.addColorStop(1,'#FF8A00');x.fillStyle=g;
+    const t=a.currentTime, live=!a.paused, n=36, bw=w/n*.55, beat=Math.pow(1-((t*2)%1),3);
+    for(let i=0;i<n;i++){const p=i/n, v=live?(.25+.45*Math.abs(Math.sin(p*7+t*1.7))*(.6+.4*Math.sin(p*13-t*3))+.35*beat*Math.exp(-Math.pow((p-.5)*2.4,2))):.08;
+      const bh=Math.max(3,Math.min(1,v)*h), bx=i*(w/n)+(w/n-bw)/2; x.beginPath(); x.roundRect?x.roundRect(bx,(h-bh)/2,bw,bh,bw/2):x.rect(bx,(h-bh)/2,bw,bh); x.fill();}
+  }
+  a.addEventListener('timeupdate',()=>{if(!np.hidden)paint()}); a.addEventListener('play',()=>{paint();
+    if(!autoOpened&&matchMedia('(max-width:700px)').matches){autoOpened=true;open()}});
+  a.addEventListener('pause',()=>paint()); a.addEventListener('loadedmetadata',()=>paint(true));
+  if('serviceWorker' in navigator&&location.protocol==='https:') addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 })();
 </script>
 <script>
