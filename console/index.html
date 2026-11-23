@@ -47,6 +47,40 @@ header .wrap{display:flex;align-items:center;gap:12px}
 .mode button{border:0;background:none;padding:8px 14px;border-radius:999px;font:600 13px/1 var(--display);color:var(--mute);white-space:nowrap}
 .mode button[aria-pressed="true"]{background:var(--wave);color:#fff}
 
+/* stage */
+.protog{margin-left:auto;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:9px 14px;font:700 13px/1 var(--display)}
+.protog[aria-expanded="true"]{background:var(--wave);border-color:transparent}
+.stage{position:relative;overflow:hidden;border-radius:24px;border:1px solid var(--line);background:#07020e;min-height:300px;margin-top:6px}
+#viz{position:absolute;inset:0;width:100%;height:100%}
+.stage-in{position:relative;padding:clamp(18px,4vw,34px);display:flex;flex-direction:column;gap:10px;min-height:300px;justify-content:flex-end;background:linear-gradient(180deg,transparent 20%,rgb(7 2 14/.85))}
+.st-top{display:flex;align-items:center;gap:10px;font:700 12px var(--mono);letter-spacing:.14em;color:var(--mute);margin-bottom:auto}
+.st-top .bot{width:34px;height:34px;border-radius:10px;background:var(--wave);display:grid;place-items:center;font:800 12px var(--display);color:#fff;letter-spacing:0}
+.st-top .bot.live{animation:glow 1.2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 6px rgb(255 46 136/.25)}}
+.np-title{margin:0;font:900 clamp(40px,8vw,92px)/.95 var(--display);letter-spacing:-.02em;text-wrap:balance}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{padding:6px 11px;border-radius:999px;background:rgb(255 255 255/.08);border:1px solid rgb(255 255 255/.1);font:700 12px var(--mono);backdrop-filter:blur(6px)}
+#np-up{color:var(--ok)}
+.np-bar{height:5px;border-radius:9px;background:rgb(255 255 255/.12);overflow:hidden}
+.np-bar i{display:block;height:100%;width:0;background:var(--wave)}
+.np-log{margin:0;color:var(--mute);font-size:14px}
+.big{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.bb{border:1px solid var(--line);background:var(--panel);border-radius:18px;padding:16px 8px;font-size:26px;line-height:1;display:flex;flex-direction:column;align-items:center;gap:8px;transition:transform .08s}
+.bb b{font:800 14px var(--display)}
+.bb:active{transform:scale(.96)}
+.bb.hype{background:linear-gradient(135deg,#6b1243,#3a0f2a);border-color:#8d1f5a}
+.bb.chill{background:linear-gradient(135deg,#123a5e,#0d1f33);border-color:#1f5a8d}
+.vibewrap{display:flex;align-items:center;gap:10px;margin-top:10px;font:700 11px var(--mono);letter-spacing:.14em;color:var(--mute)}
+.vibewrap .meter{flex:1;height:10px;border-radius:99px;background:var(--panel-2);overflow:hidden;border:1px solid var(--line)}
+.vibewrap .meter i{display:block;height:100%;width:50%;background:var(--wave);transition:width .4s}
+.namebox{display:grid;grid-template-columns:1fr auto auto;gap:8px}
+.namebox button{border:1px solid var(--line);background:var(--panel-2);border-radius:12px;padding:0 14px;font:700 13px var(--display);white-space:nowrap}
+#name-save{background:var(--wave);border-color:transparent}
+.namechip{margin:8px 0 12px;font-size:13px;color:var(--mute)}
+.namechip b{color:var(--ok)}
+.pro{margin-top:14px}
+.pro-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font:700 12px var(--mono);letter-spacing:.14em;color:var(--mute)}
+@media (max-width:640px){.big{grid-template-columns:1fr 1fr}.namebox{grid-template-columns:1fr 1fr}.namebox input{grid-column:1/-1;padding:12px}.namebox button{padding:12px}}
 /* AI bar */
 .ai{margin-top:10px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:12px 14px;border-radius:16px;background:var(--panel);border:1px solid var(--line)}
 .ai .bot{width:40px;height:40px;border-radius:12px;background:var(--wave);display:grid;place-items:center;font:800 13px var(--display)}
@@ -86,9 +120,9 @@ header .wrap{display:flex;align-items:center;gap:12px}
 @media (max-width:820px){.show{grid-template-columns:1fr}}
 /* entries */
 .entries{margin-top:10px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px}
-.ent-row{display:grid;grid-template-columns:minmax(0,260px) 1fr;gap:10px;align-items:center}
+.ent-row{display:grid;gap:10px}
 #ent-name{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 12px;color:var(--ink)}
-.ent-btns{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.ent-btns{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}
 .ent{position:relative;overflow:hidden;border:0;border-radius:14px;padding:12px 8px;text-align:left;color:#fff;background:var(--panel-2);box-shadow:inset 0 0 0 1px var(--line);min-width:0}
 .ent b{display:block;font:800 14px/1.2 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ent small{display:block;font:500 10px var(--mono);letter-spacing:.06em;color:var(--mute);margin-top:3px}
@@ -98,7 +132,7 @@ header .wrap{display:flex;align-items:center;gap:12px}
 .ent:disabled{opacity:.45}
 .flash{position:fixed;inset:0;z-index:25;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgb(255 255 255/.85),rgb(255 46 136/.55) 35%,transparent 70%);animation:flash .9s ease-out forwards}
 @keyframes flash{from{opacity:1}to{opacity:0}}
-@media (max-width:980px){.ent-row{grid-template-columns:1fr}.ent-btns{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:980px){.ent-btns{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:420px){.ent-btns{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.entries .ph span{display:none}}
 @media (prefers-reduced-motion:reduce){.flash{animation-duration:.01s}}
@@ -211,23 +245,28 @@ header .wrap{display:flex;align-items:center;gap:12px}
       <svg viewBox="0 0 260 240" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2FF7"/><stop offset=".55" stop-color="#FF2E88"/><stop offset="1" stop-color="#FF8A00"/></linearGradient></defs><path d="M68 52 V150 a27 27 0 0 1 -54 0" fill="none" stroke="url(#g)" stroke-width="30" stroke-linecap="round"/><rect x="100" y="45" width="22" height="150" rx="11" fill="url(#g)"/><rect x="132" y="70" width="22" height="100" rx="11" fill="url(#g)"/><rect x="164" y="52" width="22" height="136" rx="11" fill="url(#g)"/><rect x="196" y="83" width="22" height="74" rx="11" fill="url(#g)"/><rect x="228" y="65" width="22" height="110" rx="11" fill="url(#g)"/></svg>
       JHOOMWAVE <small>CONSOLE</small>
     </a>
-    <div class="mode" role="group" aria-label="Who is mixing">
-      <button type="button" id="m-ai" aria-pressed="true">🤖 AI DJ</button>
-      <button type="button" id="m-you" aria-pressed="false">🎛 You</button>
-    </div>
+    <button class="protog" id="protog" type="button" aria-expanded="false">🎛 Pro decks</button>
   </div>
 </header>
 
 <main class="wrap">
-  <div class="ai">
-    <div class="bot" id="bot">AI</div>
-    <div class="ai-txt"><b id="ai-head">AI DJ · READY</b><span id="ai-log">Press start. I'll read the vibe and run the decks.</span></div>
-    <div class="vibe">
-      <button type="button" id="chill">😌 Chill</button>
-      <div class="meter" title="Crowd vibe"><i id="vibe"></i></div>
-      <button type="button" id="hype">🔥 Hype</button>
+  <section class="stage" aria-label="Now playing">
+    <canvas id="viz" aria-hidden="true"></canvas>
+    <div class="stage-in">
+      <div class="st-top"><span class="bot" id="bot">AI</span><b id="ai-head">AI DJ · READY</b></div>
+      <h1 class="np-title" id="np-title">Dhol Dhamaka</h1>
+      <div class="chips"><span id="np-bpm">100 BPM</span><span id="np-key">6A</span><span id="np-tag">Desi dhol</span><span id="np-up">Next: —</span></div>
+      <div class="np-bar"><i id="np-prog"></i></div>
+      <p class="np-log" id="ai-log">Press start. I'll read the vibe and run the night.</p>
     </div>
+  </section>
+  <div class="big">
+    <button type="button" class="bb chill" id="chill">😌<b>Chill</b></button>
+    <button type="button" class="bb hype" id="hype">🔥<b>Hype</b></button>
+    <button type="button" class="bb" id="nextnow">⏭<b>Next song</b></button>
+    <button type="button" class="bb" id="pp">⏯<b>Pause</b></button>
   </div>
+  <div class="vibewrap"><span>CROWD VIBE</span><div class="meter"><i id="vibe"></i></div></div>
   <div class="show">
     <section class="prompt" aria-label="DJ teleprompter">
       <div class="ph"><b>TELEPROMPTER</b><span id="pr-where">Before the night</span></div>
@@ -241,15 +280,25 @@ header .wrap{display:flex;align-items:center;gap:12px}
   </div>
 
   <section class="entries" aria-label="Entry moments">
-    <div class="ph"><b>🎬 ENTRY MOMENTS</b><span>Music dips, entry beat drops, MC counts down to the BOOM</span></div>
-    <div class="ent-row">
-      <input id="ent-name" type="text" maxlength="40" placeholder="Name to announce, e.g. Rahul &amp; Priya" aria-label="Name to announce">
-      <div class="ent-btns" id="ent-btns"></div>
+    <div class="ph"><b>🎬 MOMENTS</b><span>Save a name, then tap a moment. The AI announces it out loud.</span></div>
+    <div class="namebox">
+      <input id="ent-name" type="text" maxlength="40" placeholder="Type a name, e.g. Rahul &amp; Priya" aria-label="Name to announce">
+      <button type="button" id="name-save">Save</button>
+      <button type="button" id="name-test">🔊 Hear it</button>
     </div>
-    <div class="ph bd-h"><b>🎂 BIRTHDAY SONG</b><span>Original song · name appears in the lyrics on screen</span></div>
+    <p class="namechip" id="namechip">No name saved yet. The AI will say "the couple" or "birthday star".</p>
+    <div class="ent-btns" id="ent-btns"></div>
+    <div class="ph bd-h"><b>🎂 BIRTHDAY</b><span>Beat + lyrics on screen + the AI calls out the name</span></div>
     <div class="ent-btns" id="bd-btns"></div>
   </section>
 
+  <section class="pro" id="pro" hidden>
+    <div class="pro-head"><b>PRO DECKS</b>
+      <div class="mode" role="group" aria-label="Who is mixing">
+        <button type="button" id="m-ai" aria-pressed="true">🤖 AI mixes</button>
+        <button type="button" id="m-you" aria-pressed="false">🎛 I mix</button>
+      </div>
+    </div>
   <div class="console">
     <section class="deck a" id="deck-a" aria-label="Deck A">
       <div class="dtop"><span class="dl">A</span><div class="dtitle"><select id="sel-a" aria-label="Track on deck A"></select><div class="dmeta"><span id="bpm-a">— BPM</span><span class="key" id="key-a">—</span><span id="pct-a">±0.0%</span></div></div></div>
@@ -310,13 +359,15 @@ header .wrap{display:flex;align-items:center;gap:12px}
     </section>
   </div>
 
+  </section>
+
   <p class="note">The console plays original JHOOMWAVE tracks. Mixing happens live in your browser. <a href="/">Back to jhoomwave.com</a> · <a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">@jhoomwave</a></p>
 </main>
 
 <div class="start" id="start">
   <div class="card">
     <h1>you're in the <span>booth.</span></h1>
-    <p>Let the AI DJ run the night and hit <b>🔥 Hype</b> when the floor needs it, or switch to <b>🎛 You</b> and mix it yourself.</p>
+    <p>The AI DJ runs the night. You just steer: <b>🔥 Hype</b>, <b>😌 Chill</b>, <b>⏭ Next</b>, entries and birthdays. Want the real decks? Open <b>🎛 Pro decks</b>.</p>
     <button class="go" id="go" type="button">▶ Start the night</button>
     <small>Turn the volume up. Headphones hit different.</small>
   </div>
@@ -575,8 +626,8 @@ function playEntry(e,i){
   entryOn=e; ramp.stop=false; document.querySelectorAll('.ent').forEach(b=>b.disabled=b.id!=='ent-'+e.id); $('ent-'+e.id).classList.add('on');
   const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(.12,t+1.2);
   entEl.src='audio/entries/jw_entry_0'+(i+1)+'_'+e.id+'.mp3'; entEl.currentTime=0; entEl.play().catch(()=>{});
-  const name=($('ent-name').value||'').trim();
-  e.script=[[0,e.open,'BUILD'],[6,'Phones out, torches on! 📱🔦','BUILD'],[21*EB,'3…','COUNTDOWN'],[22*EB,'2…','COUNTDOWN'],[23*EB,'1…','COUNTDOWN'],
+  if(($('ent-name').value||'').trim()!==NAME) saveName(); const name=NAME;
+  e.spoken=false; e.script=[[0,e.open,'BUILD'],[6,'Phones out, torches on! 📱🔦','BUILD'],[21*EB,'3…','COUNTDOWN'],[22*EB,'2…','COUNTDOWN'],[23*EB,'1…','COUNTDOWN'],
     [BOOM,'Please welcome… '+(name?name+'! 🔥':e.who),'BOOM'],[BOOM+5,'Haath upar! Shor machao! 🙌','GROOVE'],[BOOM+10,'Ek baar aur… zor se! 🔥','GROOVE']];
   e.flashed=false; log('AI DJ · ENTRY',`${e.name}: music dipped, entry beat playing, BOOM at ${fmt(BOOM)}. Blends paused.`); track('console_entry',{entry:e.id});
 }
@@ -587,7 +638,7 @@ function playSong(s){
   if(!ac){ $('go').click(); setTimeout(()=>playSong(s),600); return }
   if(entryOn){ entEl.pause(); endEntry(); return }
   if(!entWired){const src=ac.createMediaElementSource(entEl); const g=ac.createGain(); src.connect(g).connect(master); entWired=true}
-  const name=($('ent-name').value||'').trim()||'birthday star';
+  if(($('ent-name').value||'').trim()!==NAME) saveName(); const name=NAME||'birthday star';
   entryOn={id:'bd-'+s.id,name:s.title,song:true,script:s.lines.map(l=>[l[0],l[1].replace(/\{NAME\}/g,name),l[2].toUpperCase()])};
   document.querySelectorAll('.ent').forEach(b=>b.disabled=b.id!=='ent-bd-'+s.id); $('ent-bd-'+s.id).classList.add('on');
   const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(.08,t+1.2);
@@ -603,12 +654,45 @@ setInterval(()=>{const e=entryOn; if(!e) return; const t=entEl.currentTime;
   $('ent-'+e.id).querySelector('i').style.width=Math.min(100,t/(entEl.duration||26.4)*100)+'%';
   let cur=e.script[0],nx=null; e.script.forEach(c=>{if(t>=c[0]-.05)cur=c; else if(!nx)nx=c});
   setPrompt(cur[1]); $('pr-where').textContent=e.name+' · '+cur[2];
-  if(e.song){$('pr-in').textContent=nx?'NEXT IN '+Math.max(0,nx[0]-t).toFixed(1)+'s':'LAST LINE'; $('pr-next').textContent=nx?nx[1]:'Music comes back on its own.';
+  if(e.song){ if(cur!==e.lastLine){e.lastLine=cur; if((NAME&&cur[1].includes(NAME))||(/birthday|jiyo/i.test(cur[1])&&cur[2]!=='INTRO')) speak(cur[1],{rate:1.05,pitch:1.15})}
+   $('pr-in').textContent=nx?'NEXT IN '+Math.max(0,nx[0]-t).toFixed(1)+'s':'LAST LINE'; $('pr-next').textContent=nx?nx[1]:'Music comes back on its own.';
     if(cur[2]==='DROP'&&e.prevSec!=='DROP'&&(e.prevSec=cur[2])){ const f=document.createElement('div'); f.className='flash'; document.body.append(f); setTimeout(()=>f.remove(),1000)} e.prevSec=cur[2]; return}
   if(t<BOOM){$('pr-in').textContent='BOOM IN '+(BOOM-t).toFixed(1)+'s'; $('pr-next').textContent=nx?nx[1]:''}
   else {$('pr-in').textContent='AFTER'; $('pr-next').textContent='Music comes back on its own when the entry ends.'}
+  if(!e.song&&!e.spoken&&t>=BOOM-.25){e.spoken=true; speak('Please welcome, '+(NAME||e.who.replace(/[!…]/g,'')),{rate:.9,pitch:1.1})}
   if(!e.flashed&&t>=BOOM-.03){e.flashed=true; const f=document.createElement('div'); f.className='flash'; document.body.append(f); setTimeout(()=>f.remove(),1000)}
 },50);
+
+// ---------- party view: stage, big buttons, saved name + voice ----------
+$('protog').addEventListener('click',()=>{const pr=$('pro'); pr.hidden=!pr.hidden; $('protog').setAttribute('aria-expanded',!pr.hidden); if(!pr.hidden){drawWave('a');drawWave('b'); pr.scrollIntoView({behavior:'smooth',block:'start'})}});
+$('nextnow').addEventListener('click',()=>{ if(!ac){$('go').click();return} if(blending||entryOn) return; if(!aiOn) setMode(true); log('AI DJ · NEXT','Skipping ahead: blending into the next song now.'); blend(); track('console_next')});
+$('pp').addEventListener('click',()=>{ if(!ac){$('go').click();return} const d=decks[live()]; setPlay(live(),d.el.paused); });
+let NAME=''; try{NAME=localStorage.getItem('jw_name')||''}catch(e){}
+function showName(){ $('ent-name').value=NAME; $('namechip').innerHTML=''; if(NAME){const b=document.createElement('b'); b.textContent='✓ Saved: '+NAME; $('namechip').append(b,' · the AI will announce this name in moments and birthday songs.')} else $('namechip').textContent='No name saved yet. The AI will say "the couple" or "birthday star".'}
+function saveName(){ NAME=($('ent-name').value||'').trim().slice(0,40); try{NAME?localStorage.setItem('jw_name',NAME):localStorage.removeItem('jw_name')}catch(e){} showName(); }
+let voice=null; function pickVoice(){ const vs=(window.speechSynthesis&&speechSynthesis.getVoices())||[]; voice=vs.find(v=>/en-IN/i.test(v.lang))||vs.find(v=>/hi-IN/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null }
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice }
+function speak(text,opt={}){ if(!('speechSynthesis' in window)) return false; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/\(Hey!\)/,'')); if(voice){u.voice=voice;u.lang=voice.lang} else u.lang='en-IN';
+  u.rate=opt.rate||.95; u.pitch=opt.pitch||1.05; u.volume=1; speechSynthesis.speak(u); return true }catch(e){return false} }
+$('name-save').addEventListener('click',()=>{saveName(); if(NAME) speak('Name saved. '+NAME); track('console_name_save')});
+$('ent-name').addEventListener('keydown',e=>{if(e.key==='Enter'){saveName(); if(NAME) speak('Name saved. '+NAME)}});
+$('name-test').addEventListener('click',()=>{ const n=($('ent-name').value||'').trim()||NAME; if(!speak(n?'Please welcome, '+n+'! Happy birthday, '+n+'!':'Type a name first.')) $('namechip').textContent='This browser cannot speak. Try Chrome or Safari.'});
+showName();
+// stage visual: real audio spectrum mirrored around the centre, glowing in the brand gradient
+const viz=$('viz'), vx=viz.getContext('2d'); let fbuf=null;
+function drawViz(now){ const w=viz.clientWidth,h=viz.clientHeight,dpr=Math.min(devicePixelRatio||1,2); if(viz.width!==w*dpr){viz.width=w*dpr;viz.height=h*dpr} vx.setTransform(dpr,0,0,dpr,0,0); vx.clearRect(0,0,w,h);
+  const n=64, g=vx.createLinearGradient(0,0,w,0); g.addColorStop(0,'#7B2FF7'); g.addColorStop(.55,'#FF2E88'); g.addColorStop(1,'#FF8A00');
+  let vals=[]; if(ac&&analyser){ if(!fbuf) fbuf=new Uint8Array(analyser.frequencyBinCount); analyser.getByteFrequencyData(fbuf); for(let i=0;i<n;i++){const k=Math.floor(Math.pow(i/n,1.7)*fbuf.length*.6); vals.push(fbuf[k]/255)} }
+  else for(let i=0;i<n;i++) vals.push(.12+.1*Math.sin(i*.4+now*.002));
+  const bw=w/(n*2); vx.fillStyle=g; vx.shadowColor='#FF2E88'; vx.shadowBlur=18;
+  for(let i=0;i<n;i++){ const v=Math.pow(vals[i],1.4), bh=Math.max(4,v*h*.8), y=(h-bh)/2-h*.08;
+    [w/2+i*bw, w/2-(i+1)*bw].forEach(x=>{vx.globalAlpha=.35+.65*v; vx.fillRect(x+bw*.18,y,bw*.64,bh)}) }
+  vx.globalAlpha=1; vx.shadowBlur=0;
+  const d=decks[live()], tr=d.track; if(tr){ $('np-title').textContent=tr.title; $('np-bpm').textContent=bpmOf(live()).toFixed(1)+' BPM'; $('np-key').textContent=tr.key; $('np-tag').textContent=tr.tag||'';
+    $('np-prog').style.width=((d.el.currentTime/(d.el.duration||tr.dur))*100)+'%'; $('np-up').textContent=queue.length?'Next: '+T[queue[0]].title:'Next: —';
+    $('pp').querySelector('b').textContent=d.el.paused?'Play':'Pause' }
+  requestAnimationFrame(drawViz) }
+requestAnimationFrame(drawViz);
 
 // ---------- start ----------
 load('a',0); load('b',2); recent=[T[0].id]; setVibe(.5); played=[]; plan(T[0]);
