@@ -106,6 +106,10 @@ body.compact .np-title{font-size:clamp(34px,6vw,64px)}
 .prompt,.setlist{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px;min-width:0}
 .ph{display:flex;justify-content:space-between;gap:10px;font:700 11px var(--mono);letter-spacing:.14em;color:var(--mute);margin-bottom:8px}
 .ph b{color:var(--gold)}
+.vctl{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 6px}
+.vctl button{border:1px solid var(--line);background:var(--panel-2);border-radius:999px;padding:6px 10px;font:700 11px/1 var(--display);white-space:nowrap}
+.vctl button[aria-pressed="true"]{background:color-mix(in srgb,var(--b) 30%,var(--panel-2));border-color:color-mix(in srgb,var(--b) 70%,transparent)}
+#v-on[aria-pressed="false"]{opacity:.7}
 .prompt .now{margin:6px 0 12px;font:800 clamp(22px,3.2vw,34px)/1.15 var(--display);text-wrap:balance;min-height:2.3em}
 .nextline{display:flex;gap:10px;align-items:baseline;padding-top:10px;border-top:1px dashed var(--line);color:var(--mute);font-size:14px;min-width:0}
 .nextline span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -437,6 +441,13 @@ body{display:flex;flex-direction:column;min-height:100dvh}
   <div class="dock">
     <div class="view" data-view="show"><section class="prompt" aria-label="DJ teleprompter">
       <div class="ph"><b>TELEPROMPTER</b><span id="pr-where">Before the night</span></div>
+      <div class="vctl" role="group" aria-label="MC voice">
+        <button type="button" id="v-on" aria-pressed="true">🎙 Voice ON</button>
+        <button type="button" id="v-pause" aria-pressed="false">⏸ Pause</button>
+        <button type="button" id="v-f" class="vg" aria-pressed="true">👩 Female</button>
+        <button type="button" id="v-m" class="vg" aria-pressed="false">👨 Male</button>
+        <button type="button" id="v-tone" aria-pressed="false">✨ Smooth</button>
+      </div>
       <p class="now" id="mc" aria-live="polite">Lights low, phones up. JHOOMWAVE is in the booth.</p>
       <div class="nextline"><span class="in" id="pr-in">NEXT</span><span id="pr-next">Press start and the script follows the set.</span></div>
     </section></div>
@@ -492,7 +503,7 @@ const MC={
 };
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 function say(k){ setPrompt(pick(MC[k])); }
-function setPrompt(s){ if(s===lastCue) return; lastCue=s; const el=$('mc'); el.textContent=s; el.animate?.([{opacity:.2,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:320}); }
+function setPrompt(s){ if(s===lastCue) return; lastCue=s; const el=$('mc'); el.textContent=s; if(ac&&!/^[123]…$/.test(s)) setTimeout(()=>{ if(lastCue===s&&!(entryOn&&entryOn.song)) speak(s) },60); el.animate?.([{opacity:.2,transform:'translateY(6px)'},{opacity:1,transform:'none'}],{duration:320}); }
 function log(head,txt){ $('ai-head').textContent=head; $('ai-log').textContent=txt; }
 
 // ---------- audio graph ----------
@@ -760,7 +771,6 @@ setInterval(()=>{const e=entryOn; if(!e) return; const t=entEl.currentTime;
     if(cur[2]==='DROP'&&e.prevSec!=='DROP'&&(e.prevSec=cur[2])){ const f=document.createElement('div'); f.className='flash'; document.body.append(f); setTimeout(()=>f.remove(),1000)} e.prevSec=cur[2]; return}
   if(t<BOOM){$('pr-in').textContent='BOOM IN '+(BOOM-t).toFixed(1)+'s'; $('pr-next').textContent=nx?nx[1]:''}
   else {$('pr-in').textContent='AFTER'; $('pr-next').textContent='Music comes back on its own when the entry ends.'}
-  if(!e.song&&!e.spoken&&t>=BOOM-.25){e.spoken=true; speak('Please welcome, '+(NAME||e.who.replace(/[!…]/g,'')),{rate:.9,pitch:1.1})}
   if(!e.flashed&&t>=BOOM-.03){e.flashed=true; const f=document.createElement('div'); f.className='flash'; document.body.append(f); setTimeout(()=>f.remove(),1000)}
 },50);
 
@@ -774,13 +784,39 @@ $('pp').addEventListener('click',()=>{ if(!ac){$('go').click();return} const d=d
 let NAME=''; try{NAME=localStorage.getItem('jw_name')||''}catch(e){}
 function showName(){ $('ent-name').value=NAME; $('namechip').innerHTML=''; if(NAME){const b=document.createElement('b'); b.textContent='✓ Saved: '+NAME; $('namechip').append(b,' · the AI will announce this name in moments and birthday songs.')} else $('namechip').textContent='No name saved yet. The AI will say "the couple" or "birthday star".'}
 function saveName(){ NAME=($('ent-name').value||'').trim().slice(0,40); try{NAME?localStorage.setItem('jw_name',NAME):localStorage.removeItem('jw_name')}catch(e){} showName(); }
-let voice=null; function pickVoice(){ const vs=(window.speechSynthesis&&speechSynthesis.getVoices())||[]; voice=vs.find(v=>/en-IN/i.test(v.lang))||vs.find(v=>/hi-IN/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null }
+// MC voice: on/off, pause, female/male, smooth or hype tone. Uses the device's built-in voices (free).
+const VP={on:true,gender:'f',tone:'hype',paused:false};
+try{Object.assign(VP,JSON.parse(localStorage.getItem('jw_voice')||'{}'));VP.paused=false}catch(e){}
+const FEM=/female|woman|zira|samantha|victoria|karen|moira|tessa|veena|heera|lekha|kalpana|aditi|raveena|neerja|swara|priya|kiara|ananya|google uk english female|serena|susan|fiona|allison|ava|joanna|salli|kimberly|ivy/i;
+const MAL=/male|man\b|david|mark|daniel|alex|fred|rishi|hemant|prabhat|madhur|ravi|kunal|arjun|google uk english male|george|james|tom|oliver|matthew|joey|justin|brian/i;
+let VOICES=[]; function pickVoice(){ VOICES=(window.speechSynthesis&&speechSynthesis.getVoices())||[] }
+function voiceFor(){ const loc=v=>/en-IN|hi-IN/i.test(v.lang)?2:/^en/i.test(v.lang)?1:0;
+  const want=VP.gender==='f'?FEM:MAL, avoid=VP.gender==='f'?MAL:FEM;
+  const c=VOICES.filter(v=>loc(v)>0).sort((a,b)=>((want.test(b.name)&&!avoid.test(b.name))*4+loc(b))-((want.test(a.name)&&!avoid.test(a.name))*4+loc(a)));
+  return c[0]||null }
 if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice }
-function speak(text,opt={}){ if(!('speechSynthesis' in window)) return false; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/\(Hey!\)/,'')); if(voice){u.voice=voice;u.lang=voice.lang} else u.lang='en-IN';
-  u.rate=opt.rate||.95; u.pitch=opt.pitch||1.05; u.volume=1; speechSynthesis.speak(u); return true }catch(e){return false} }
+function saveVP(){ try{localStorage.setItem('jw_voice',JSON.stringify({on:VP.on,gender:VP.gender,tone:VP.tone}))}catch(e){} }
+function vUI(){ $('v-on').setAttribute('aria-pressed',VP.on); $('v-on').textContent=VP.on?'🎙 Voice ON':'🔇 Voice OFF';
+  $('v-pause').setAttribute('aria-pressed',VP.paused); $('v-pause').textContent=VP.paused?'▶ Resume':'⏸ Pause';
+  $('v-f').setAttribute('aria-pressed',VP.gender==='f'); $('v-m').setAttribute('aria-pressed',VP.gender==='m');
+  $('v-tone').setAttribute('aria-pressed',VP.tone==='smooth'); $('v-tone').textContent=VP.tone==='smooth'?'✨ Smooth':'🔥 Hype tone'; }
+function duckFor(on){ if(!ac||!duck||entryOn) return; const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(on?.45:1,t+.25) }
+function speak(text,opt={}){ if(!('speechSynthesis' in window)) return false; if(!opt.force&&(!VP.on||VP.paused)) return true;
+  try{ speechSynthesis.cancel(); const clean=text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/\(Hey!\)/g,'').trim(); if(!clean) return true;
+    const u=new SpeechSynthesisUtterance(clean); const v=voiceFor(); if(v){u.voice=v;u.lang=v.lang} else u.lang='en-IN';
+    const smooth=VP.tone==='smooth', f=VP.gender==='f';
+    u.rate=(opt.rate||1)*(smooth?.86:1.04); u.pitch=f?(smooth?1.12:1.28):(smooth?.72:.9); u.volume=1;
+    u.onstart=()=>duckFor(true); u.onend=u.onerror=()=>duckFor(false);
+    speechSynthesis.speak(u); return true }catch(e){return false} }
+$('v-on').addEventListener('click',()=>{VP.on=!VP.on; if(!VP.on){speechSynthesis?.cancel(); duckFor(false)} VP.paused=false; saveVP(); vUI(); track('console_voice',{on:VP.on})});
+$('v-pause').addEventListener('click',()=>{ if(!('speechSynthesis' in window)) return; VP.paused=!VP.paused; if(VP.paused){speechSynthesis.pause()} else {speechSynthesis.resume()} vUI()});
+$('v-f').addEventListener('click',()=>{VP.gender='f'; saveVP(); vUI(); speak('Hi, I am your JHOOMWAVE host. Lets go!',{force:true})});
+$('v-m').addEventListener('click',()=>{VP.gender='m'; saveVP(); vUI(); speak('Hi, I am your JHOOMWAVE host. Lets go!',{force:true})});
+$('v-tone').addEventListener('click',()=>{VP.tone=VP.tone==='smooth'?'hype':'smooth'; saveVP(); vUI(); speak(VP.tone==='smooth'?'Smooth mode. Relax, feel the groove.':'Hype mode! Haath upar!',{force:true})});
+vUI();
 $('name-save').addEventListener('click',()=>{saveName(); if(NAME) speak('Name saved. '+NAME); track('console_name_save')});
 $('ent-name').addEventListener('keydown',e=>{if(e.key==='Enter'){saveName(); if(NAME) speak('Name saved. '+NAME)}});
-$('name-test').addEventListener('click',()=>{ const n=($('ent-name').value||'').trim()||NAME; if(!speak(n?'Please welcome, '+n+'! Happy birthday, '+n+'!':'Type a name first.')) $('namechip').textContent='This browser cannot speak. Try Chrome or Safari.'});
+$('name-test').addEventListener('click',()=>{ const n=($('ent-name').value||'').trim()||NAME; if(!speak(n?'Please welcome, '+n+'! Happy birthday, '+n+'!':'Type a name first.',{force:true})) $('namechip').textContent='This browser cannot speak. Try Chrome or Safari.'});
 showName();
 // stage visual: real audio spectrum mirrored around the centre, glowing in the brand gradient
 const viz=$('viz'), vx=viz.getContext('2d'); let fbuf=null;
