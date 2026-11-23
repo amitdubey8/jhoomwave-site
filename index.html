@@ -28,6 +28,13 @@
 <meta name="twitter:title" content="JHOOMWAVE · AI DJ">
 <meta name="twitter:description" content="We don't play songs. We start nights.">
 <meta name="twitter:image" content="https://jhoomwave.com/img/og.jpg">
+<script>
+// Visitor stats: Google Analytics 4. Inactive until GA_ID is set (Measurement ID like "G-XXXXXXX").
+window.GA_ID="";
+window.track=function(name,params){try{window.gtag&&gtag('event',name,params||{})}catch(e){}};
+if(window.GA_ID){var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;document.head.appendChild(s);
+  window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config',GA_ID,{anonymize_ip:true});}
+</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
  {"@type":"MusicGroup","@id":"https://jhoomwave.com/#brand","name":"JHOOMWAVE","alternateName":"Jhoomwave","url":"https://jhoomwave.com/",
@@ -368,6 +375,7 @@ footer a{color:var(--ink)}
   btn&&btn.addEventListener('click',()=>{
     if(timer){clearInterval(timer);timer=null;ac.close();ac=null;btn.textContent='🔊 Drop the beat';btn.setAttribute('aria-pressed','false');return}
     try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){btn.textContent='Sound not available here';return}
+    const mixA=document.getElementById('audio'); if(mixA) mixA.pause();
     nextT=ac.currentTime+.05;step=0;timer=setInterval(sched,50);sched();
     btn.textContent='■ Stop the beat';btn.setAttribute('aria-pressed','true');requestAnimationFrame(draw);
   });
@@ -379,7 +387,7 @@ footer a{color:var(--ink)}
 (function(){
   const M=JSON.parse(document.getElementById('mixes').textContent), a=document.getElementById('audio');
   const $=id=>document.getElementById(id), bar=$('player'), list=$('list'), ol=$('tracks');
-  let cur=null, rows=[];
+  let cur=null, rows=[]; const marks=new Set();
   const fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
   function renderList(m){
     $('list-title').textContent='Vol. '+String(m.vol).padStart(2,'0')+' · '+m.name+' · tracklist & credits';
@@ -388,7 +396,7 @@ footer a{color:var(--ink)}
       ts.className='ts';ts.textContent=fmt(tr.t);tt.className='tt';tt.textContent=tr.title;
       if(tr.url){const l=document.createElement('a');l.href=tr.url;l.target='_blank';l.rel='noopener';l.textContent=tr.by;l.addEventListener('click',e=>e.stopPropagation());by.append('by ',l)}else by.textContent='by '+tr.by;
       tt.append(by);lic.className='lic';lic.textContent=tr.note;li.append(ts,tt,lic);
-      li.addEventListener('click',()=>{a.currentTime=tr.t;a.play()});ol.append(li);return li});
+      li.addEventListener('click',()=>{a.currentTime=tr.t;a.play();track('track_jump',{volume:m.vol,track:tr.title})});ol.append(li);return li});
     list.hidden=false;
   }
   function load(v){
@@ -397,9 +405,11 @@ footer a{color:var(--ink)}
     document.querySelectorAll('.mix[data-vol]').forEach(el=>el.classList.toggle('on',+el.dataset.vol===v));
     const d=$('drop'); if(d&&d.getAttribute('aria-pressed')==='true') d.click();
     bar.hidden=false;document.body.classList.add('playing');a.play().catch(()=>{});
+    marks.clear(); track('mix_play',{volume:v,mix_name:m.name});
   }
   document.querySelectorAll('.mix[data-vol]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();
     const v=+el.dataset.vol; if(cur&&cur.vol===v){a.paused?a.play():a.pause()} else load(v)}));
+  [bar,document.getElementById('sessions')].forEach(el=>el.addEventListener('contextmenu',e=>e.preventDefault()));
   $('p-toggle').addEventListener('click',()=>a.paused?a.play():a.pause());
   const sync=()=>{const p=a.paused;$('p-toggle').textContent=p?'▶':'❚❚';$('p-toggle').setAttribute('aria-label',p?'Play':'Pause')};
   a.addEventListener('play',sync);a.addEventListener('pause',sync);
@@ -409,12 +419,17 @@ footer a{color:var(--ink)}
   a.addEventListener('timeupdate',()=>{
     if(!cur) return; const t=a.currentTime;
     if(!seeking&&a.duration){seek.value=t/a.duration*1000;$('p-time').textContent=fmt(t)+' / '+fmt(a.duration)}
+    if(a.duration){const pc=Math.floor(t/a.duration*4)*25; for(const q of [25,50,75]) if(pc>=q&&!marks.has(q)){marks.add(q);track('mix_progress',{volume:cur.vol,percent:q})}}
     let i=0; cur.tracks.forEach((tr,k)=>{if(t>=tr.t)i=k});
     rows.forEach((r,k)=>r.classList.toggle('cur',k===i)); const tr=cur.tracks[i];
     $('p-track').textContent='· '+tr.title+' – '+tr.by;
   });
-  a.addEventListener('ended',()=>{const n=M.find(x=>x.vol===cur.vol+1); if(n) load(n.vol)});
+  a.addEventListener('ended',()=>{track('mix_complete',{volume:cur.vol});const n=M.find(x=>x.vol===cur.vol+1); if(n) load(n.vol)});
 })();
+</script>
+<script>
+document.addEventListener('click',e=>{const l=e.target.closest('a[href*="instagram.com"]'); if(l) track('instagram_click',{where:l.closest('section,nav,footer,header')?.id||l.closest('nav,footer')?.tagName.toLowerCase()||'page'});
+  if(e.target.closest('#drop')) track('beat_drop');});
 </script>
 </body>
 </html>
