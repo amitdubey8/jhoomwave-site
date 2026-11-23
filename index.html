@@ -154,7 +154,7 @@ section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
 @media (max-width:520px){.steps{grid-template-columns:1fr}}
 
 /* road */
-.road{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
 .stop{position:relative;padding:26px 22px;border:1px solid var(--line);border-radius:18px;background:var(--night-2);min-width:0}
 .stop.now{border-color:transparent;background:linear-gradient(var(--night-2),var(--night-2)) padding-box,var(--wave) border-box;border:1.5px solid transparent}
 .stop .k{font:500 11px/1 var(--mono);letter-spacing:.16em;color:var(--gold)}
@@ -331,7 +331,7 @@ footer a{color:var(--ink)}
     <div class="pillars">
       <div class="pillar"><span class="tag">Sessions</span><h3>Global party sound</h3><p>House, EDM, trance and desi fusion mixes, cut for the moment the room lifts.</p><span class="for">Instagram · YouTube</span></div>
       <div class="pillar"><span class="tag">Live</span><h3>Private events</h3><p>An AI DJ and MC that plans the night around your crowd: weddings, villa parties, rooftops, birthdays.</p><span class="for">Hosts · planners · families</span></div>
-      <div class="pillar"><span class="tag">Studio</span><h3>Brand anthems</h3><p>Launch music, walk-on tracks and a sound your team recognises in two seconds.</p><span class="for">Companies · launches · award nights</span></div>
+      <div class="pillar"><span class="tag">Studio</span><h3>Songs & anthems</h3><p>Birthday songs sung for one person, launch music, walk-on tracks and a sound your team recognises in two seconds.</p><span class="for">Birthdays · companies · launches · award nights</span></div>
       <div class="pillar"><span class="tag">Playlists</span><h3>Venue sound <span class="soon">SOON</span></h3><p>The right energy for every hour of the day, from morning café to late-night lounge.</p><span class="for">Cafés · hotels · gyms · offices</span></div>
     </div>
   </div>
@@ -359,9 +359,10 @@ footer a{color:var(--ink)}
       <p>Our roadmap. The first step is live today; the rest is what we're building.</p>
     </div>
     <div class="road">
-      <div class="stop now"><span class="k">NOW</span><h3>AI DJ Sessions</h3><p>Real beatmatched mixes, planned and played by the AI, curated by a human.</p></div>
-      <div class="stop"><span class="k">NEXT</span><h3>Live Mode</h3><p>The set reacts to the floor in real time. Hosts tap "hype" or "chill"; an optional camera reads only how much the floor moves. No faces, off by default at private events.</p></div>
-      <div class="stop"><span class="k">THEN</span><h3>The JHOOMWAVE booth</h3><p>A DJ booth that runs the whole night by itself, from first song to last call: music, lights cues and the mic.</p></div>
+      <div class="stop now"><span class="k">NOW · LIVE</span><h3>The AI DJ console</h3><p>Two decks the AI mixes in front of you, a set list it plans and re-plans when you hit Hype, entries with countdowns, and an MC voice that hosts the night.</p></div>
+      <div class="stop now"><span class="k">NOW · LIVE</span><h3>Songs made for one person</h3><p>Real sung birthday songs for kids, seniors, founders, developers, doctors, teachers and traders. Original lyrics, licensed AI vocals.</p></div>
+      <div class="stop"><span class="k">NEXT</span><h3>Your name, sung live</h3><p>Type a name at the party and a new song with that name is ready in about a minute. Plus Live Mode: an optional camera reads only how much the floor moves. No faces, off by default.</p></div>
+      <div class="stop"><span class="k">THEN</span><h3>The JHOOMWAVE booth</h3><p>A DJ booth, and one day a robot DJ, that runs the whole night by itself: music, lights and the mic, from first song to last call.</p></div>
       <div class="stop"><span class="k">ONE DAY</span><h3>Every room, worldwide</h3><p>From a sangeet in Jaipur to a rooftop in London. Same wave, any city.</p></div>
     </div>
   </div>
