@@ -299,3 +299,9 @@ body[data-theme="neon80s"] .hero .g{-webkit-text-stroke:2px #000;text-shadow:non
 body[data-theme="neon80s"] .desk2{border:3px solid #000;box-shadow:6px 6px 0 #000}
 body[data-theme="neon80s"] .desk2:nth-child(odd){transform:rotate(.6deg)} body[data-theme="neon80s"] .desk2:nth-child(even){transform:rotate(-.6deg)}
 body[data-theme="neon80s"] .ava{border:3px solid #000}
+
+/* studio interior photo behind the hero; the sky/theme colour tints it */
+.hero{min-height:360px}
+.hero>.interior{position:absolute!important;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;mix-blend-mode:luminosity;pointer-events:none}
+.hero.sky-day>.interior,.hero.sky-golden>.interior{opacity:.62;mix-blend-mode:normal}
+.hero>.shade{position:absolute!important;inset:0;background:linear-gradient(180deg,rgb(14 5 24/.15),rgb(14 5 24/.55) 60%,rgb(14 5 24/.8));pointer-events:none}

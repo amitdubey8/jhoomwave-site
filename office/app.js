@@ -290,7 +290,8 @@
     const now = new Date(), ph = skyPhase(now);
     const fresh = vibe && vibe.temp_c != null && Date.now() - new Date(vibe.updated_at) < 8 * 3600e3;
     const stars = h('div', { class: 'stars', 'aria-hidden': 'true' }, Array.from({ length: 28 }, () => { const s = h('i'); s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 60 + '%'; s.style.animationDelay = (Math.random() * 3).toFixed(2) + 's'; return s; }));
-    kids.push(h('section', { class: 'hero sky-' + ph[0] }, stars, themeRain(vibe && vibe.theme), eq,
+    const interior = h('img', { class: 'interior', src: 'media/studio.jpg', alt: '', 'aria-hidden': 'true' });
+    kids.push(h('section', { class: 'hero sky-' + ph[0] }, interior, h('div', { class: 'shade', 'aria-hidden': 'true' }), stars, themeRain(vibe && vibe.theme), eq,
       h('p', { class: 'hq' }, h('span', {}, '📍 Virtual HQ · Sea-facing rooftop studio, Bandra, Mumbai'),
         h('span', { class: 'hqtime' }, `${ph[1]} ${tfmt(now)} · ${ph[2]} · ${ph[3]}`),
         h('span', { class: 'hqtime' }, fresh ? `🌡️ ${Number(vibe.temp_c).toFixed(0)}°C · ${vibe.condition || ''}` : '🌤️ Weather arrives with the next team huddle'),
