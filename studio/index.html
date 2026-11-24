@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#0E0518"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="/css/app.css">
 <style>
 :root{--night:#0E0518;--n2:#170A28;--line:#2C1C44;--ink:#F6F1FF;--mute:#B3A6CC;--pink:#FF2E88;--gold:#C9A86A;
  --wave:linear-gradient(100deg,#7B2FF7,#FF2E88 55%,#FF8A00);--d:"Poppins",system-ui,sans-serif;--b:"Inter",system-ui,sans-serif;--m:"JetBrains Mono",monospace;color-scheme:dark}
@@ -147,4 +148,6 @@ $('d-copy').addEventListener('click',async()=>{try{await navigator.clipboard.wri
  sh.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{sh.hidden=true; n.classList.remove('open'); bg.setAttribute('aria-expanded',false)}));
 })();
 </script>
+<nav class="tb" aria-label="Quick"><a href="/"><span aria-hidden="true">🏠</span>Home</a><a href="/#shop"><span aria-hidden="true">🎵</span>Songs</a><a href="/#make" class="mk"><span aria-hidden="true">＋</span>Make</a><a href="/weddings/"><span aria-hidden="true">💍</span>Weddings</a><a href="/kids/"><span aria-hidden="true">🧸</span>Kids</a></nav>
+<script src="/js/jhoomi.js" defer></script>
 </body></html>

@@ -1,7 +1,7 @@
 {
-  "name": "JHOOMWAVE · AI DJ",
+  "name": "JHOOMWAVE",
   "short_name": "JHOOMWAVE",
-  "description": "We don't play songs. We start nights. AI DJ sessions, private events and brand anthems.",
+  "description": "Your song. Your name. Songs for every celebration: birthdays, weddings, kids, family and brands.",
   "start_url": "/?source=app",
   "scope": "/",
   "display": "standalone",
