@@ -244,9 +244,25 @@
     });
     return b;
   }
+  const THEMES = {
+    studio: ['🎛️ Studio', ''], thanksgiving: ['🦃 Thanksgiving', '🍂'], christmas: ['🎄 Christmas', '❄️'], diwali: ['🪔 Diwali', '✨'],
+    halloween: ['🎃 Halloween', '🦇'], newyear: ['🎆 New Year', '🎉'], holi: ['🎨 Holi', '🌸'], traditional: ['🪷 Traditional', '🪷'], neon80s: ['🌴 Neon City (loading-screen art)', '🌴'],
+  };
+  function applyTheme(t) { document.body.dataset.theme = THEMES[t] ? t : 'studio'; }
+  function themeRain(t) {
+    const e = (THEMES[t] || [])[1]; if (!e) return null;
+    return h('div', { class: 'rain', 'aria-hidden': 'true' }, Array.from({ length: 14 }, (_, i) => { const s = h('i', {}, e); s.style.left = (i * 7 + Math.random() * 5) + '%'; s.style.animationDelay = (Math.random() * 6).toFixed(1) + 's'; s.style.animationDuration = (6 + Math.random() * 5).toFixed(1) + 's'; return s; }));
+  }
+  function themePicker(cur) {
+    const sel = h('select', { class: 'themesel', 'aria-label': 'Office theme' }, Object.entries(THEMES).map(([k, v]) => h('option', { value: k, selected: k === cur }, v[0])));
+    sel.addEventListener('change', async () => { const { error } = await sb.from('office_vibe').upsert({ id: 1, theme: sel.value }); if (error) return fail(error); toast('Office theme: ' + THEMES[sel.value][0]); rerender(); });
+    return sel;
+  }
+  const AV = {}; // agent id -> portrait path (AI-generated faces of people who do not exist)
   function avatar(id, size) {
     const d = DESK[id] || ['✨', '#7B2FF7', '#FF2E88'];
-    const a = h('div', { class: 'ava' }, d[0]); a.style.background = `linear-gradient(135deg,${d[1]},${d[2]})`;
+    const a = h('div', { class: 'ava' }, AV[id] ? h('img', { src: AV[id], alt: '', loading: 'lazy' }) : d[0]); a.style.background = `linear-gradient(135deg,${d[1]},${d[2]})`;
+    if (AV[id]) { const b = h('span', { class: 'badge' }, d[0]); a.append(b); }
     if (size) { a.style.width = a.style.height = size + 'px'; a.style.fontSize = Math.round(size / 2) + 'px'; a.style.borderRadius = Math.round(size / 3) + 'px'; }
     return a;
   }
@@ -259,7 +275,8 @@
     ]);
     const today = new Date().toISOString().slice(0, 10), soon = new Date(Date.now() + 3 * 864e5).toISOString().slice(0, 10);
     const [vb, cel, wg] = await Promise.all([sb.from('office_vibe').select('*').maybeSingle(), sb.from('celebrations').select('*').gte('day', today).lte('day', soon).order('day'), sb.from('weekly_goals').select('*').eq('week_start', monday(new Date())).order('id')]);
-    const vibe = vb.data;
+    const vibe = vb.data; applyTheme(vibe && vibe.theme);
+    (a.data || []).forEach((x) => { if (x.avatar) AV[x.id] = x.avatar; });
     const agents = a.data || [], kp = Object.fromEntries((k.data || []).map((x) => [x.id, x]));
     const byName = Object.fromEntries(agents.map((x) => [x.name, x.id]));
     const busy = agents.filter((x) => x.status === 'working').length;
@@ -273,10 +290,11 @@
     const now = new Date(), ph = skyPhase(now);
     const fresh = vibe && vibe.temp_c != null && Date.now() - new Date(vibe.updated_at) < 8 * 3600e3;
     const stars = h('div', { class: 'stars', 'aria-hidden': 'true' }, Array.from({ length: 28 }, () => { const s = h('i'); s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 60 + '%'; s.style.animationDelay = (Math.random() * 3).toFixed(2) + 's'; return s; }));
-    kids.push(h('section', { class: 'hero sky-' + ph[0] }, stars, eq,
+    kids.push(h('section', { class: 'hero sky-' + ph[0] }, stars, themeRain(vibe && vibe.theme), eq,
       h('p', { class: 'hq' }, h('span', {}, '📍 Virtual HQ · Sea-facing rooftop studio, Bandra, Mumbai'),
         h('span', { class: 'hqtime' }, `${ph[1]} ${tfmt(now)} · ${ph[2]} · ${ph[3]}`),
-        h('span', { class: 'hqtime' }, fresh ? `🌡️ ${Number(vibe.temp_c).toFixed(0)}°C · ${vibe.condition || ''}` : '🌤️ Weather arrives with the next team huddle')),
+        h('span', { class: 'hqtime' }, fresh ? `🌡️ ${Number(vibe.temp_c).toFixed(0)}°C · ${vibe.condition || ''}` : '🌤️ Weather arrives with the next team huddle'),
+        ME.role === 'owner' ? themePicker((vibe && vibe.theme) || 'studio') : h('span', { class: 'hqtime' }, 'Theme: ' + ((THEMES[(vibe && vibe.theme) || 'studio'] || THEMES.studio)[0]))),
       h('p', { class: 'hello' }, `${greet()}, ${first} 👋 `, studioBtn()),
       h('h1', {}, 'The JHOOMWAVE studio is ', h('span', { class: 'g' }, word)),
       h('p', { class: 'sub' }, h('b', {}, `${busy} of ${agents.length}`), ' teammates in the zone · next team huddle in ', h('b', {}, nextHuddle())),
@@ -308,17 +326,22 @@
         (cb.data || []).length ? h('ol', { class: 'lb' }, cb.data.map((r, i) => { const av = avatar(r.id, 30); return h('li', {}, h('span', { class: 'md' }, medal[i]), av, h('b', {}, r.name), h('span', { class: 'cn' }, `🪙 ${r.coins}`)); })) : h('p', { class: 'mut' }, 'No coins yet.')),
       h('section', { class: 'board' }, h('div', { class: 'sech' }, h('h2', {}, '🏆 Awards wall'), h('small', {}, 'Employee of the Week every Monday')),
         (aw.data || []).length ? h('div', { class: 'aw' }, aw.data.map((r) => h('div', { class: 'cert' }, h('span', { class: 'ce' }, r.emoji || '🏆'), h('div', {}, h('b', {}, `${r.title} · ${nameOf[r.agent_id] || ''}`), h('div', { class: 'small mut' }, r.citation || ''), h('div', { class: 'small mut' }, ago(r.at)))))) : h('p', { class: 'mut' }, 'First awards land at the Monday all-hands.'))));
+    const PANTRY = [['☕', 'Masala chai'], ['🍵', 'Filter coffee'], ['🧋', 'Cold brew'], ['🫖', 'Kahwa'], ['🥤', 'Nimbu soda'], ['🥟', 'Samosa'], ['🍘', 'Indori poha'], ['🍪', 'Choco-chip cookies'], ['🌮', 'Vada pav'], ['🍿', 'Masala popcorn'], ['🍰', 'Red velvet'], ['🍉', 'Fruit bowl'], ['🥨', 'Khakhra'], ['🍫', 'Dark chocolate']];
+    const dayN = Math.floor(Date.now() / 864e5), pick = [0, 1, 2, 3, 4].map((i) => PANTRY[(dayN * 3 + i * 5) % PANTRY.length]);
+    kids.push(h('section', { class: 'pantry' }, h('div', { class: 'sech' }, h('h2', {}, '🍽️ Pantry today'), h('small', {}, 'fresh every day at the rooftop café')),
+      h('div', { class: 'menu' }, pick.map(([e, n]) => h('span', { class: 'dish' }, h('b', {}, e), n))), h('p', { class: 'small mut' }, '🪴 34 plants · 🎶 lo-fi on the speakers · 🌊 sea view from every desk')));
     const online = agents.filter((x) => x.status !== 'planned').length;
     kids.push(h('div', { class: 'sech' }, h('h2', {}, '🎛️ On the floor'), h('small', {}, `${online} online · ${agents.length} on the team · green light = in the zone`)));
     const deskCard = (x) => {
       const av = avatar(x.id); av.append(h('span', { class: 'lt' }));
       return h('article', { class: 'desk2 ' + x.status, id: 'desk-' + x.id },
-        h('div', { class: 'who' }, av, h('div', {}, h('div', { class: 'nm' }, x.name, h('span', { class: 'aitag', title: (x.id || '').startsWith('creator-') ? 'Virtual creator' : 'AI teammate' }, (x.id || '').startsWith('creator-') ? '✦ Virtual' : '✦ AI')), h('div', { class: 'rl' }, x.role))),
+        h('div', { class: 'who' }, av, h('div', {}, h('div', { class: 'nm' }, x.name, h('span', { class: 'aitag', title: x.id === 'dog' ? 'Studio dog' : (x.id || '').startsWith('creator-') ? 'Virtual creator' : 'AI teammate' }, x.id === 'dog' ? '🐾 Dog' : (x.id || '').startsWith('creator-') ? '✦ Virtual' : '✦ AI')), h('div', { class: 'rl' }, x.role))),
         h('div', { class: 'mood' }, x.status === 'working' ? h('span', { class: 'mini', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i')) : null, MOOD[x.status] || x.status),
         x.now_doing ? h('div', { class: 'bubble' }, x.now_doing) : null,
         h('div', { class: 'dl' }, x.last_done ? h('div', {}, h('span', {}, '✅ Just finished: '), x.last_done) : null, x.next_up ? h('div', {}, h('span', {}, '⏭️ Up next: '), x.next_up) : null, x.goal ? h('div', {}, h('span', {}, '🎯 Goal: '), x.goal) : null),
         h('div', { class: 'when' }, (x.base_city ? '📍 ' + x.base_city + ' · ' : '') + 'updated ' + ago(x.updated_at)),
         x.vibe ? h('div', { class: 'offduty' }, '🎈 Off duty: ' + x.vibe) : null,
+        x.desk ? h('div', { class: 'desktop', title: 'On the desk' }, h('span', { class: 'chair', 'aria-hidden': 'true' }, '🪑'), h('span', {}, x.desk)) : null,
         x.bio ? h('details', { class: 'persona' }, h('summary', {}, 'About ' + x.name), h('p', {}, x.bio)) : null);
     };
     for (const t of [...TEAMS, null]) {
@@ -354,7 +377,8 @@
 
   // ---------------------------------------------------------------- Team chat
   async function pageChat(page) {
-    const [m, a] = await Promise.all([sb.from('messages').select('*').eq('room', 'team').order('at', { ascending: false }).limit(80), sb.from('agents').select('id,name')]);
+    const [m, a] = await Promise.all([sb.from('messages').select('*').eq('room', 'team').order('at', { ascending: false }).limit(80), sb.from('agents').select('id,name,avatar')]);
+    (a.data || []).forEach((x) => { if (x.avatar) AV[x.id] = x.avatar; });
     if (m.error) throw m.error;
     const byName = Object.fromEntries((a.data || []).map((x) => [x.name, x.id]));
     const list = h('ul', { class: 'chat' }, (m.data || []).slice().reverse().map((x) => {

@@ -256,3 +256,46 @@ body{background:radial-gradient(1200px 600px at 10% -10%,rgb(123 47 247/.18),tra
 .aw{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
 .cert{display:flex;gap:10px;align-items:flex-start;background:linear-gradient(135deg,rgb(255 210 63/.14),rgb(255 46 136/.10));border:1px solid rgb(255 210 63/.35);border-radius:16px;padding:10px 12px}
 .cert .ce{font-size:28px}
+
+.ava{overflow:visible}.ava img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.ava .badge{position:absolute;left:-6px;top:-6px;font-size:13px;line-height:1;background:var(--night-2);border-radius:999px;padding:2px}
+
+.desktop{display:flex;align-items:center;gap:8px;margin-top:auto;padding:8px 12px;border-radius:12px;font-size:18px;letter-spacing:2px;
+  background:linear-gradient(180deg,#6b4423,#4a2e17);box-shadow:inset 0 2px 0 rgb(255 255 255/.12),0 6px 14px -8px rgb(0 0 0/.7);border:1px solid #3a230f}
+.desktop .chair{font-size:16px;opacity:.85;letter-spacing:0}
+.pantry{background:linear-gradient(135deg,rgb(255 138 0/.14),rgb(46 229 157/.08));border:1px solid rgb(255 255 255/.12);border-radius:22px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.menu{display:flex;flex-wrap:wrap;gap:8px}
+.dish{display:inline-flex;align-items:center;gap:6px;background:rgb(14 5 24/.5);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px}
+.dish b{font-size:18px}
+
+/* office themes (our own designs; no brand artwork) */
+.themesel{width:auto;padding:4px 10px;font-size:12.5px;border-radius:999px;background:rgb(14 5 24/.45);border:1px solid rgb(255 255 255/.2)}
+.rain{position:absolute!important;inset:0;pointer-events:none;overflow:hidden}
+.rain i{position:absolute;top:-30px;font-style:normal;font-size:20px;opacity:.85}
+@media (prefers-reduced-motion:no-preference){.rain i{animation:fall linear infinite}@keyframes fall{to{transform:translateY(380px) rotate(200deg)}}}
+@media (prefers-reduced-motion:reduce){.rain{display:none}}
+body[data-theme="thanksgiving"]{--wave:linear-gradient(90deg,#B8452B,#E07A2E 55%,#F2B33D);--pink:#E07A2E;background:radial-gradient(1000px 500px at 0 -10%,rgb(224 122 46/.22),transparent 60%),#160a06}
+body[data-theme="thanksgiving"] .hero{background:linear-gradient(160deg,#3a1408,#8a3a16 55%,#d98a2b)}
+body[data-theme="christmas"]{--wave:linear-gradient(90deg,#C8102E,#E8E8E8 50%,#1F7A3A);--pink:#E23D4F;background:radial-gradient(1000px 500px at 0 -10%,rgb(31 122 58/.25),transparent 60%),#07120c}
+body[data-theme="christmas"] .hero{background:linear-gradient(160deg,#0b2a17,#7a1020 60%,#c8102e)}
+body[data-theme="diwali"]{--wave:linear-gradient(90deg,#7A1E3A,#E2A400 55%,#FFD86B);--pink:#E2A400;background:radial-gradient(1000px 500px at 0 -10%,rgb(226 164 0/.22),transparent 60%),#140808}
+body[data-theme="diwali"] .hero{background:linear-gradient(160deg,#2a0812,#7a1e3a 55%,#e2a400)}
+body[data-theme="halloween"]{--wave:linear-gradient(90deg,#FF7A00,#8A2BE2);--pink:#FF7A00;background:#0b0710}
+body[data-theme="halloween"] .hero{background:linear-gradient(160deg,#120a1c,#3b1258 55%,#ff7a00)}
+body[data-theme="newyear"]{--wave:linear-gradient(90deg,#C0C0C0,#FFD700 55%,#FFF1B8);--pink:#FFD700;background:#08070c}
+body[data-theme="newyear"] .hero{background:linear-gradient(160deg,#0a0a14,#2b2b3d 55%,#b8962e)}
+body[data-theme="holi"]{--wave:linear-gradient(90deg,#FF2E88,#FFD23F 35%,#2EE59D 65%,#00C2FF);background:#0e0718}
+body[data-theme="holi"] .hero{background:linear-gradient(135deg,#ff2e88,#ffd23f 35%,#2ee59d 65%,#00c2ff)}
+body[data-theme="traditional"]{--wave:linear-gradient(90deg,#7A1E3A,#C9952B 60%,#F3D27A);--pink:#C9952B;background:#12070a}
+body[data-theme="traditional"] .hero{background:linear-gradient(160deg,#2a0a12,#7a1e3a 55%,#c9952b)}
+body[data-theme="neon80s"]{--wave:linear-gradient(90deg,#FF3CAC,#784BA0 50%,#2B86C5);--pink:#FF3CAC;background:radial-gradient(1000px 500px at 50% 0,rgb(255 60 172/.2),transparent 60%),#0a0614}
+body[data-theme="neon80s"] .hero{background:linear-gradient(180deg,#1a0633,#4a1070 45%,#ff3cac 75%,#ffb86b)}
+
+/* Neon City: our own comic "loading-screen" art style (thick ink outlines, halftone, tilted panels). No game names, logos or fonts. */
+body[data-theme="neon80s"] .hero{border:4px solid #000;box-shadow:10px 10px 0 #000;transform:rotate(-.6deg);
+  background:radial-gradient(circle at 80% 30%,#ffd36b 0 70px,transparent 71px),radial-gradient(rgb(0 0 0/.25) 1.2px,transparent 1.3px) 0 0/9px 9px,linear-gradient(180deg,#2a0b4d,#7a1fa2 45%,#ff3cac 72%,#ffb86b)}
+body[data-theme="neon80s"] .hero h1{text-transform:uppercase;font-style:italic;letter-spacing:-.5px;text-shadow:4px 4px 0 #000;transform:skew(-6deg)}
+body[data-theme="neon80s"] .hero .g{-webkit-text-stroke:2px #000;text-shadow:none;background:linear-gradient(180deg,#fff7a8,#ff9d2e);-webkit-background-clip:text;background-clip:text;color:transparent}
+body[data-theme="neon80s"] .desk2{border:3px solid #000;box-shadow:6px 6px 0 #000}
+body[data-theme="neon80s"] .desk2:nth-child(odd){transform:rotate(.6deg)} body[data-theme="neon80s"] .desk2:nth-child(even){transform:rotate(-.6deg)}
+body[data-theme="neon80s"] .ava{border:3px solid #000}
