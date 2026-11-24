@@ -61,3 +61,4 @@ button,a{touch-action:manipulation}
 
 video,audio{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .vc,.fp,.vw{-webkit-touch-callout:none}
+.ig-btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;height:42px;padding:0 16px;border-radius:999px;background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00);color:#fff!important;font:700 14px "Inter",system-ui,sans-serif;text-decoration:none}
