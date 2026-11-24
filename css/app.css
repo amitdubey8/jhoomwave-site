@@ -4,6 +4,7 @@ body{-webkit-tap-highlight-color:transparent;overflow-x:clip}
 img,video{max-width:100%}
 button,a{touch-action:manipulation}
 @media (max-width:760px){
+  html{scroll-padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));scroll-padding-top:72px}
   input,select,textarea{font-size:16px!important}
   body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
 }
@@ -57,3 +58,6 @@ button,a{touch-action:manipulation}
 .jh-ask button{width:44px;height:44px;border-radius:12px;border:0;background:linear-gradient(100deg,#7B2FF7,#FF2E88);color:#fff;font-size:18px;cursor:pointer}
 .jh-note{margin:10px 0 0;color:#9F92BA;font-size:11.5px;line-height:1.45}.jh-note a{color:#FF8AC2}
 @media (prefers-reduced-motion:reduce){.jh *,.jh{animation:none!important;transition:none!important}}
+
+video,audio{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.vc,.fp,.vw{-webkit-touch-callout:none}

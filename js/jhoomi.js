@@ -4,6 +4,13 @@
   let solo = null;
   window.jwSolo = function (m) { if (solo && solo !== m) { try { solo.pause(); } catch (e) {} } solo = m; };
 
+  /* Make saving media harder: no download button, no picture-in-picture, no right-click / long-press save on players. */
+  const lock = m => { try { m.setAttribute('controlslist', 'nodownload noplaybackrate noremoteplayback'); m.disablePictureInPicture = true; m.setAttribute('disablepictureinpicture', ''); m.disableRemotePlayback = true; } catch (e) {} };
+  document.querySelectorAll('video,audio').forEach(lock);
+  new MutationObserver(ms => ms.forEach(r => r.addedNodes.forEach(n => { if (n.nodeType === 1) { if (/^(VIDEO|AUDIO)$/.test(n.tagName)) lock(n); n.querySelectorAll && n.querySelectorAll('video,audio').forEach(lock); } }))).observe(document.documentElement, { childList: true, subtree: true });
+  document.addEventListener('contextmenu', e => { if (e.target.closest('video,audio,.vc,.fp,.vw,.player,.mini,.pbtn,.pb,.pl,[data-src]')) e.preventDefault(); });
+  document.addEventListener('dragstart', e => { if (e.target.closest('video,audio,img')) e.preventDefault(); });
+
   if (document.body.dataset.nojhoomi !== undefined) return;
   const L = {
     hi: { n: 'हिंदी', hello: 'Namaste! Main Jhoomi hoon, JHOOMWAVE ki aawaz. Yahan aapke naam ka gaana banta hai. Kuch bhi poochiye!', a: 'hi' },

@@ -114,6 +114,28 @@
 .vw .x{top:calc(14px + env(safe-area-inset-top,0px));right:14px}
 .vw .nx,.vw .pv{top:50%;transform:translateY(-50%);background:rgb(0 0 0/.35)}.vw .nx{right:10px}.vw .pv{left:10px}
 .vw .cap{position:absolute;left:16px;top:calc(18px + env(safe-area-inset-top,0px));z-index:2;font:800 15px var(--display);text-shadow:0 2px 10px #000;max-width:calc(100% - 90px)}
+/* featured film */
+.film{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:center}
+.fp{position:relative;aspect-ratio:16/9;border-radius:22px;overflow:hidden;background:#000 center/cover;box-shadow:0 30px 80px rgb(0 0 0/.55),0 0 0 1px rgb(255 255 255/.08)}
+.fp video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.fp .go{position:absolute;inset:0;display:grid;place-items:center;border:0;background:linear-gradient(180deg,rgb(0 0 0/.05),rgb(0 0 0/.35));cursor:pointer;z-index:1}
+.fp .go span{display:grid;place-items:center;width:clamp(64px,8vw,92px);height:clamp(64px,8vw,92px);border-radius:50%;background:var(--wave);color:#fff;font-size:clamp(24px,3vw,34px);box-shadow:0 12px 40px rgb(255 46 136/.55);padding-left:6px}
+.fp .go[hidden]{display:none}
+.fi .eb{color:var(--pink)}.fi h2{font-weight:900;font-size:clamp(32px,4vw,54px);line-height:1;margin:10px 0 12px}
+.fi .meta{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:14px;margin-bottom:14px}
+.fi .meta i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--wave);font-style:normal;font:900 13px var(--display);color:#fff}
+.fi .meta b{color:var(--ink)}
+.fi blockquote{margin:0 0 18px;padding-left:14px;border-left:3px solid var(--pink);color:#D9D0EC;font-size:15px}
+.fi .cta{display:flex;flex-wrap:wrap;gap:10px}
+@media (max-width:900px){.film{grid-template-columns:1fr}}
+@media (max-width:760px){.fp{aspect-ratio:9/16;width:min(100%,calc(78svh*9/16));margin:0 auto}}
+/* inline reels */
+.vc video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.vc.playing::after,.vc.playing .meta,.vc.playing .pl,.vc.playing .dur{opacity:0;transition:opacity .3s}
+.vc .fs{position:absolute;top:10px;left:10px;z-index:2;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:0;background:rgb(0 0 0/.45);color:#fff;font-size:16px;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+/* hero wave: the JHOOMWAVE bars, swaying like a crowd; they dance to the anthem when it plays */
+.hero canvas#wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:42%;pointer-events:none;z-index:1;opacity:.75;-webkit-mask-image:linear-gradient(180deg,transparent,#000 35%);mask-image:linear-gradient(180deg,transparent,#000 35%)}
+.hero>.wrap{z-index:2}
 </style>
 </head>
 <body>
@@ -132,13 +154,14 @@
 </nav>
 
 <header class="hero" id="make">
+  <canvas id="wave" aria-hidden="true"></canvas>
   <div class="wrap">
     <div>
       <span class="eb">Songs · Voices · Party sound</span>
       <h1 style="margin-top:16px">Your song.<br>Your name.<br><span class="g">Ready in minutes.</span></h1>
       <p class="lead">Birthday, couple, wedding entry, kids and devotional songs, sung for the people you love. Hindi, Hinglish, Punjabi or English. Hear a free preview first, pay only if you love it.</p>
       <div class="cta"><a class="btn pri" href="#shop">Make my song · from ₹29</a><a class="btn" href="/pricing/">See prices</a></div>
-      <button class="anthem" id="anthem" type="button" aria-label="Play the JHOOMWAVE Anthem"><span class="ab" id="ab">▶</span><span><b>JHOOMWAVE Anthem</b><small>"Jhoom jhoom JHOOMWAVE…" · our song</small></span><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+      <button class="anthem" id="anthem" type="button" aria-label="Play the JHOOMWAVE Anthem"><span class="ab" id="ab">▶</span><span><b>JHOOMWAVE Anthem</b><small>"Jhoom jhoom JHOOMWAVE…" · tap to listen</small></span><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
       <div class="trust"><span>🎧 <b>Free preview</b> before you pay</span><span>⚡ Ready in <b>~2 minutes</b></span><span>📲 Share on <b>WhatsApp</b> &amp; Instagram</span></div>
     </div>
 
@@ -157,13 +180,26 @@
   </div>
 </header>
 
+<section id="film" style="padding-top:clamp(20px,3vw,40px)">
+  <div class="wrap film">
+    <div class="fp" id="fp"><video id="fv" playsinline controls preload="none" controlslist="nodownload noplaybackrate" disablepictureinpicture></video><button class="go" id="fgo" type="button" aria-label="Play the JHOOMWAVE Anthem music video"><span>▶</span></button></div>
+    <div class="fi">
+      <span class="eb">Official music video</span>
+      <h2>JHOOMWAVE <span class="g">Anthem</span></h2>
+      <div class="meta"><i>JW</i><span><b>JHOOMWAVE</b> · 0:56 · Hinglish · bhangra-pop</span></div>
+      <blockquote>Jhoom jhoom JHOOMWAVE, sabko nachaye!<br>Tera naam, tera gaana, dil ko chhoo jaaye!</blockquote>
+      <div class="cta"><button class="btn pri" id="fplay" type="button">▶ Watch now</button><button class="btn" id="fshare" type="button">Share</button><a class="btn" href="#make">Make your own song</a></div>
+    </div>
+  </div>
+</section>
+
 <section id="watch" style="padding-top:8px">
   <div class="wrap">
-    <div class="sh"><h2>Dekho. Suno. <span class="g">Jhoomo.</span></h2><p>Real songs we made. Tap to watch full screen with sound. Names in the songs are examples.</p></div>
+    <div class="sh"><h2>Dekho. Suno. <span class="g">Jhoomo.</span></h2><p>Real songs we made. Tap to play right here, ⤢ for full screen. Names in the songs are examples.</p></div>
     <div class="watch" id="reels"></div>
   </div>
 </section>
-<div class="vw" id="vw" hidden role="dialog" aria-label="Video"><span class="cap" id="vcap"></span><button class="x" id="vx" type="button" aria-label="Close">✕</button><video id="vv" playsinline controls preload="none"></video><button class="pv" id="vp" type="button" aria-label="Previous">‹</button><button class="nx" id="vn" type="button" aria-label="Next">›</button></div>
+<div class="vw" id="vw" hidden role="dialog" aria-label="Video"><span class="cap" id="vcap"></span><button class="x" id="vx" type="button" aria-label="Close">✕</button><video id="vv" playsinline controls preload="none" controlslist="nodownload noplaybackrate" disablepictureinpicture></video><button class="pv" id="vp" type="button" aria-label="Previous">‹</button><button class="nx" id="vn" type="button" aria-label="Next">›</button></div>
 
 <section id="shop">
   <div class="wrap">
@@ -288,13 +324,20 @@ OCC.forEach(o=>{const d=document.createElement('div');d.className='item';
   const m=d.querySelector('.mini'); m.addEventListener('click',()=>{ if(btn===m&&!a.paused){a.pause();return} btn=m; a.src=o.src; a.play().catch(()=>{}); track('shelf_play',{occasion:o.k}) });
   $('shelf').append(d)});
 
-const REELS=[{s:'anthem',t:'JHOOMWAVE Anthem · music video',d:'Our song · 0:56'},{s:'brand',t:'What is JHOOMWAVE?',d:'Every celebration · 0:43'},{s:'moments',t:'Har moment ka gaana',d:'Birthday to bidai · 0:57'},{s:'trailer',t:'Shaadi Trailer',d:'Your wedding as a movie · 0:33'},{s:'dashing',t:'Dashing couple entry',d:'Names = the hook · 0:30'}];
+const REELS=[{s:'brand',t:'What is JHOOMWAVE?',d:'Every celebration · 0:43'},{s:'moments',t:'Har moment ka gaana',d:'Birthday to bidai · 0:57'},{s:'trailer',t:'Shaadi Trailer',d:'Your wedding as a movie · 0:33'},{s:'dashing',t:'Dashing couple entry',d:'Names = the hook · 0:30'}];
 const vw=$('vw'),vv=$('vv');let vi=0;
-REELS.forEach((r,i)=>{const b=document.createElement('button');b.type='button';b.className='vc';b.style.backgroundImage=`url(/video/${r.s}.jpg)`;
-  b.innerHTML='<span class="pl" aria-hidden="true">▶</span><span class="dur"></span><span class="meta"><b></b><small></small></span>';
+REELS.forEach((r,i)=>{const b=document.createElement('div');b.className='vc';b.style.backgroundImage=`url(/video/${r.s}.jpg)`;b.tabIndex=0;b.setAttribute('role','button');
+  b.innerHTML='<span class="pl" aria-hidden="true">▶</span><span class="dur"></span><span class="meta"><b></b><small></small></span><button class="fs" type="button" aria-label="Full screen">⤢</button>';
   b.querySelector('.dur').textContent=r.d.split('·').pop().trim();b.querySelector('b').textContent=r.t;b.querySelector('small').textContent=r.d.split('·')[0].trim();
-  b.setAttribute('aria-label','Play video: '+r.t);b.addEventListener('click',()=>openV(i));$('reels').append(b)});
-function openV(i){vi=(i+REELS.length)%REELS.length;const r=REELS[vi];vv.poster=`/video/${r.s}.jpg`;vv.src=`/video/${r.s}.mp4`;$('vcap').textContent=r.t;vw.hidden=false;document.documentElement.style.overflow='hidden';
+  b.setAttribute('aria-label','Play video: '+r.t);
+  const toggle=()=>{let v=b.querySelector('video');if(!v){v=document.createElement('video');v.playsInline=true;v.setAttribute('playsinline','');v.preload='auto';v.poster=`/video/${r.s}.jpg`;v.src=`/video/${r.s}.mp4`;
+      v.addEventListener('play',()=>{b.classList.add('playing');window.jwSolo&&jwSolo(v)});v.addEventListener('pause',()=>b.classList.remove('playing'));v.addEventListener('ended',()=>{b.classList.remove('playing');v.currentTime=0});b.prepend(v)}
+    if(v.paused){v.play().catch(()=>{});track('reel_play',{reel:r.s,mode:'inline'})}else v.pause()};
+  b.addEventListener('click',e=>{if(e.target.closest('.fs'))return;toggle()});
+  b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});
+  b.querySelector('.fs').addEventListener('click',e=>{e.stopPropagation();const v=b.querySelector('video');let t=0;if(v){t=v.currentTime;v.pause()}openV(i,t)});
+  $('reels').append(b)});
+function openV(i,t){vi=(i+REELS.length)%REELS.length;const r=REELS[vi];vv.poster=`/video/${r.s}.jpg`;vv.src=`/video/${r.s}.mp4`;if(t)vv.currentTime=t;$('vcap').textContent=r.t;vw.hidden=false;document.documentElement.style.overflow='hidden';
   window.jwSolo&&jwSolo(vv);vv.play().catch(()=>{});track('reel_play',{reel:r.s})}
 function closeV(){vv.pause();vw.hidden=true;document.documentElement.style.overflow=''}
 $('vx').addEventListener('click',closeV);$('vn').addEventListener('click',()=>openV(vi+1));$('vp').addEventListener('click',()=>openV(vi-1));
@@ -302,9 +345,44 @@ vv.addEventListener('ended',()=>openV(vi+1));
 addEventListener('keydown',e=>{if(vw.hidden)return;if(e.key==='Escape')closeV();if(e.key==='ArrowRight')openV(vi+1);if(e.key==='ArrowLeft')openV(vi-1)});
 let ty=null;vw.addEventListener('touchstart',e=>{ty=e.touches[0].clientY},{passive:true});
 vw.addEventListener('touchend',e=>{if(ty===null)return;const dy=e.changedTouches[0].clientY-ty;ty=null;if(dy<-70)openV(vi+1);else if(dy>90)closeV()},{passive:true});
+const fv=$('fv'),fp=$('fp'),wide=matchMedia('(min-width:761px)');
+const fsrc=()=>wide.matches?'/video/anthem_wide':'/video/anthem';
+function fprep(){const b=fsrc();if(!fv.dataset.s||fv.dataset.s!==b){const t=fv.currentTime||0,pl=!fv.paused;fv.dataset.s=b;fv.poster=b+'.jpg';fp.style.backgroundImage=`url(${b}.jpg)`;fv.src=b+'.mp4';if(t)fv.currentTime=t;if(pl)fv.play().catch(()=>{})}}
+fprep();wide.addEventListener?wide.addEventListener('change',fprep):wide.addListener(fprep);
+function fplay(){fprep();$('fgo').hidden=true;window.jwSolo&&jwSolo(fv);fv.play().catch(()=>{});track('anthem_video_play')}
+$('fgo').addEventListener('click',fplay);$('fplay').addEventListener('click',()=>{fp.scrollIntoView({behavior:'smooth',block:'center'});fplay()});
+fv.addEventListener('play',()=>{$('fgo').hidden=true});
 const an=new Audio('/audio/jhoomwave_anthem.mp3');an.preload='none';
-$('anthem').addEventListener('click',()=>{if(!an.paused){an.pause();return}window.jwSolo&&jwSolo(an);an.play().catch(()=>{});track('anthem_play')});
-an.addEventListener('play',()=>{$('anthem').classList.add('on');$('ab').textContent='❚❚'});['pause','ended'].forEach(ev=>an.addEventListener(ev,()=>{$('anthem').classList.remove('on');$('ab').textContent='▶'}));
+
+/* hero wave */
+(function(){const c=$('wave');if(!c||!c.getContext)return;const x=c.getContext('2d'),still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ let w=0,h=0,vis=true,raf=0,ac2=null,an2=null,dat=null,lvl=0;
+ function size(){const d=Math.min(devicePixelRatio||1,2);w=c.clientWidth;h=c.clientHeight;c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0)}
+ window.jwHookWave=function(m){if(an2)return;try{const C=window.AudioContext||window.webkitAudioContext;ac2=new C();const s=ac2.createMediaElementSource(m);an2=ac2.createAnalyser();an2.fftSize=256;an2.smoothingTimeConstant=.78;s.connect(an2);an2.connect(ac2.destination);dat=new Uint8Array(an2.frequencyBinCount)}catch(e){an2=null}};
+ window.jwWaveResume=function(){try{ac2&&ac2.state==='suspended'&&ac2.resume()}catch(e){}};
+ function draw(t){raf=0;x.clearRect(0,0,w,h);
+  const g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,'#7B2FF7');g.addColorStop(.55,'#FF2E88');g.addColorStop(1,'#FF8A00');
+  const live=an2&&!an.paused;let e=0;if(live){an2.getByteFrequencyData(dat);for(let i=2;i<40;i++)e+=dat[i];e/=38*255}
+  lvl+=((live?e:0)-lvl)*.2;
+  const bw=Math.max(5,w/120),gap=bw*.85,n=Math.ceil(w/(bw+gap)),pts=[];
+  x.fillStyle=g;
+  for(let i=0;i<n;i++){const p=i/n;
+   let a=.42+.22*Math.sin(p*8+t*.0016)+.14*Math.sin(p*21-t*.0026)+.1*Math.sin(p*3.3+t*.0009);
+   if(live){const k=Math.min(dat.length-1,2+Math.floor(Math.abs(p-.5)*2*60));a=a*.35+(dat[k]/255)*.95+lvl*.3}
+   const bh=Math.max(bw,Math.min(1,a)*h*.92),bx=i*(bw+gap),by=h-bh;
+   x.globalAlpha=.55+.45*Math.min(1,a);x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,bw/2):x.rect(bx,by,bw,bh);x.fill();pts.push([bx+bw/2,by])}
+  x.globalAlpha=1;x.lineWidth=3;x.strokeStyle=g;x.shadowColor='#FF2E88';x.shadowBlur=18+lvl*40;x.beginPath();
+  pts.forEach(([px,py],i)=>{const yy=py-10-6*Math.sin(i*.25+t*.004);i?x.lineTo(px,yy):x.moveTo(px,yy)});x.stroke();x.shadowBlur=0;
+  if(vis&&(!still||live))raf=requestAnimationFrame(draw)}
+ const go=()=>{if(!raf&&vis)raf=requestAnimationFrame(draw)};window.jwWaveGo=go;
+ size();addEventListener('resize',()=>{size();go()});
+ if('IntersectionObserver' in window)new IntersectionObserver(es=>{vis=es[0].isIntersecting;go()}).observe(c);
+ go()})();
+$('anthem').addEventListener('click',()=>{if(!an.paused){an.pause();return}window.jwHookWave&&jwHookWave(an);window.jwWaveResume&&jwWaveResume();window.jwSolo&&jwSolo(an);an.play().catch(()=>{});window.jwWaveGo&&jwWaveGo();track('anthem_audio_play')});
+an.addEventListener('play',()=>{$('anthem').classList.add('on');$('ab').textContent='❚❚'});
+['pause','ended'].forEach(ev=>an.addEventListener(ev,()=>{$('anthem').classList.remove('on');$('ab').textContent='▶'}));
+$('fshare').addEventListener('click',async()=>{const d={title:'JHOOMWAVE Anthem',text:'Jhoom jhoom JHOOMWAVE! 🎶',url:'https://jhoomwave.com/#film'};
+  try{if(navigator.share){await navigator.share(d)}else{await navigator.clipboard.writeText(d.url);$('fshare').textContent='Link copied ✓'}}catch(e){}track('anthem_share')});
 paint();
 })();
 </script>
