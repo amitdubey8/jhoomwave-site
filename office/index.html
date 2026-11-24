@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; media-src 'self' https://*.supabase.co blob:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>JHOOMWAVE Office</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app">
+  <!-- sign in -->
+  <main class="gate" id="v-login" hidden>
+    <div class="gcard">
+      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <h1>Sign in</h1>
+      <p class="mut">Team only. Enter your work email and we send a 6-digit code.</p>
+      <form id="f-email" novalidate>
+        <label for="in-email">Work email</label>
+        <input id="in-email" type="email" autocomplete="email" inputmode="email" required>
+        <button class="btn" type="submit" id="b-send">Send code</button>
+      </form>
+      <form id="f-code" hidden novalidate>
+        <label for="in-code">6-digit code from your email</label>
+        <input id="in-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+        <button class="btn" type="submit">Verify</button>
+        <button class="lnk" type="button" id="b-back">Use another email</button>
+      </form>
+      <p class="msg" id="login-msg" role="status"></p>
+    </div>
+  </main>
+
+  <!-- 2FA -->
+  <main class="gate" id="v-mfa" hidden>
+    <div class="gcard">
+      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <h1 id="mfa-title">Two-step check</h1>
+      <div id="mfa-enroll" hidden>
+        <p class="mut">First time here: open Google Authenticator (or Microsoft Authenticator), tap +, and scan this code.</p>
+        <img id="mfa-qr" alt="QR code for your authenticator app" width="180" height="180">
+        <p class="mut small">Can't scan? Type this key: <code id="mfa-secret"></code></p>
+      </div>
+      <p class="mut" id="mfa-ask">Enter the 6-digit code from your authenticator app.</p>
+      <form id="f-mfa" novalidate>
+        <label for="in-mfa">Authenticator code</label>
+        <input id="in-mfa" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+        <button class="btn" type="submit">Confirm</button>
+        <button class="lnk" type="button" data-signout>Sign out</button>
+      </form>
+      <p class="msg" id="mfa-msg" role="status"></p>
+    </div>
+  </main>
+
+  <!-- no access -->
+  <main class="gate" id="v-denied" hidden>
+    <div class="gcard">
+      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <h1>No access yet</h1>
+      <p class="mut">This login is not on the JHOOMWAVE team list, or it was switched off. Ask the founder to invite this email.</p>
+      <button class="btn" type="button" data-signout>Sign out</button>
+    </div>
+  </main>
+
+  <!-- office -->
+  <div class="shell" id="v-app" hidden>
+    <header class="top">
+      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <nav class="nav" id="nav" aria-label="Sections"></nav>
+      <div class="me"><span id="me-email"></span><span class="chip" id="me-role"></span><button class="lnk" type="button" data-signout>Sign out</button></div>
+    </header>
+    <main class="page" id="page" tabindex="-1"></main>
+    <p class="toast" id="toast" role="status" hidden></p>
+  </div>
+</div>
+<script src="config.js"></script>
+<script src="vendor/supabase-2.45.4.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

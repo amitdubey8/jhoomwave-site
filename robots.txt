@@ -1,26 +1,37 @@
 # Everyone (search engines and answer engines) is welcome to read JHOOMWAVE.
 User-agent: *
 Allow: /
+Disallow: /office/
 
 User-agent: Googlebot
 Allow: /
+Disallow: /office/
 User-agent: Bingbot
 Allow: /
+Disallow: /office/
 User-agent: GPTBot
 Allow: /
+Disallow: /office/
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /office/
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /office/
 User-agent: ClaudeBot
 Allow: /
+Disallow: /office/
 User-agent: Claude-User
 Allow: /
+Disallow: /office/
 User-agent: PerplexityBot
 Allow: /
+Disallow: /office/
 User-agent: Google-Extended
 Allow: /
+Disallow: /office/
 User-agent: Applebot
 Allow: /
+Disallow: /office/
 
 Sitemap: https://jhoomwave.com/sitemap.xml
