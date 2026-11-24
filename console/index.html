@@ -717,8 +717,8 @@ function setMode(ai){aiOn=ai; $('m-ai').setAttribute('aria-pressed',ai); $('m-yo
 function manual(){ if(aiOn&&!blending){ /* keep AI on; manual touches are welcome */ } }
 $('m-ai').addEventListener('click',()=>setMode(true)); $('m-you').addEventListener('click',()=>setMode(false));
 function setVibe(v){vibe=Math.max(0,Math.min(1,v)); $('vibe').style.width=(vibe*100)+'%'}
-$('hype').addEventListener('click',()=>{setVibe(vibe+.25); say('hype'); if(ac){fxHorn(); if(vibe>.7) fxEcho()} log(aiOn?'JHOOMWAVE DJ · HYPE '+Math.round(vibe*100)+'%':'VIBE · HYPE','Crowd is up. Set list re-planned for higher energy; next blend is 16 beats with riser and drop.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'hype'})});
-$('chill').addEventListener('click',()=>{setVibe(vibe-.25); say('chill'); log(aiOn?'JHOOMWAVE DJ · CHILL '+Math.round(vibe*100)+'%':'VIBE · CHILL','Easing off. Set list re-planned for groove; next blend is 32 smooth beats.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'chill'})});
+$('hype').addEventListener('click',()=>{setVibe(vibe+.25); say('hype'); if(ac){fxHorn(); if(vibe>.7) fxEcho()} log(aiOn?'JHOOMWAVE DJ · HYPE '+Math.round(vibe*100)+'%':'VIBE · HYPE','Crowd is up. Set list re-planned for higher energy; next blend is 8 beats with riser and drop.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'hype'})});
+$('chill').addEventListener('click',()=>{setVibe(vibe-.25); say('chill'); log(aiOn?'JHOOMWAVE DJ · CHILL '+Math.round(vibe*100)+'%':'VIBE · CHILL','Easing off. Set list re-planned for groove; next blend is 16 smooth beats.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'chill'})});
 const CAM=c=>({n:parseInt(c),l:c.slice(-1)});
 function keyScore(a,b){a=CAM(a);b=CAM(b); if(a.n===b.n) return 1; const dn=Math.min((a.n-b.n+12)%12,(b.n-a.n+12)%12); return (dn===1&&a.l===b.l)?.85:(dn===1?.5:.2)}
 function chooseNext(cur){
@@ -728,7 +728,7 @@ function chooseNext(cur){
 async function blend(){
   const from=live(), to=other(from), F=decks[from], D=decks[to]; if(!F.track) return;
   blending=true; if(!queue.length) plan(F.track); const nx=T[queue.shift()]; mixingIn=T.indexOf(nx); load(to,mixingIn); renderSet();
-  const beats=vibe>.6?16:32, target=bpmOf(from);
+  const beats=vibe>.6?8:16, target=bpmOf(from);
   D.pitch=Math.max(-8,Math.min(8,(target/nx.bpm-1)*100)); $('pitch-'+to).value=D.pitch; rate(to);
   const spbF=60/F.track.bpm, spbD=60/nx.bpm, ph=(((F.el.currentTime-F.track.offset)/spbF)%1+1)%1;
   D.el.currentTime=nx.offset+(16+ph)*spbD; $('low-'+to).value=-30; applyEq();
@@ -741,6 +741,7 @@ async function blend(){
   await ramp('xf',.5,half,applyXf);
   $('low-'+from).value=-30; $('low-'+to).value=0; applyEq(); if(vibe>.6) fxDrop();
   await ramp('xf',toXf,half,applyXf);
+  if(ramp.stop){ $('xf').value=toXf; applyXf(); $('low-'+to).value=0; applyEq(); }
   F.el.pause(); ui(from); $('low-'+from).value=0; applyEq();
   // glide the new deck home to its own tempo over 8 beats
   const p0=D.pitch, t0=performance.now(), glide=8*60/nx.bpm*1000;
@@ -775,7 +776,7 @@ function cues(t){const b=60/t.bpm,o=t.offset; return [[o,t.mc[0],'INTRO'],[o+64*
 function prompter(){ if(entryOn||introOn) return;
   const k=live(), d=decks[k]; if(!d.track||!ac) return; const t=d.el.currentTime, r=d.el.playbackRate||1, cs=cues(d.track);
   let cur=null,nx=null; cs.forEach(c=>{if(t>=c[0]-.3)cur=c; else if(!nx)nx=c});
-  const need=(vibe>.6?16:32)*60/bpmOf(k)+4, blendAt=(d.el.duration||d.track.dur)-need*r, up=queue.length?T[queue[0]]:null;
+  const need=(vibe>.6?8:16)*60/bpmOf(k)+4, blendAt=(d.el.duration||d.track.dur)-need*r, up=queue.length?T[queue[0]]:null;
   if(blending){ $('pr-where').textContent='TRANSITION'; if(mixingIn!==null){$('pr-in').textContent='NOW';$('pr-next').textContent=`Blending into ${T[mixingIn].title} · beats locked`} return }
   if(up&&aiOn&&t>=blendAt-12){ setPrompt(`Next up: ${up.title}! ${up.mc[0]}`); $('pr-where').textContent=d.track.title+' · OUTRO';
     $('pr-in').textContent='IN '+fmt((blendAt-t)/r); $('pr-next').textContent=`AI blends into ${up.title} · ${up.bpm} BPM · ${up.key}`; }
@@ -785,9 +786,10 @@ function prompter(){ if(entryOn||introOn) return;
   const eta=$('sl-eta'); if(eta&&aiOn&&up) eta.textContent='IN '+fmt((blendAt-t)/r);
 }
 setInterval(prompter,250);
+setInterval(()=>{ if(!ac||!aiOn||blending) return; const k=live(), o=other(k); if(!decks[o].el.paused&&!held.length) { decks[o].el.pause(); ui(o) } },500);
 setInterval(()=>{ if(!ac||!aiOn||blending||entryOn) return; const k=live(), d=decks[k];
   if(!d.track||d.el.paused||!d.el.duration) return;
-  const left=(d.el.duration-d.el.currentTime)/d.el.playbackRate, need=(vibe>.6?16:32)*60/bpmOf(k)+4;
+  const left=(d.el.duration-d.el.currentTime)/d.el.playbackRate, need=(vibe>.6?8:16)*60/bpmOf(k)+4;
   if(left<need) blend(); },250);
 
 // ---------- visuals ----------
@@ -819,6 +821,12 @@ const ENT=[
 const EB=60/100, BOOM=24*EB;
 const BD=[{"id": "kids", "label": "Kids", "emo": "🎈", "title": "Birthday Balloon Party", "lyrics": ["Aaj tumhara birthday hai, jump karo, taali bajao!", "Balloon pakdo, cake hai aaya, sabne milke dance machaya!", "Happy happy birthday, superstar! Hey!", "Gift kholo, smile karo, aaj ke superstar tum ho!"]}, {"id": "adult", "label": "Adults", "emo": "🎉", "title": "Happy Happy Birthday", "lyrics": ["Aaj hai tera din yaara, dance floor pe sab aa jao!", "Cake kaato, candle bujhao, sab milke zor se gaao!", "Happy happy birthday, yaara! Hey!", "Saal naya, vibe nayi, party abhi baaki hai!"]}, {"id": "senior", "label": "Senior ji", "emo": "🌸", "title": "Sau Saal Jiyo", "lyrics": ["Aaj aapka janamdin hai, aashirwaad aur pyaar ka din!", "Poori family aaj saath hai, yaadon ki mehfil saath hai!", "Happy birthday aapko, sau saal jiyo!", "Hasi khushi har saal rahe, sehat aur pyaar bemisaal rahe!"]}, {"id": "entrepreneur", "label": "Entrepreneur", "emo": "🚀", "title": "Founder Mode", "lyrics": ["Aaj founder ka din hai, idea se empire tak har din!", "Startup se unicorn tak, hustle kabhi rukta nahi!", "Happy birthday, founder! Hey!", "Naya saal, naya funding round, next level, next round!"]}, {"id": "recruiter", "label": "Recruiter / HR", "emo": "💼", "title": "Hired for Happiness", "lyrics": ["Interview khatam, party shuru! Sabse best talent wahi hai!", "Offer letter khushiyon ka, joining date aaj ki party ka!", "Happy birthday, HR superstar! Shortlist, select, celebrate!", "Notice period chhutti pe, aaj sirf dance ki duty pe!"]}, {"id": "developer", "label": "Developer", "emo": "💻", "title": "Deploy the Party", "lyrics": ["Git push party force! Zero bugs, full vibe hai!", "Code compile, cake deploy, sab milke karo enjoy!", "Happy birthday, developer! Build, test, ship, party!", "Prod mein sirf khushiyan live, aaj standup nahi sirf jive!"]}, {"id": "doctor", "label": "Doctor", "emo": "🩺", "title": "Doctor's Day Off", "lyrics": ["Aaj doctor sahab off duty! Sabki sehat ka hero wahi hai!", "Prescription: full on dance! Side effect: sirf smiles aur romance!", "Happy birthday, doctor sahab! Hey!", "Aaj koi OPD nahi, sirf party, koi duty nahi!"]}, {"id": "teacher", "label": "Teacher", "emo": "📚", "title": "Class Dismissed", "lyrics": ["Class dismissed, party time! Sabke favourite teacher yahi hai!", "Homework nahi, sirf dance! Aaj sabko full marks ka chance!", "Happy birthday, teacher! Hey!", "A, B, C, party! Attendance: poori class present!"]}, {"id": "trader", "label": "Trader", "emo": "📈", "title": "Green Candle Birthday", "lyrics": ["Market khul gaya, party bhi! Aaj chart hai green!", "Bull run chalu, full on scene! Stop loss nahi, sirf profit!", "Happy birthday, trader! Hey!", "Buy, hold, party, repeat! Har saal green candle raho!"]}];
 const entEl=new Audio(); entEl.preload='auto';
+/* one music source at a time: during an entry or a song the decks fade out and pause, then resume where they were */
+/* an entry or song owns the mic: any host line (or the welcome intro) stops first */
+function hushHost(){ introOn=false; vPending=null; clipQ=[]; try{clipEl.pause()}catch(e){} }
+let held=[]; function floorHold(){ ramp.stop=true; /* a running blend snaps to its end */
+  setTimeout(()=>{ if(!entryOn) return; held=['a','b'].filter(k=>!decks[k].el.paused); held.forEach(k=>decks[k].el.pause()); },900) }
+function floorBack(){ ramp.stop=false; held.forEach(k=>decks[k].el.play().catch(()=>{})); held=[] }
 let entWired=false;
 ENT.forEach((e,i)=>{const b=document.createElement('button');b.type='button';b.className='ent';b.id='ent-'+e.id;
   const x=document.createElement('b');x.textContent=e.name;const s=document.createElement('small');s.textContent=e.use;const bar=document.createElement('i');b.append(x,s,bar);
@@ -827,8 +835,9 @@ function playEntry(e,i){
   if(!ac){ $('go').click(); setTimeout(()=>playEntry(e,i),600); return }
   if(entryOn){ entEl.pause(); endEntry(); return }
   if(!entWired){const src=ac.createMediaElementSource(entEl); const g=ac.createGain(); g.gain.value=1; src.connect(g).connect(master); entWired=true}
+  hushHost();
   entryOn=e; ramp.stop=false; document.querySelectorAll('.ent').forEach(b=>b.disabled=b.id!=='ent-'+e.id); $('ent-'+e.id).classList.add('on');
-  const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(.12,t+1.2);
+  const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(0,t+.8); floorHold();
   entEl.src='audio/entries/jw_entry_0'+(i+1)+'_'+e.id+'.mp3'; entEl.currentTime=0; entEl.play().catch(()=>{});
   if(($('ent-name').value||'').trim()!==NAME) saveName(); const name=NAME;
   e.spoken=false; e.script=[[0,e.open,'BUILD'],[6,'Phones out, torches on! 📱🔦','BUILD'],[21*EB,'3…','COUNTDOWN'],[22*EB,'2…','COUNTDOWN'],[23*EB,'1…','COUNTDOWN'],
@@ -836,21 +845,22 @@ function playEntry(e,i){
   e.flashed=false; log('JHOOMWAVE DJ · ENTRY',`${e.name}: music dipped, entry beat playing, BOOM at ${fmt(BOOM)}. Blends paused.`); track('console_entry',{entry:e.id});
 }
 BD.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='ent';b.id='ent-bd-'+s.id;
-  const x=document.createElement('b');x.textContent=s.emo+' '+s.label;const sm=document.createElement('small');sm.textContent=s.title.toUpperCase()+' · AI VOCALS';const bar=document.createElement('i');b.append(x,sm,bar);
+  const x=document.createElement('b');x.textContent=s.emo+' '+s.label;const sm=document.createElement('small');sm.textContent=s.title.toUpperCase()+' · SING-ALONG';const bar=document.createElement('i');b.append(x,sm,bar);
   b.addEventListener('click',()=>playSong(s));$('bd-btns').append(b)});
 function playSong(s){
   if(!ac){ $('go').click(); setTimeout(()=>playSong(s),600); return }
   if(entryOn){ entEl.pause(); endEntry(); return }
   if(!entWired){const src=ac.createMediaElementSource(entEl); const g=ac.createGain(); src.connect(g).connect(master); entWired=true}
+  hushHost();
   if(($('ent-name').value||'').trim()!==NAME) saveName(); const name=NAME||'birthday star';
   const lines=[[0,'🎂 '+s.title+(NAME?' · for '+NAME:''),'INTRO']].concat(s.lyrics.map((x,i)=>[8+i*16,x,'SING ALONG'])).concat([[76,(NAME?'Happy birthday, '+NAME+'! 🎂🔥':'Happy birthday! 🎂🔥'),'FINALE']]);
   entryOn={id:'bd-'+s.id,name:s.title,song:true,script:lines};
   document.querySelectorAll('.ent').forEach(b=>b.disabled=b.id!=='ent-bd-'+s.id); $('ent-bd-'+s.id).classList.add('on');
-  const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(.08,t+1.2);
+  const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(0,t+.8); floorHold();
   entEl.src='audio/songs/jw_song_'+s.id+'.mp3'; entEl.currentTime=0; entEl.play().catch(()=>{});
   log('JHOOMWAVE DJ · BIRTHDAY',`${s.title} for ${name}. Lyrics on the teleprompter, everyone sings along. Blends paused.`); track('console_birthday',{persona:s.id});
 }
-function endEntry(){const e=entryOn; if(!e) return; entryOn=null; const t=ac.currentTime;
+function endEntry(){const e=entryOn; if(!e) return; entryOn=null; floorBack(); const t=ac.currentTime;
   duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(1,t+1.5);
   document.querySelectorAll('.ent').forEach(b=>{b.disabled=false;b.classList.remove('on');b.querySelector('i').style.width='0'});
   log('JHOOMWAVE DJ · LIVE','Entry done. Music is back, set list continues.'); lastCue='';}
@@ -859,7 +869,7 @@ setInterval(()=>{const e=entryOn; if(!e) return; const t=entEl.currentTime;
   $('ent-'+e.id).querySelector('i').style.width=Math.min(100,t/(entEl.duration||26.4)*100)+'%';
   let cur=e.script[0],nx=null; e.script.forEach(c=>{if(t>=c[0]-.05)cur=c; else if(!nx)nx=c});
   setPrompt(cur[1]); $('pr-where').textContent=e.name+' · '+cur[2];
-  if(e.song){ if(cur!==e.lastLine){e.lastLine=cur; if(NAME&&cur[2]==='FINALE') speak(cur[1],{tts:true,rate:1.05})}
+  if(e.song){ if(cur!==e.lastLine){e.lastLine=cur; /* song has its own vocals: host stays quiet */}
    $('pr-in').textContent=nx?'NEXT IN '+Math.max(0,nx[0]-t).toFixed(1)+'s':'LAST LINE'; $('pr-next').textContent=nx?nx[1]:'Music comes back on its own.';
     if(cur[2]==='DROP'&&e.prevSec!=='DROP'&&(e.prevSec=cur[2])){ const f=document.createElement('div'); f.className='flash'; document.body.append(f); setTimeout(()=>f.remove(),1000)} e.prevSec=cur[2]; return}
   if(t<BOOM){$('pr-in').textContent='BOOM IN '+(BOOM-t).toFixed(1)+'s'; $('pr-next').textContent=nx?nx[1]:''}
@@ -877,17 +887,9 @@ $('pp').addEventListener('click',()=>{ if(!ac){$('go').click();return} const d=d
 let NAME=''; try{NAME=localStorage.getItem('jw_name')||''}catch(e){}
 function showName(){ $('ent-name').value=NAME; $('namechip').innerHTML=''; if(NAME){const b=document.createElement('b'); b.textContent='✓ Saved: '+NAME; $('namechip').append(b,' · the AI will announce this name in moments and birthday songs.')} else $('namechip').textContent='No name saved yet. The host will say "the couple" or "birthday star".'}
 function saveName(){ NAME=($('ent-name').value||'').trim().slice(0,40); try{NAME?localStorage.setItem('jw_name',NAME):localStorage.removeItem('jw_name')}catch(e){} showName(); }
-// MC voice: on/off, pause, female/male, smooth or hype tone. Uses the device's built-in voices (free).
+// MC voice: on/off, pause, female/male, smooth or hype tone. Studio-recorded JHOOMWAVE voices only (no device/robot voice).
 const VP={on:true,gender:'f',tone:'hype',paused:false};
 try{Object.assign(VP,JSON.parse(localStorage.getItem('jw_voice')||'{}'));VP.paused=false}catch(e){}
-const FEM=/female|woman|zira|samantha|victoria|karen|moira|tessa|veena|heera|lekha|kalpana|aditi|raveena|neerja|swara|priya|kiara|ananya|google uk english female|serena|susan|fiona|allison|ava|joanna|salli|kimberly|ivy/i;
-const MAL=/male|man\b|david|mark|daniel|alex|fred|rishi|hemant|prabhat|madhur|ravi|kunal|arjun|google uk english male|george|james|tom|oliver|matthew|joey|justin|brian/i;
-let VOICES=[]; function pickVoice(){ VOICES=(window.speechSynthesis&&speechSynthesis.getVoices())||[] }
-function voiceFor(){ const loc=v=>/en-IN|hi-IN/i.test(v.lang)?2:/^en/i.test(v.lang)?1:0;
-  const want=VP.gender==='f'?FEM:MAL, avoid=VP.gender==='f'?MAL:FEM;
-  const c=VOICES.filter(v=>loc(v)>0).sort((a,b)=>((want.test(b.name)&&!avoid.test(b.name))*4+loc(b))-((want.test(a.name)&&!avoid.test(a.name))*4+loc(a)));
-  return c[0]||null }
-if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice }
 function saveVP(){ try{localStorage.setItem('jw_voice',JSON.stringify({on:VP.on,gender:VP.gender,tone:VP.tone}))}catch(e){} }
 function vUI(){ $('v-on').setAttribute('aria-pressed',VP.on); $('v-on').textContent=VP.on?'🎙 Voice ON':'🔇 Voice OFF';
   $('v-pause').setAttribute('aria-pressed',VP.paused); $('v-pause').textContent=VP.paused?'▶ Resume':'⏸ Pause';
@@ -898,39 +900,33 @@ const VMAP={"lights low phones up jhoomwave is in the booth": "start1", "dance f
 const vnorm=s=>s.replace(/\[.*?\]/g,'').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,' ').trim();
 const clipEl=new Audio(); clipEl.preload='auto'; let clipQ=[];
 function endIntro(){ if(!introOn) return; introOn=false; const t2=ac.currentTime; duck.gain.cancelScheduledValues(t2); duck.gain.setValueAtTime(duck.gain.value,t2); duck.gain.linearRampToValueAtTime(1,t2+.6); fxHorn(); setMode(true) }
-function playClips(ids){ if(introOn) endIntro(); clipQ=ids.slice(); speechSynthesis?.cancel(); nextClip() }
+function playClips(ids){ if(introOn) endIntro(); clipQ=ids.slice(); nextClip() }
 function nextClip(){ const id=clipQ.shift(); if(!id){duckFor(false);if(typeof vFlush==='function')vFlush();return} clipEl.src='audio/voice/'+VP.gender+'_'+id+'.mp3'; duckFor(true); clipEl.play().catch(()=>{duckFor(false)}) }
 clipEl.addEventListener('ended',nextClip); clipEl.addEventListener('error',()=>{clipQ=[];duckFor(false)});
 function clipsFor(text){ const n=vnorm(text); if(VMAP[n]) return [VMAP[n]];
+  if(/^please welcome/.test(n)){ const id=(entryOn&&entryOn.id&&!entryOn.song)?entryOn.id:'birthday'; return ['w_'+id] }
   const m=text.match(/^Next up: (.+?)! (.*)$/); if(m){const r=VMAP[vnorm(m[2])], n=VNEXT[m[1]]; const ids=[n,r].filter(Boolean); if(ids.length) return ids}
   return null }
 /* One voice at a time: urgent lines (countdown, welcome, BOOM) cut in cleanly; anything else waits its turn. */
 let vPending=null;
-const vBusy=()=>(!clipEl.paused&&!clipEl.ended&&clipEl.currentTime>0)||(window.speechSynthesis&&speechSynthesis.speaking);
+const vBusy=()=>!clipEl.paused&&!clipEl.ended&&clipEl.currentTime>0;
 const vUrgent=t=>/^\s*[123]…|please welcome|welcome…|boom|countdown/i.test(t||'');
 function vFlush(){ if(vPending&&!vBusy()){ const p=vPending; vPending=null; setTimeout(()=>speak(p[0],Object.assign({},p[1],{queued:true})),250) } }
-window.jwSpeak=(t,o)=>speak(t,o||{}); window.jwVP=VP; window.jwVoiceStop=()=>{vPending=null;clipQ=[];clipEl.pause();try{speechSynthesis.cancel()}catch(e){}duckFor(false)};
+window.jwSpeak=(t,o)=>speak(t,o||{}); window.jwVP=VP; window.jwVoiceStop=()=>{vPending=null;clipQ=[];clipEl.pause();duckFor(false)};
 function speak(text,opt={}){ if(!opt.force&&(!VP.on||VP.paused)) return true;
+  const ids=clipsFor(text); if(!ids) return true; /* no studio clip for this line: it stays on the teleprompter only (no robot voice) */
   if(!opt.queued&&!opt.urgent&&!vUrgent(text)&&vBusy()){ vPending=[text,opt]; return true }
   if(opt.urgent||vUrgent(text)){ vPending=null }
-  const ids=!opt.tts&&clipsFor(text); if(ids){ try{speechSynthesis.cancel()}catch(e){} playClips(ids); return true }
-  clipQ=[]; try{ if(!clipEl.paused) clipEl.pause() }catch(e){}
-  if(!('speechSynthesis' in window)) return false;
-  try{ speechSynthesis.cancel(); const clean=text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/\(Hey!\)/g,'').trim(); if(!clean) return true;
-    const u=new SpeechSynthesisUtterance(clean); const v=voiceFor(); if(v){u.voice=v;u.lang=v.lang} else u.lang='en-IN';
-    const smooth=VP.tone==='smooth', f=VP.gender==='f';
-    u.rate=(opt.rate||1)*(smooth?.86:1.04); u.pitch=f?(smooth?1.12:1.28):(smooth?.72:.9); u.volume=1;
-    u.onstart=()=>duckFor(true); u.onend=u.onerror=()=>{duckFor(false);vFlush()};
-    speechSynthesis.speak(u); return true }catch(e){return false} }
-$('v-on').addEventListener('click',()=>{VP.on=!VP.on; if(!VP.on){speechSynthesis?.cancel(); clipQ=[]; clipEl.pause(); duckFor(false)} VP.paused=false; saveVP(); vUI(); track('console_voice',{on:VP.on})});
-$('v-pause').addEventListener('click',()=>{ VP.paused=!VP.paused; if(VP.paused){speechSynthesis?.pause(); clipEl.pause()} else {speechSynthesis?.resume(); if(clipEl.src&&!clipEl.ended) clipEl.play().catch(()=>{})} vUI()});
+  playClips(ids); return true }
+$('v-on').addEventListener('click',()=>{VP.on=!VP.on; if(!VP.on){vPending=null; clipQ=[]; clipEl.pause(); duckFor(false)} VP.paused=false; saveVP(); vUI(); track('console_voice',{on:VP.on})});
+$('v-pause').addEventListener('click',()=>{ VP.paused=!VP.paused; if(VP.paused){clipEl.pause()} else {if(clipEl.src&&!clipEl.ended&&clipEl.currentTime>0) clipEl.play().catch(()=>{})} vUI()});
 $('v-f').addEventListener('click',()=>{VP.gender='f'; saveVP(); vUI(); playClips(['start1'])});
 $('v-m').addEventListener('click',()=>{VP.gender='m'; saveVP(); vUI(); playClips(['start1'])});
-$('v-tone').addEventListener('click',()=>{VP.tone=VP.tone==='smooth'?'hype':'smooth'; saveVP(); vUI(); speak(VP.tone==='smooth'?'Smooth mode. Relax, feel the groove.':'Hype mode! Haath upar!',{force:true})});
+$('v-tone').addEventListener('click',()=>{VP.tone=VP.tone==='smooth'?'hype':'smooth'; saveVP(); vUI(); playClips([VP.tone==='smooth'?'chill1':'hype1'])});
 vUI();
-$('name-save').addEventListener('click',()=>{saveName(); if(NAME) speak('Name saved. '+NAME); track('console_name_save')});
-$('ent-name').addEventListener('keydown',e=>{if(e.key==='Enter'){saveName(); if(NAME) speak('Name saved. '+NAME)}});
-$('name-test').addEventListener('click',()=>{ const n=($('ent-name').value||'').trim()||NAME; if(!speak(n?'Please welcome, '+n+'! Happy birthday, '+n+'!':'Type a name first.',{force:true})) $('namechip').textContent='This browser cannot speak. Try Chrome or Safari.'});
+$('name-save').addEventListener('click',()=>{saveName(); track('console_name_save')});
+$('ent-name').addEventListener('keydown',e=>{if(e.key==='Enter'){saveName()}});
+$('name-test').addEventListener('click',()=>{ const n=($('ent-name').value||'').trim()||NAME; if(!n){$('namechip').textContent='Type a name first.';return} playClips(['w_birthday']); $('namechip').textContent='The name shows big on screen; the studio host says "Please welcome…". Spoken names in the studio voice are coming soon.'});
 showName();
 // stage visual: real audio spectrum mirrored around the centre, glowing in the brand gradient
 const viz=$('viz'), vx=viz.getContext('2d'); let fbuf=null;

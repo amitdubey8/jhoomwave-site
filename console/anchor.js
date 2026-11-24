@@ -1,5 +1,5 @@
 /* JHOOMWAVE Booth · Anchor mode: pick an event, answer a few questions, get a timed run-of-show with the anchor's
-   script, music cues, games and timers. Lines are spoken through the console's single voice queue (no overlaps).
+   script, music cues, games and timers. Recorded studio lines go through the console's single voice queue (no overlaps); no device voice.
    No network calls; the show is kept in this browser only. */
 (function () {
   const $ = id => document.getElementById(id);
@@ -104,13 +104,13 @@
         <label>Host voice<select id="a-voice"><option value="f">Female</option><option value="m">Male</option></select></label></div>
         <label>Style<div class="chipsx" id="a-style"><button type="button" data-s="classy">Classy</button><button type="button" data-s="masti">Masti</button><button type="button" data-s="corporate">Corporate</button></div></label>
         <button class="bigb" id="a-build" type="button">✨ Build my show</button></div>
-      <p class="note2">The script is spoken with this device's voice for now. Studio voices per event and Punjabi are coming next.</p></section>
+      <p class="note2">You read the line from the screen; the Booth plays the music cue and the JHOOMWAVE studio voice where a line is recorded. Studio voice for every script line (and Punjabi) is coming next.</p></section>
   </div>
   <div class="acol">
     <section class="ac tele"><span class="seg" id="a-seg">No show yet</span><p class="line" id="a-line">Pick an event, fill the names and tap "Build my show".</p>
       <div class="meta"><span id="a-at">—</span><span id="a-mus">—</span><span id="a-pos">—</span></div>
       <div class="timer" id="a-timer"><span>⏱ Activity timer</span><b id="a-tl">0:00</b><button class="ghostb" id="a-tgo" type="button">Start</button></div>
-      <div class="ctl3"><button type="button" id="a-prev">⏮ Back</button><button type="button" class="say" id="a-say">🎙 Say it</button><button type="button" id="a-next">Next ⏭</button></div></section>
+      <div class="ctl3"><button type="button" id="a-prev">⏮ Back</button><button type="button" class="say" id="a-say">🎬 Cue it</button><button type="button" id="a-next">Next ⏭</button></div></section>
     <section class="ac"><h3>📋 Run of show <span><button class="ghostb" id="a-print-b" type="button" style="height:32px">🖨 Print / PDF</button></span></h3><ol class="ros" id="a-ros"></ol></section>
   </div>
   <div id="a-print"></div>`;
@@ -154,7 +154,7 @@
     if (g[3] === 'hype') click('hype'); else if (g[3] === 'chill') click('chill');
     else if (g[3] === 'entry') { const t = document.querySelector('#ent-btns button'); if (t) t.click(); }
   }
-  function sayLine() { if (!show) return; const g = show.segs[si]; if (li === 0) cue(g); if (g[3] === 'entry') return; window.jwSpeak && window.jwSpeak(g[2][li], { tts: true }); }
+  function sayLine() { if (!show) return; const g = show.segs[si]; if (li === 0) cue(g); if (g[3] === 'entry') return; window.jwSpeak && window.jwSpeak(g[2][li], {}); }
   function step(d) {
     if (!show) return; const g = show.segs[si];
     if (d > 0) { if (li < g[2].length - 1) li++; else if (si < show.segs.length - 1) { si++; li = 0; stopT(); } }
@@ -162,7 +162,7 @@
     renderRos(); paint();
   }
   function stopT() { clearInterval(tmr); tmr = null; $('a-tgo').textContent = 'Start'; }
-  $('a-tgo').addEventListener('click', () => { if (tmr) { stopT(); return; } $('a-tgo').textContent = 'Pause'; tmr = setInterval(() => { left = Math.max(0, left - 1); $('a-tl').textContent = fmt(left); if (!left) { stopT(); const h = $('fx-horn'); if (h) h.click(); window.jwSpeak && window.jwSpeak('Time up!', { tts: true, urgent: true }); } }, 1000); });
+  $('a-tgo').addEventListener('click', () => { if (tmr) { stopT(); return; } $('a-tgo').textContent = 'Pause'; tmr = setInterval(() => { left = Math.max(0, left - 1); $('a-tl').textContent = fmt(left); if (!left) { stopT(); const h = $('fx-horn'); if (h) h.click();  } }, 1000); });
   $('a-build').addEventListener('click', build);
   $('a-say').addEventListener('click', sayLine);
   $('a-next').addEventListener('click', () => step(1)); $('a-prev').addEventListener('click', () => step(-1));
