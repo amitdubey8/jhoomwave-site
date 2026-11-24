@@ -111,6 +111,7 @@
   </div>
   <div class="disc"><span>© 2026 JHOOMWAVE</span><span>Vocals and voices are created with JHOOMWAVE's music engine (synthetic voices) on lyrics we write. We label them where platforms ask.</span></div>
 </div></footer>
+<script src="/js/enquiry.js"></script>
 <script>
 (function(){const $=id=>document.getElementById(id);let msg='';
 $('df').addEventListener('submit',e=>{e.preventDefault();
@@ -118,6 +119,10 @@ $('df').addEventListener('submit',e=>{e.preventDefault();
  $('d-out').textContent=msg;$('d-out').hidden=false;$('d-act').hidden=false;try{window.gtag&&gtag('event','demo_request',{who:$('d-who').value})}catch(x){}});
 $('d-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(msg);$('d-copy').textContent='Copied ✓'}catch(x){const r=document.createRange();r.selectNodeContents($('d-out'));getSelection().removeAllRanges();getSelection().addRange(r);$('d-copy').textContent='Select & copy'}});
 })();
+</script>
+<script>
+window.jwWireForm&&jwWireForm({form:'df',actions:'d-act',collect:()=>{const v=id=>(document.getElementById(id)||{}).value||'';
+  return {kind:'business',name:v('d-name')||'Business enquiry',business:v('d-name'),city:v('d-city'),message:`${v('d-who')} · ${v('d-vol')} events/orders a month\n${v('d-need')}`};}});
 </script>
 <nav class="tb" aria-label="Quick"><a href="/"><span aria-hidden="true">🏠</span>Home</a><a href="/#shop"><span aria-hidden="true">🎵</span>Songs</a><a href="/#make" class="mk"><span aria-hidden="true">＋</span>Make</a><a href="/weddings/"><span aria-hidden="true">💍</span>Weddings</a><a href="/kids/"><span aria-hidden="true">🧸</span>Kids</a></nav>
 <script src="/js/nav.js"></script>

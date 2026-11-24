@@ -176,6 +176,11 @@ $('wf').addEventListener('submit',e=>{e.preventDefault();
 $('w-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(msg);$('w-copy').textContent='Copied ✓'}catch(x){const r=document.createRange();r.selectNodeContents($('w-out'));getSelection().removeAllRanges();getSelection().addRange(r);$('w-copy').textContent='Select & copy'}});
 })();
 </script>
+<script src="/js/enquiry.js"></script>
+<script>
+window.jwWireForm&&jwWireForm({form:'wf',actions:'w-act',collect:()=>{const v=id=>(document.getElementById(id)||{}).value||'';
+  return {kind:'song_order',name:v('w-names'),message:`${v('w-what')}\nNames: ${v('w-names')}\nDate: ${v('w-date')}\nLanguage: ${v('w-lang')} · Style: ${v('w-style')}\nStory: ${v('w-story')}`};}});
+</script>
 <nav class="tb" aria-label="Quick"><a href="/"><span aria-hidden="true">🏠</span>Home</a><a href="/#shop"><span aria-hidden="true">🎵</span>Songs</a><a href="/#make" class="mk"><span aria-hidden="true">＋</span>Make</a><a href="/weddings/" aria-current="page"><span aria-hidden="true">💍</span>Weddings</a><a href="/kids/"><span aria-hidden="true">🧸</span>Kids</a></nav>
 <script src="/js/nav.js"></script>
 <script src="/js/jhoomi.js" defer></script>
