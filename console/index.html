@@ -435,7 +435,7 @@ body.easy{height:auto!important;overflow:auto!important;padding-bottom:env(safe-
   <div class="logline"><span class="meter" title="Crowd vibe"><i id="vibe"></i></span><span id="ai-log">Press start. I'll read the vibe and run the night.</span></div>
 </header>
 
-<div class="modeswitch" role="group" aria-label="Console mode"><button type="button" id="ms-easy" aria-pressed="true">🎉 Party</button><button type="button" id="ms-pro" aria-pressed="false">🎛 Pro</button><a id="ms-ig" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener" aria-label="Follow @jhoomwave on Instagram">📸 @jhoomwave</a></div>
+<div class="modeswitch" role="group" aria-label="Console mode"><button type="button" id="ms-easy" aria-pressed="true">🎉 Party</button><button type="button" id="ms-anchor" aria-pressed="false">🎤 Anchor</button><button type="button" id="ms-pro" aria-pressed="false">🎛 Pro</button><a id="ms-ig" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener" aria-label="Follow @jhoomwave on Instagram">📸 @jhoomwave</a></div>
 <main class="party" id="party" aria-label="Party mode">
   <div class="pcol">
     <section class="pc nowp"><canvas id="pviz" aria-hidden="true"></canvas><span class="lbl">NOW PLAYING</span><div class="ttl" id="p-title">Press start</div>
@@ -899,19 +899,28 @@ const vnorm=s=>s.replace(/\[.*?\]/g,'').toLowerCase().normalize('NFKD').replace(
 const clipEl=new Audio(); clipEl.preload='auto'; let clipQ=[];
 function endIntro(){ if(!introOn) return; introOn=false; const t2=ac.currentTime; duck.gain.cancelScheduledValues(t2); duck.gain.setValueAtTime(duck.gain.value,t2); duck.gain.linearRampToValueAtTime(1,t2+.6); fxHorn(); setMode(true) }
 function playClips(ids){ if(introOn) endIntro(); clipQ=ids.slice(); speechSynthesis?.cancel(); nextClip() }
-function nextClip(){ const id=clipQ.shift(); if(!id){duckFor(false);return} clipEl.src='audio/voice/'+VP.gender+'_'+id+'.mp3'; duckFor(true); clipEl.play().catch(()=>{duckFor(false)}) }
+function nextClip(){ const id=clipQ.shift(); if(!id){duckFor(false);if(typeof vFlush==='function')vFlush();return} clipEl.src='audio/voice/'+VP.gender+'_'+id+'.mp3'; duckFor(true); clipEl.play().catch(()=>{duckFor(false)}) }
 clipEl.addEventListener('ended',nextClip); clipEl.addEventListener('error',()=>{clipQ=[];duckFor(false)});
 function clipsFor(text){ const n=vnorm(text); if(VMAP[n]) return [VMAP[n]];
   const m=text.match(/^Next up: (.+?)! (.*)$/); if(m){const r=VMAP[vnorm(m[2])], n=VNEXT[m[1]]; const ids=[n,r].filter(Boolean); if(ids.length) return ids}
   return null }
+/* One voice at a time: urgent lines (countdown, welcome, BOOM) cut in cleanly; anything else waits its turn. */
+let vPending=null;
+const vBusy=()=>(!clipEl.paused&&!clipEl.ended&&clipEl.currentTime>0)||(window.speechSynthesis&&speechSynthesis.speaking);
+const vUrgent=t=>/^\s*[123]…|please welcome|welcome…|boom|countdown/i.test(t||'');
+function vFlush(){ if(vPending&&!vBusy()){ const p=vPending; vPending=null; setTimeout(()=>speak(p[0],Object.assign({},p[1],{queued:true})),250) } }
+window.jwSpeak=(t,o)=>speak(t,o||{}); window.jwVP=VP; window.jwVoiceStop=()=>{vPending=null;clipQ=[];clipEl.pause();try{speechSynthesis.cancel()}catch(e){}duckFor(false)};
 function speak(text,opt={}){ if(!opt.force&&(!VP.on||VP.paused)) return true;
-  const ids=!opt.tts&&clipsFor(text); if(ids){ playClips(ids); return true }
+  if(!opt.queued&&!opt.urgent&&!vUrgent(text)&&vBusy()){ vPending=[text,opt]; return true }
+  if(opt.urgent||vUrgent(text)){ vPending=null }
+  const ids=!opt.tts&&clipsFor(text); if(ids){ try{speechSynthesis.cancel()}catch(e){} playClips(ids); return true }
+  clipQ=[]; try{ if(!clipEl.paused) clipEl.pause() }catch(e){}
   if(!('speechSynthesis' in window)) return false;
   try{ speechSynthesis.cancel(); const clean=text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,'').replace(/\(Hey!\)/g,'').trim(); if(!clean) return true;
     const u=new SpeechSynthesisUtterance(clean); const v=voiceFor(); if(v){u.voice=v;u.lang=v.lang} else u.lang='en-IN';
     const smooth=VP.tone==='smooth', f=VP.gender==='f';
     u.rate=(opt.rate||1)*(smooth?.86:1.04); u.pitch=f?(smooth?1.12:1.28):(smooth?.72:.9); u.volume=1;
-    u.onstart=()=>duckFor(true); u.onend=u.onerror=()=>duckFor(false);
+    u.onstart=()=>duckFor(true); u.onend=u.onerror=()=>{duckFor(false);vFlush()};
     speechSynthesis.speak(u); return true }catch(e){return false} }
 $('v-on').addEventListener('click',()=>{VP.on=!VP.on; if(!VP.on){speechSynthesis?.cancel(); clipQ=[]; clipEl.pause(); duckFor(false)} VP.paused=false; saveVP(); vUI(); track('console_voice',{on:VP.on})});
 $('v-pause').addEventListener('click',()=>{ VP.paused=!VP.paused; if(VP.paused){speechSynthesis?.pause(); clipEl.pause()} else {speechSynthesis?.resume(); if(clipEl.src&&!clipEl.ended) clipEl.play().catch(()=>{})} vUI()});
@@ -983,5 +992,6 @@ addEventListener('resize',()=>{drawWave('a');drawWave('b')});
   for(let i=0;i<n;i++){const p=i/n;let a=an?buf[Math.floor(Math.pow(p,1.5)*buf.length*.55)]/255:.15+.1*Math.sin(p*9+t*.002);a=Math.max(.05,a);const bh=a*h*.75,bx=i*w/n;x.globalAlpha=.4+.6*a;x.fillRect(bx,(h-bh)/2,bw,bh)}x.globalAlpha=1})();
 })();
 </script>
+<script src="anchor.js"></script>
 </body>
 </html>
