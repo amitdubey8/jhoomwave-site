@@ -35,7 +35,7 @@
   }
   // session lives in this tab only: closing the tab signs you out
   const sb = window.supabase.createClient(C.supabaseUrl, C.supabaseKey, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storage: window.sessionStorage },
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'implicit', storage: window.sessionStorage },
   });
   window.__jwSb = sb; // for tests
   let ME = null;
@@ -48,10 +48,10 @@
     email = $('in-email').value.trim().toLowerCase();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $('login-msg').textContent = 'Type a full email address.'; return; }
     $('b-send').disabled = true;
-    await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } }); // same answer either way: don't reveal who is on the team
+    await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } }); // same answer either way: don't reveal who is on the team
     $('b-send').disabled = false;
     $('f-email').hidden = true; $('f-code').hidden = false; $('in-code').focus();
-    $('login-msg').textContent = 'If this email is on the team, a code is on its way. Check spam too.';
+    $('login-msg').textContent = 'If this email is on the team, an email is on its way: tap its sign-in link, or type the code if it has one. Check spam too.';
   });
   $('b-back').addEventListener('click', () => { $('f-code').hidden = true; $('f-email').hidden = false; $('login-msg').textContent = ''; });
   $('f-code').addEventListener('submit', async (e) => {
@@ -317,6 +317,8 @@
   // ---------------------------------------------------------------- start
   (async () => {
     const { data: { session } } = await sb.auth.getSession();
+    // arriving from the email sign-in link: drop the one-time tokens from the address bar
+    if (/access_token|error_description/.test(location.hash)) history.replaceState(null, '', location.pathname + '#office');
     if (session) afterLogin(); else show('v-login');
   })();
 })();
