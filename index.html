@@ -134,7 +134,7 @@
 .vc.playing::after,.vc.playing .meta,.vc.playing .pl,.vc.playing .dur{opacity:0;transition:opacity .3s}
 .vc .fs{position:absolute;top:10px;left:10px;z-index:2;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:0;background:rgb(0 0 0/.45);color:#fff;font-size:16px;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 /* hero wave: the JHOOMWAVE bars, swaying like a crowd; they dance to the anthem when it plays */
-.hero canvas#wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:42%;pointer-events:none;z-index:1;opacity:.75;-webkit-mask-image:linear-gradient(180deg,transparent,#000 35%);mask-image:linear-gradient(180deg,transparent,#000 35%)}
+.hero canvas#wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:40%;pointer-events:none;z-index:1;opacity:.6;-webkit-mask-image:linear-gradient(180deg,transparent,#000 30%,#000 75%,transparent);mask-image:linear-gradient(180deg,transparent,#000 30%,#000 75%,transparent)}
 .hero>.wrap{z-index:2}
 </style>
 </head>
@@ -364,15 +364,15 @@ const an=new Audio('/audio/jhoomwave_anthem.mp3');an.preload='none';
   const g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,'#7B2FF7');g.addColorStop(.55,'#FF2E88');g.addColorStop(1,'#FF8A00');
   const live=an2&&!an.paused;let e=0;if(live){an2.getByteFrequencyData(dat);for(let i=2;i<40;i++)e+=dat[i];e/=38*255}
   lvl+=((live?e:0)-lvl)*.2;
-  const bw=Math.max(5,w/120),gap=bw*.85,n=Math.ceil(w/(bw+gap)),pts=[];
-  x.fillStyle=g;
+  const bw=Math.max(5,w/110),gap=bw*.9,n=Math.ceil(w/(bw+gap)),mid=h*.56;
+  x.fillStyle=g;x.shadowColor='#FF2E88';x.shadowBlur=8+lvl*30;
   for(let i=0;i<n;i++){const p=i/n;
-   let a=.42+.22*Math.sin(p*8+t*.0016)+.14*Math.sin(p*21-t*.0026)+.1*Math.sin(p*3.3+t*.0009);
-   if(live){const k=Math.min(dat.length-1,2+Math.floor(Math.abs(p-.5)*2*60));a=a*.35+(dat[k]/255)*.95+lvl*.3}
-   const bh=Math.max(bw,Math.min(1,a)*h*.92),bx=i*(bw+gap),by=h-bh;
-   x.globalAlpha=.55+.45*Math.min(1,a);x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,bw/2):x.rect(bx,by,bw,bh);x.fill();pts.push([bx+bw/2,by])}
-  x.globalAlpha=1;x.lineWidth=3;x.strokeStyle=g;x.shadowColor='#FF2E88';x.shadowBlur=18+lvl*40;x.beginPath();
-  pts.forEach(([px,py],i)=>{const yy=py-10-6*Math.sin(i*.25+t*.004);i?x.lineTo(px,yy):x.moveTo(px,yy)});x.stroke();x.shadowBlur=0;
+   let a=.5+.5*Math.sin(p*9+t*.0012)*Math.sin(p*3.1-t*.0007)+.15*Math.sin(p*31+t*.003);
+   if(live){const k=Math.min(dat.length-1,2+Math.floor(Math.abs(p-.5)*2*60));a=a*.3+(dat[k]/255)*1.05+lvl*.35}
+   a=Math.max(.06,Math.min(1,a));
+   const bh=Math.max(bw,a*h*.86),bx=i*(bw+gap),by=mid-bh/2;
+   x.globalAlpha=.5+.5*a;x.beginPath();x.roundRect?x.roundRect(bx,by,bw,bh,bw/2):x.rect(bx,by,bw,bh);x.fill()}
+  x.globalAlpha=1;x.shadowBlur=0;
   if(vis&&(!still||live))raf=requestAnimationFrame(draw)}
  const go=()=>{if(!raf&&vis)raf=requestAnimationFrame(draw)};window.jwWaveGo=go;
  size();addEventListener('resize',()=>{size();go()});
