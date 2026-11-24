@@ -352,6 +352,57 @@ body{display:flex;flex-direction:column;min-height:100dvh}
   .eqs{gap:8px}
   .ent-btns{grid-template-columns:1fr 1fr}
 }
+
+/* ===== Party Mode (default): simple, big, one screen. Pro decks stay one tap away. ===== */
+.party{display:none}
+body.easy .party{display:grid}
+body.easy .booth .console,body.easy .booth .dock,body.easy .tabs,body.easy .tb-in .ctl,body.easy .tb-in .mode{display:none!important}
+body.easy{height:auto!important;overflow:auto!important;padding-bottom:env(safe-area-inset-bottom,0px)!important}
+.modeswitch{position:fixed;right:max(14px,env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));z-index:30;display:flex;padding:4px;border-radius:999px;background:rgb(20 10 34/.9);border:1px solid var(--line);backdrop-filter:blur(10px)}
+.modeswitch button{height:36px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--mute);font:700 13px var(--display);cursor:pointer}
+.modeswitch button[aria-pressed="true"]{background:var(--wave);color:#fff}
+.party{max-width:1240px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-left,0px)) 16px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px}
+.pc{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px 16px}
+.pc h3{margin:0 0 12px;font:700 12px var(--mono);letter-spacing:.14em;color:var(--mute);text-transform:uppercase;display:flex;justify-content:space-between;gap:10px}
+.pc h3 small{font:500 12px var(--body);letter-spacing:0;text-transform:none}
+.nowp{position:relative;overflow:hidden;min-height:172px;display:flex;flex-direction:column;justify-content:flex-end;background:radial-gradient(90% 90% at 80% 0%,rgb(255 46 136/.28),transparent 60%),radial-gradient(80% 90% at 0% 100%,rgb(123 47 247/.3),transparent 60%),var(--panel)}
+.nowp canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.55;pointer-events:none}
+.nowp .lbl{position:relative;font:700 12px var(--mono);letter-spacing:.16em;color:#FFC2DD}
+.nowp .ttl{position:relative;font:900 clamp(32px,4.2vw,52px)/1 var(--display);margin:8px 0 8px;overflow-wrap:anywhere}
+.nowp .meta{position:relative;display:flex;flex-wrap:wrap;gap:8px;color:#D9D0EC;font:600 13px var(--body)}
+.nowp .meta span{padding:4px 10px;border-radius:999px;background:rgb(255 255 255/.08)}
+.nowp .bar{position:relative;height:6px;border-radius:6px;background:rgb(255 255 255/.12);margin-top:14px;overflow:hidden}.nowp .bar i{display:block;height:100%;width:0;background:var(--wave)}
+.big3{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:10px;margin-top:12px}
+.big3 button{height:74px;border-radius:20px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);font:800 17px var(--display);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .1s}
+.big3 button span{font-size:28px;line-height:1}
+.big3 button:active{transform:scale(.96)}
+.big3 .hy{background:linear-gradient(135deg,#FF2E88,#FF8A00);border:0;box-shadow:0 10px 30px rgb(255 46 136/.35)}
+.big3 .ch{background:linear-gradient(135deg,#2B1F6B,#3A2A8C);border:0}
+.big3 .pz{width:80px}
+.host{margin-top:12px}
+.host .say{font:800 clamp(18px,1.9vw,23px)/1.25 var(--display);margin:0;min-height:2.5em}
+.host .vrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chipb{height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink);font:700 13px var(--body);cursor:pointer}
+.chipb[aria-pressed="true"]{background:var(--wave);border-color:transparent}
+.mom .nm{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px}
+.mom input{height:48px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:0 14px;font:500 16px var(--body);min-width:0}
+.mom .nm button{height:48px;padding:0 18px;border-radius:14px;border:0;background:var(--wave);color:#fff;font:800 14px var(--display);cursor:pointer}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tiles button{min-height:58px;padding:10px;border-radius:16px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);text-align:left;cursor:pointer;font:800 14px/1.2 var(--display)}
+.tiles button small{display:block;margin-top:4px;font:600 11px var(--mono);letter-spacing:.08em;color:var(--mute)}
+.tiles button:hover{border-color:var(--b)}
+.fx4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fx4 button{height:56px;border-radius:16px;border:0;color:#fff;font:800 13px var(--display);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.fx4 button span{font-size:22px}
+.fx4 button:active{transform:scale(.95)}
+.upn{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.upn li{display:flex;align-items:center;gap:12px;padding:8px 12px;border-radius:14px;background:var(--panel-2);cursor:pointer}
+.upn li b{flex:1;min-width:0;font:700 15px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upn li small{color:var(--mute);font:600 12px var(--mono)}
+.upn li.now{outline:1.5px solid var(--b)}
+.pcol{display:grid;gap:12px;align-content:start;min-width:0}
+@media (max-width:900px){.party{grid-template-columns:1fr;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}.modeswitch{top:auto;bottom:calc(14px + env(safe-area-inset-bottom,0px))}}
+@media (max-width:520px){.big3{grid-template-columns:repeat(3,1fr)}.big3 .pz{grid-column:1/-1;width:auto;height:52px;flex-direction:row;gap:8px}.big3 button{height:78px}.tiles{grid-template-columns:1fr 1fr}.nowp{min-height:210px}}
 </style>
 </head>
 <body>
@@ -364,7 +415,7 @@ body{display:flex;flex-direction:column;min-height:100dvh}
       JHOOMWAVE <small>CONSOLE</small>
     </a>
     <div class="np">
-      <div class="np-row"><span class="bot" id="bot">AI</span><b class="np-title" id="np-title">Dhol Dhamaka</b><span class="np-head" id="ai-head">AI DJ · READY</span></div>
+      <div class="np-row"><span class="bot" id="bot">DJ</span><b class="np-title" id="np-title">Dhol Dhamaka</b><span class="np-head" id="ai-head">JHOOMWAVE DJ · READY</span></div>
       <div class="chips"><span id="np-bpm">100 BPM</span><span id="np-key">6A</span><span id="np-tag">Desi dhol</span><span id="np-up">Next: —</span></div>
       <div class="np-bar"><i id="np-prog"></i></div>
     </div>
@@ -375,13 +426,32 @@ body{display:flex;flex-direction:column;min-height:100dvh}
       <button type="button" class="cb" id="pp" title="Play / pause">⏯<b>Pause</b></button>
     </div>
     <div class="mode" role="group" aria-label="Who is mixing">
-      <button type="button" id="m-ai" aria-pressed="true">🤖 AI</button>
+      <button type="button" id="m-ai" aria-pressed="true">🎧 Auto</button>
       <button type="button" id="m-you" aria-pressed="false">🎛 Me</button>
     </div>
   </div>
   <div class="logline"><span class="meter" title="Crowd vibe"><i id="vibe"></i></span><span id="ai-log">Press start. I'll read the vibe and run the night.</span></div>
 </header>
 
+<div class="modeswitch" role="group" aria-label="Console mode"><button type="button" id="ms-easy" aria-pressed="true">🎉 Party</button><button type="button" id="ms-pro" aria-pressed="false">🎛 Pro</button></div>
+<main class="party" id="party" aria-label="Party mode">
+  <div class="pcol">
+    <section class="pc nowp"><canvas id="pviz" aria-hidden="true"></canvas><span class="lbl">NOW PLAYING</span><div class="ttl" id="p-title">Press start</div>
+      <div class="meta"><span id="p-bpm">— BPM</span><span id="p-tag">—</span><span id="p-next">Next: —</span></div><div class="bar"><i id="p-prog"></i></div></section>
+    <div class="big3"><button type="button" class="ch" data-proxy="chill"><span>😌</span>Chill</button><button type="button" class="hy" data-proxy="hype"><span>🔥</span>Hype</button><button type="button" data-proxy="nextnow"><span>⏭</span>Next</button><button type="button" class="pz" data-proxy="pp" id="p-pp"><span>⏯</span>Pause</button></div>
+    <section class="pc host"><h3>🎤 Host says <small id="p-where"></small></h3><p class="say" id="p-say">Lights low, phones up. JHOOMWAVE is in the booth.</p>
+      <div class="vrow"><button type="button" class="chipb" data-proxy="v-on" id="p-von">🎙 Voice on</button><button type="button" class="chipb" data-proxy="v-f" id="p-vf">👩 Female</button><button type="button" class="chipb" data-proxy="v-m" id="p-vm">👨 Male</button></div></section>
+  </div>
+  <div class="pcol">
+    <section class="pc mom"><h3>🎬 Moments <small>Save a name, tap a moment</small></h3>
+      <div class="nm"><input id="p-name" maxlength="40" placeholder="Name, e.g. Rahul &amp; Priya" aria-label="Name to announce"><button type="button" id="p-save">Save</button></div>
+      <div class="tiles" id="p-tiles"></div></section>
+    <section class="pc"><h3>💥 Effects</h3><div class="fx4">
+      <button type="button" data-proxy="fx-horn" style="background:#C2185B"><span>📯</span>Horn</button><button type="button" data-proxy="fx-drop" style="background:#6A1B9A"><span>💣</span>Drop</button>
+      <button type="button" data-proxy="fx-rise" style="background:#E65100"><span>🚀</span>Riser</button><button type="button" data-proxy="fx-siren" style="background:#00838F"><span>🚨</span>Siren</button></div></section>
+    <section class="pc"><h3>🎶 Up next <small>Tap to play next</small></h3><ol class="upn" id="p-up"></ol></section>
+  </div>
+</main>
 <main class="booth" id="booth">
   <div class="console view" data-view="decks">
     <section class="deck a" id="deck-a" aria-label="Deck A">
@@ -457,18 +527,18 @@ body{display:flex;flex-direction:column;min-height:100dvh}
       <p class="now" id="mc" aria-live="polite">Lights low, phones up. JHOOMWAVE is in the booth.</p>
       <div class="nextline"><span class="in" id="pr-in">NEXT</span><span id="pr-next">Press start and the script follows the set.</span></div>
     </section></div>
-    <div class="view" data-view="show"><section class="setlist" aria-label="AI set list">
-      <div class="ph"><b>AI SET LIST</b><span id="sl-info">9 tracks · planned live</span></div>
+    <div class="view" data-view="show"><section class="setlist" aria-label="Set list">
+      <div class="ph"><b>SET LIST</b><span id="sl-info">9 tracks · planned live</span></div>
       <ol id="sl"></ol>
     </section></div>
     <div class="view" data-view="moments"><section class="entries" aria-label="Entry moments">
-    <div class="ph"><b>🎬 ENTRIES</b><span>Save a name, then tap an entry. The AI host counts down and announces it.</span></div>
+    <div class="ph"><b>🎬 ENTRIES</b><span>Save a name, then tap an entry. The host counts down and announces it.</span></div>
     <div class="namebox">
       <input id="ent-name" type="text" maxlength="40" placeholder="Type a name, e.g. Rahul &amp; Priya" aria-label="Name to announce">
       <button type="button" id="name-save">Save</button>
       <button type="button" id="name-test">🔊 Hear it</button>
     </div>
-    <p class="namechip" id="namechip">No name saved yet. The AI will say "the couple" or "birthday star".</p>
+    <p class="namechip" id="namechip">No name saved yet. The host will say "the couple" or "birthday star".</p>
     <div class="ent-btns" id="ent-btns"></div>
     <div class="ent-btns" id="bd-btns" hidden></div>
     <a class="tostudio" href="/studio/">🎂 Birthday songs, kids characters, anthems &amp; announcements → <b>JHOOMWAVE Studio</b></a>
@@ -485,7 +555,7 @@ body{display:flex;flex-direction:column;min-height:100dvh}
 <div class="start" id="start">
   <div class="card">
     <h1>we are <span>JHOOMWAVE.</span></h1>
-    <p>Not just a DJ: the mahol. An AI that reads the crowd, matches the beat, holds the mic and sings for your people. Press start and let it introduce itself. Then steer with <b>🔥 Hype</b>, <b>😌 Chill</b> and <b>⏭ Next</b>.</p>
+    <p>Not just a DJ: the mahol. A DJ that reads the crowd, matches the beat, holds the mic and sings for your people. Press start and let it introduce itself. Then steer with <b>🔥 Hype</b>, <b>😌 Chill</b> and <b>⏭ Next</b>.</p>
     <button class="go" id="go" type="button">▶ Start the night</button>
     <small>Turn the volume up. Headphones hit different.</small>
   </div>
@@ -498,6 +568,7 @@ const T=JSON.parse(document.getElementById('tracks').textContent);
 const $=id=>document.getElementById(id);
 const fmt=s=>{s=Math.max(0,s||0);return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0')};
 let introOn=false, duck, entryOn=null, ac=null, master, comp, analyser, an2, filt, hp, echoIn, echoWet, delay, fb, splitter;
+window.jwAn=()=>analyser;
 const decks={};
 let mixingIn=null, aiOn=true, vibe=.5, recent=[], blending=false, queue=[], played=[], nextAt=null, lastCue='';
 const MC={
@@ -640,12 +711,12 @@ addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==
 
 // ---------- AI DJ ----------
 function setMode(ai){aiOn=ai; $('m-ai').setAttribute('aria-pressed',ai); $('m-you').setAttribute('aria-pressed',!ai); $('bot').classList.toggle('live',ai);
-  log(ai?'AI DJ · LIVE':'AI DJ · STANDING BY', ai?'Reading the vibe. I pick, beatmatch and blend the next track.':'You have the decks. Tap 🤖 AI DJ to hand them back.'); track('console_mode',{mode:ai?'ai':'you'})}
+  log(ai?'JHOOMWAVE DJ · LIVE':'JHOOMWAVE DJ · STANDING BY', ai?'Reading the vibe. I pick, beatmatch and blend the next track.':'You have the decks. Tap 🤖 AI DJ to hand them back.'); track('console_mode',{mode:ai?'ai':'you'})}
 function manual(){ if(aiOn&&!blending){ /* keep AI on; manual touches are welcome */ } }
 $('m-ai').addEventListener('click',()=>setMode(true)); $('m-you').addEventListener('click',()=>setMode(false));
 function setVibe(v){vibe=Math.max(0,Math.min(1,v)); $('vibe').style.width=(vibe*100)+'%'}
-$('hype').addEventListener('click',()=>{setVibe(vibe+.25); say('hype'); if(ac){fxHorn(); if(vibe>.7) fxEcho()} log(aiOn?'AI DJ · HYPE '+Math.round(vibe*100)+'%':'VIBE · HYPE','Crowd is up. Set list re-planned for higher energy; next blend is 16 beats with riser and drop.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'hype'})});
-$('chill').addEventListener('click',()=>{setVibe(vibe-.25); say('chill'); log(aiOn?'AI DJ · CHILL '+Math.round(vibe*100)+'%':'VIBE · CHILL','Easing off. Set list re-planned for groove; next blend is 32 smooth beats.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'chill'})});
+$('hype').addEventListener('click',()=>{setVibe(vibe+.25); say('hype'); if(ac){fxHorn(); if(vibe>.7) fxEcho()} log(aiOn?'JHOOMWAVE DJ · HYPE '+Math.round(vibe*100)+'%':'VIBE · HYPE','Crowd is up. Set list re-planned for higher energy; next blend is 16 beats with riser and drop.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'hype'})});
+$('chill').addEventListener('click',()=>{setVibe(vibe-.25); say('chill'); log(aiOn?'JHOOMWAVE DJ · CHILL '+Math.round(vibe*100)+'%':'VIBE · CHILL','Easing off. Set list re-planned for groove; next blend is 32 smooth beats.'); if(decks[live()].track) plan(decks[live()].track,true); track('console_vibe',{v:'chill'})});
 const CAM=c=>({n:parseInt(c),l:c.slice(-1)});
 function keyScore(a,b){a=CAM(a);b=CAM(b); if(a.n===b.n) return 1; const dn=Math.min((a.n-b.n+12)%12,(b.n-a.n+12)%12); return (dn===1&&a.l===b.l)?.85:(dn===1?.5:.2)}
 function chooseNext(cur){
@@ -659,7 +730,7 @@ async function blend(){
   D.pitch=Math.max(-8,Math.min(8,(target/nx.bpm-1)*100)); $('pitch-'+to).value=D.pitch; rate(to);
   const spbF=60/F.track.bpm, spbD=60/nx.bpm, ph=(((F.el.currentTime-F.track.offset)/spbF)%1+1)%1;
   D.el.currentTime=nx.offset+(16+ph)*spbD; $('low-'+to).value=-30; applyEq();
-  log('AI DJ · BLENDING', `${F.track.title} → ${nx.title} · ${F.track.bpm}→${target.toFixed(1)} BPM · key ${F.track.key}→${nx.key}${keyScore(F.track.key,nx.key)>=.85?' ✓ harmonic':''} · ${beats} beats`);
+  log('JHOOMWAVE DJ · BLENDING', `${F.track.title} → ${nx.title} · ${F.track.bpm}→${target.toFixed(1)} BPM · key ${F.track.key}→${nx.key}${keyScore(F.track.key,nx.key)>=.85?' ✓ harmonic':''} · ${beats} beats`);
   say('blend'); await D.el.play().catch(()=>{}); ui(to);
   const secs=beats*60/target, toXf=to==='b'?1:0;
   if(vibe>.6) fxRise(beats);
@@ -672,7 +743,7 @@ async function blend(){
   // glide the new deck home to its own tempo over 8 beats
   const p0=D.pitch, t0=performance.now(), glide=8*60/nx.bpm*1000;
   (function g(){const p=Math.min(1,(performance.now()-t0)/glide); D.pitch=p0*(1-p); $('pitch-'+to).value=D.pitch; rate(to); if(p<1) requestAnimationFrame(g)})();
-  log('AI DJ · LIVE',`Now playing ${nx.title} (${nx.bpm} BPM, ${nx.key}). Next blend in ~${Math.round((D.el.duration||150)*.55)}s.`);
+  log('JHOOMWAVE DJ · LIVE',`Now playing ${nx.title} (${nx.bpm} BPM, ${nx.key}). Next blend in ~${Math.round((D.el.duration||150)*.55)}s.`);
   blending=false; mixingIn=null; played.push(nx.id); plan(nx); 
 }
 // set planning: warm-up -> peak curve, harmonic keys, tempo close; Hype/Chill re-plans what's left
@@ -760,7 +831,7 @@ function playEntry(e,i){
   if(($('ent-name').value||'').trim()!==NAME) saveName(); const name=NAME;
   e.spoken=false; e.script=[[0,e.open,'BUILD'],[6,'Phones out, torches on! 📱🔦','BUILD'],[21*EB,'3…','COUNTDOWN'],[22*EB,'2…','COUNTDOWN'],[23*EB,'1…','COUNTDOWN'],
     [BOOM,'Please welcome… '+(name?name+'! 🔥':e.who),'BOOM'],[BOOM+5,'Haath upar! Shor machao! 🙌','GROOVE'],[BOOM+10,'Ek baar aur… zor se! 🔥','GROOVE']];
-  e.flashed=false; log('AI DJ · ENTRY',`${e.name}: music dipped, entry beat playing, BOOM at ${fmt(BOOM)}. Blends paused.`); track('console_entry',{entry:e.id});
+  e.flashed=false; log('JHOOMWAVE DJ · ENTRY',`${e.name}: music dipped, entry beat playing, BOOM at ${fmt(BOOM)}. Blends paused.`); track('console_entry',{entry:e.id});
 }
 BD.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='ent';b.id='ent-bd-'+s.id;
   const x=document.createElement('b');x.textContent=s.emo+' '+s.label;const sm=document.createElement('small');sm.textContent=s.title.toUpperCase()+' · AI VOCALS';const bar=document.createElement('i');b.append(x,sm,bar);
@@ -775,12 +846,12 @@ function playSong(s){
   document.querySelectorAll('.ent').forEach(b=>b.disabled=b.id!=='ent-bd-'+s.id); $('ent-bd-'+s.id).classList.add('on');
   const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(.08,t+1.2);
   entEl.src='audio/songs/jw_song_'+s.id+'.mp3'; entEl.currentTime=0; entEl.play().catch(()=>{});
-  log('AI DJ · BIRTHDAY',`${s.title} for ${name}. Lyrics on the teleprompter, everyone sings along. Blends paused.`); track('console_birthday',{persona:s.id});
+  log('JHOOMWAVE DJ · BIRTHDAY',`${s.title} for ${name}. Lyrics on the teleprompter, everyone sings along. Blends paused.`); track('console_birthday',{persona:s.id});
 }
 function endEntry(){const e=entryOn; if(!e) return; entryOn=null; const t=ac.currentTime;
   duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(duck.gain.value,t); duck.gain.linearRampToValueAtTime(1,t+1.5);
   document.querySelectorAll('.ent').forEach(b=>{b.disabled=false;b.classList.remove('on');b.querySelector('i').style.width='0'});
-  log('AI DJ · LIVE','Entry done. Music is back, set list continues.'); lastCue='';}
+  log('JHOOMWAVE DJ · LIVE','Entry done. Music is back, set list continues.'); lastCue='';}
 entEl.addEventListener('ended',endEntry);
 setInterval(()=>{const e=entryOn; if(!e) return; const t=entEl.currentTime;
   $('ent-'+e.id).querySelector('i').style.width=Math.min(100,t/(entEl.duration||26.4)*100)+'%';
@@ -799,10 +870,10 @@ setInterval(()=>{const e=entryOn; if(!e) return; const t=entEl.currentTime;
 function setTab(v){document.body.dataset.tab=v; document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tab===v)); if(v==='decks'){drawWave('a');drawWave('b')} try{localStorage.setItem('jw_tab',v)}catch(e){} }
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
 let tab0='decks'; try{tab0=localStorage.getItem('jw_tab')||'decks'}catch(e){} setTab(tab0);
-$('nextnow').addEventListener('click',()=>{ if(!ac){$('go').click();return} if(blending||entryOn) return; if(!aiOn) setMode(true); log('AI DJ · NEXT','Skipping ahead: blending into the next song now.'); blend(); track('console_next')});
+$('nextnow').addEventListener('click',()=>{ if(!ac){$('go').click();return} if(blending||entryOn) return; if(!aiOn) setMode(true); log('JHOOMWAVE DJ · NEXT','Skipping ahead: blending into the next song now.'); blend(); track('console_next')});
 $('pp').addEventListener('click',()=>{ if(!ac){$('go').click();return} const d=decks[live()]; setPlay(live(),d.el.paused); });
 let NAME=''; try{NAME=localStorage.getItem('jw_name')||''}catch(e){}
-function showName(){ $('ent-name').value=NAME; $('namechip').innerHTML=''; if(NAME){const b=document.createElement('b'); b.textContent='✓ Saved: '+NAME; $('namechip').append(b,' · the AI will announce this name in moments and birthday songs.')} else $('namechip').textContent='No name saved yet. The AI will say "the couple" or "birthday star".'}
+function showName(){ $('ent-name').value=NAME; $('namechip').innerHTML=''; if(NAME){const b=document.createElement('b'); b.textContent='✓ Saved: '+NAME; $('namechip').append(b,' · the AI will announce this name in moments and birthday songs.')} else $('namechip').textContent='No name saved yet. The host will say "the couple" or "birthday star".'}
 function saveName(){ NAME=($('ent-name').value||'').trim().slice(0,40); try{NAME?localStorage.setItem('jw_name',NAME):localStorage.removeItem('jw_name')}catch(e){} showName(); }
 // MC voice: on/off, pause, female/male, smooth or hype tone. Uses the device's built-in voices (free).
 const VP={on:true,gender:'f',tone:'hype',paused:false};
@@ -875,11 +946,39 @@ $('go').addEventListener('click',async()=>{
   decks.a.el.currentTime=decks.a.track.offset; await decks.a.el.play().catch(()=>{}); ui('a'); played=[decks.a.track.id]; plan(decks.a.track); track('console_start');
   // brand intro: music sits low while the JHOOMWAVE voice introduces itself, then the floor opens with a horn
   if(VP.on){ const t=ac.currentTime; duck.gain.cancelScheduledValues(t); duck.gain.setValueAtTime(.22,t); introOn=true; setPrompt('Welcome to JHOOMWAVE. Hum DJ nahi hain… hum mahol hain.');
-    log('JHOOMWAVE','Introducing ourselves… the AI DJ takes over right after.'); clipQ=[]; clipEl.src='audio/voice/'+VP.gender+'_intro.mp3';
+    log('JHOOMWAVE','Introducing ourselves… the DJ takes over right after.'); clipQ=[]; clipEl.src='audio/voice/'+VP.gender+'_intro.mp3';
     const done=()=>{ if(!introOn) return; endIntro(); say('start') };
     clipEl.addEventListener('ended',done,{once:true}); clipEl.play().catch(done); }
 });
 addEventListener('resize',()=>{drawWave('a');drawWave('b')});
+})();
+
+/* Party Mode glue: big controls proxy the pro controls; text mirrors the live state. */
+(function(){const $=id=>document.getElementById(id);
+ const setEasy=e=>{document.body.classList.toggle('easy',e);$('ms-easy').setAttribute('aria-pressed',e);$('ms-pro').setAttribute('aria-pressed',!e);try{localStorage.setItem('jw_mode',e?'easy':'pro')}catch(x){}};
+ let m='easy';try{m=localStorage.getItem('jw_mode')||'easy'}catch(x){} setEasy(m!=='pro');
+ $('ms-easy').addEventListener('click',()=>setEasy(true));$('ms-pro').addEventListener('click',()=>{setEasy(false);track('console_pro')});
+ document.querySelectorAll('[data-proxy]').forEach(b=>b.addEventListener('click',()=>{const t=$(b.dataset.proxy);if(t)t.click()}));
+ $('p-save').addEventListener('click',()=>{$('ent-name').value=$('p-name').value;$('name-save').click()});
+ $('p-name').addEventListener('keydown',e=>{if(e.key==='Enter')$('p-save').click()});
+ function tiles(){const src=[...document.querySelectorAll('#ent-btns button')];if(!src.length||$('p-tiles').childElementCount===src.length)return;$('p-tiles').innerHTML='';
+  src.forEach(o=>{const b=document.createElement('button');b.type='button';b.innerHTML=o.innerHTML;b.addEventListener('click',()=>o.click());$('p-tiles').append(b)})}
+ const txt=id=>($(id)?.textContent||'').trim();
+ function sync(){tiles();$('p-title').textContent=txt('np-title')||'Press start';$('p-bpm').textContent=txt('np-bpm');$('p-tag').textContent=txt('np-tag');$('p-next').textContent=txt('np-up');
+  $('p-prog').style.width=$('np-prog')?.style.width||'0';$('p-say').textContent=txt('mc');$('p-where').textContent=txt('pr-where');
+  $('p-pp').lastChild.textContent=($('pp').textContent.includes('Play')?'Play':'Pause');
+  ['v-on','v-f','v-m'].forEach(k=>{const o=$(k),p=$('p-'+k.replace('-',''));if(o&&p)p.setAttribute('aria-pressed',o.getAttribute('aria-pressed'))});
+  $('p-von').textContent=$('v-on').getAttribute('aria-pressed')==='true'?'🎙 Voice on':'🔇 Voice off';
+  const li=[...document.querySelectorAll('#sl li')];const sig=li.map(x=>x.className+x.textContent).join('|').slice(0,400);
+  if($('p-up').dataset.sig!==sig){$('p-up').dataset.sig=sig;$('p-up').innerHTML='';li.slice(0,innerWidth>900?4:6).forEach(o=>{const n=document.createElement('li');n.className=/now/i.test(o.className+o.textContent)?'now':'';
+   const t=o.querySelector('b,strong')?.textContent||o.textContent.trim().split('\n')[0];const meta=(o.textContent.match(/\d+\s*BPM/)||[''])[0];
+   n.innerHTML='<b></b><small></small>';n.querySelector('b').textContent=t;n.querySelector('small').textContent=n.className?'NOW':meta;n.addEventListener('click',()=>o.click());$('p-up').append(n)})}}
+ setInterval(sync,300);sync();
+ const c=$('pviz'),x=c.getContext('2d');let buf=null;
+ (function draw(){requestAnimationFrame(draw);if(!document.body.classList.contains('easy'))return;const w=c.clientWidth,h=c.clientHeight;if(c.width!==w)c.width=w;if(c.height!==h)c.height=h;x.clearRect(0,0,w,h);
+  const an=window.jwAn&&jwAn();const n=48,bw=w/n*.55;if(an){if(!buf)buf=new Uint8Array(an.frequencyBinCount);an.getByteFrequencyData(buf)}
+  const g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,'#7B2FF7');g.addColorStop(.55,'#FF2E88');g.addColorStop(1,'#FF8A00');x.fillStyle=g;const t=performance.now();
+  for(let i=0;i<n;i++){const p=i/n;let a=an?buf[Math.floor(Math.pow(p,1.5)*buf.length*.55)]/255:.15+.1*Math.sin(p*9+t*.002);a=Math.max(.05,a);const bh=a*h*.75,bx=i*w/n;x.globalAlpha=.4+.6*a;x.fillRect(bx,(h-bh)/2,bw,bh)}x.globalAlpha=1})();
 })();
 </script>
 </body>
