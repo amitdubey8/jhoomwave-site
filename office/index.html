@@ -12,6 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="JW Office">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -22,7 +23,7 @@
   <!-- sign in -->
   <main class="gate" id="v-login" hidden>
     <div class="gcard">
-      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <div class="brand"><img class="logo" src="logo.svg" alt="" width="28" height="26"><b>JHOOMWAVE</b><small>Office</small></div>
       <h1>Sign in</h1>
       <p class="mut">Team only. Enter your work email and we send a 6-digit code.</p>
       <form id="f-email" novalidate>
@@ -43,7 +44,7 @@
   <!-- 2FA -->
   <main class="gate" id="v-mfa" hidden>
     <div class="gcard">
-      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <div class="brand"><img class="logo" src="logo.svg" alt="" width="28" height="26"><b>JHOOMWAVE</b><small>Office</small></div>
       <h1 id="mfa-title">Two-step check</h1>
       <div id="mfa-enroll" hidden>
         <p class="mut">First time here: open Google Authenticator (or Microsoft Authenticator), tap +, and scan this code.</p>
@@ -64,7 +65,7 @@
   <!-- no access -->
   <main class="gate" id="v-denied" hidden>
     <div class="gcard">
-      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <div class="brand"><img class="logo" src="logo.svg" alt="" width="28" height="26"><b>JHOOMWAVE</b><small>Office</small></div>
       <h1>No access yet</h1>
       <p class="mut">This login is not on the JHOOMWAVE team list, or it was switched off. Ask the founder to invite this email.</p>
       <button class="btn" type="button" data-signout>Sign out</button>
@@ -74,7 +75,7 @@
   <!-- office -->
   <div class="shell" id="v-app" hidden>
     <header class="top">
-      <div class="brand"><span class="logo" aria-hidden="true"></span><b>JHOOMWAVE</b><small>Office</small></div>
+      <div class="brand"><img class="logo" src="logo.svg" alt="" width="28" height="26"><b>JHOOMWAVE</b><small>Office</small></div>
       <nav class="nav" id="nav" aria-label="Sections"></nav>
       <div class="me"><span id="me-email"></span><span class="chip" id="me-role"></span><button class="lnk" type="button" data-signout>Sign out</button></div>
     </header>
