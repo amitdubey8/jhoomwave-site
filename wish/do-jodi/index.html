@@ -145,7 +145,7 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
 
   <div class="eng">
     <button class="hb" id="hb" type="button" aria-pressed="false" aria-label="प्यार भेजें"><span class="h">🤍</span><span id="hc">प्यार भेजें</span></button>
-    <button class="bl" type="button" id="goBless">🙏 आशीर्वाद दें</button>
+    <button class="bl" type="button" id="goBless">💐 विश करें</button>
     <span class="vw" id="vw"></span>
   </div>
 
@@ -164,14 +164,14 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
     <p class="sig">सालगिरह की ढेरों बधाई! – अमित</p>
   </section>
 
-  <section class="bw" id="bless" aria-label="आशीर्वाद">
-    <h2>🙏 आशीर्वाद की किताब</h2>
-    <p class="hint">दोनों जोड़ियों के लिए अपनी दुआ लिखिए, मंज़ूरी के बाद सब यहाँ पढ़ पाएँगे।</p>
+  <section class="bw" id="bless" aria-label="शुभकामनाएँ">
+    <h2>💐 शुभकामनाएँ और आशीर्वाद</h2>
+    <p class="hint">दोनों जोड़ियों को बधाई दीजिए, बड़े अपना आशीर्वाद। मंज़ूरी के बाद सब यहाँ पढ़ पाएँगे।</p>
     <form id="bf" autocomplete="on">
       <input id="bn" name="name" maxlength="40" placeholder="आपका नाम (जैसे: बुआ, मामा जी, नीता)" required>
-      <div class="qk" id="qk"><button type="button">सदा खुश रहो 🙏</button><button type="button">जोड़ी सलामत रहे ❤️</button><button type="button">बहुत सुंदर गाना! 🎶</button><button type="button">सालगिरह मुबारक 💐</button><button type="button">भगवान सदा साथ रहें 🪔</button></div>
-      <textarea id="bm" maxlength="280" placeholder="अपना आशीर्वाद लिखें…" required></textarea>
-      <button class="btn cta send" type="submit" id="bs">💌 आशीर्वाद भेजें</button>
+      <div class="qk" id="qk"><button type="button">हैप्पी एनिवर्सरी 💐</button><button type="button">जोड़ी सलामत रहे ❤️</button><button type="button">ऐसे ही मुस्कुराते रहो 😊</button><button type="button">बहुत सुंदर गाना! 🎶</button><button type="button">सदा खुश रहो 🙏</button></div>
+      <textarea id="bm" maxlength="280" placeholder="अपनी शुभकामना या आशीर्वाद लिखें…" required></textarea>
+      <button class="btn cta send" type="submit" id="bs">💌 शुभकामना भेजें</button>
       <p class="msg" id="bmsg" role="status"></p>
     </form>
     <div class="bl-list" id="bll"></div>
@@ -226,8 +226,8 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
   var hb=document.getElementById('hb'),hc=document.getElementById('hc'),vw=document.getElementById('vw'),bll=document.getElementById('bll'),liked=false,hearts=0;
   function heartUI(){hb.classList.toggle('on',liked);hb.setAttribute('aria-pressed',liked);hb.querySelector('.h').textContent=liked?'❤️':'🤍';hc.textContent=hearts?(hearts+' प्यार'):'प्यार भेजें'}
   function ago(iso){var m=Math.round((Date.now()-new Date(iso))/60000);if(m<1)return 'अभी';if(m<60)return m+' मिनट पहले';var h=Math.round(m/60);if(h<24)return h+' घंटे पहले';return Math.round(h/24)+' दिन पहले'}
-  function item(b,top){var d=document.createElement('div');d.className='bl-item';var p=document.createElement('p');p.textContent=b.msg;var n=document.createElement('b');n.textContent='– '+b.name+' ';var sm=document.createElement('small');sm.textContent='· '+ago(b.at);n.appendChild(sm);d.append(p,n);if(b.pending){var w=document.createElement('small');w.className='pend';w.textContent='⏳ मंज़ूरी के बाद सबको दिखेगा';d.append(w);d.style.opacity='.85'}if(top)bll.prepend(d);else bll.append(d)}
-  function empty(){if(!bll.children.length){var e=document.createElement('p');e.className='bl-empty';e.id='ble';e.textContent='सबसे पहला आशीर्वाद आप दीजिए 🙏';bll.append(e)}}
+  function item(b,top){var d=document.createElement('div');d.className='bl-item';var p=document.createElement('p');p.textContent=b.msg;var n=document.createElement('b');n.textContent='– '+b.name+' ';var sm=document.createElement('small');sm.textContent='· '+ago(b.at);n.appendChild(sm);d.append(p,n);if(b.pending){var w=document.createElement('small');w.className='pend';w.textContent='⏳ मंज़ूरी के बाद सबको दिखेगी';d.append(w);d.style.opacity='.85'}if(top)bll.prepend(d);else bll.append(d)}
+  function empty(){if(!bll.children.length){var e=document.createElement('p');e.className='bl-empty';e.id='ble';e.textContent='सबसे पहली शुभकामना आप दीजिए 💐';bll.append(e)}}
   rpc('wish_stats',{p_slug:SLUG,p_anon:anon}).then(function(d){if(!d){empty();return}hearts=d.hearts;liked=d.liked;heartUI();if(d.views>1)vw.textContent='👀 '+d.views+' बार देखा गया';(d.blessings||[]).forEach(function(b){item(b)});empty()});
   function burst(x,y){for(var i=0;i<9;i++){var s=document.createElement('span');s.className='fly';s.textContent=['❤️','💖','💕','🌸','✨'][i%5];s.style.left=(x-13)+'px';s.style.top=(y-13)+'px';s.style.setProperty('--dx',(Math.random()*160-80)+'px');s.style.setProperty('--r',(Math.random()*90-45)+'deg');s.style.animationDelay=(i*60)+'ms';document.body.append(s);setTimeout(function(n){n.remove()}.bind(null,s),2000)}}
   hb.addEventListener('click',function(e){var r=hb.getBoundingClientRect();burst(r.left+30,r.top+10);if(navigator.vibrate)navigator.vibrate(20);if(liked)return;liked=true;hearts++;heartUI();rpc('wish_heart',{p_slug:SLUG,p_anon:anon}).then(function(n){if(typeof n==='number'){hearts=n;heartUI()}})});
@@ -235,14 +235,14 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
   var bn=document.getElementById('bn'),bm=document.getElementById('bm'),bs=document.getElementById('bs'),bmsg=document.getElementById('bmsg');
   try{bn.value=localStorage.getItem('jw_wish_name')||''}catch(e){}
   document.getElementById('qk').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){bm.value=(bm.value?bm.value.trim()+' ':'')+e.target.textContent;bm.focus()}});
-  var ERR={name:'अपना नाम लिखिए 🙂',msg:'थोड़ा सा आशीर्वाद लिखिए 🙂',link:'कृपया लिंक न डालें 🙏',words:'कृपया अच्छे शब्दों में लिखें 🙏',limit:'आज के लिए आपके 3 आशीर्वाद पहुँच गए ❤️',busy:'अभी बहुत लोग लिख रहे हैं, थोड़ी देर में कोशिश करें',closed:'यह पेज अभी आशीर्वाद नहीं ले रहा'};
+  var ERR={name:'अपना नाम लिखिए 🙂',msg:'अपनी शुभकामना लिखिए 🙂',link:'कृपया लिंक न डालें 🙏',words:'कृपया अच्छे शब्दों में लिखें 🙏',limit:'आज के लिए आपकी 3 शुभकामनाएँ पहुँच गईं ❤️',busy:'अभी बहुत लोग लिख रहे हैं, थोड़ी देर में कोशिश करें',closed:'यह पेज अभी शुभकामनाएँ नहीं ले रहा'};
   document.getElementById('bf').addEventListener('submit',function(e){e.preventDefault();var n=bn.value.trim(),m=bm.value.trim();if(!n){bmsg.textContent=ERR.name;return}if(m.length<2){bmsg.textContent=ERR.msg;return}
     bs.disabled=true;bmsg.textContent='भेज रहे हैं…';
     rpc('wish_bless',{p_slug:SLUG,p_anon:anon,p_name:n,p_msg:m}).then(function(r){bs.disabled=false;
       if(!r){bmsg.textContent='नेटवर्क की दिक्कत, दोबारा भेजें';return}
       if(r.error){bmsg.textContent=ERR[r.error]||'दोबारा कोशिश करें';return}
       try{localStorage.setItem('jw_wish_name',n)}catch(e){}
-      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='आपका आशीर्वाद पहुँच गया! 🙏 मंज़ूरी के बाद सबको दिखेगा ❤️';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
+      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='आपकी शुभकामना पहुँच गई! 💐 मंज़ूरी के बाद सबको दिखेगी ❤️';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
   // marigold petals when the song starts for the first time
   var showered=false;v.addEventListener('play',function(){if(showered||matchMedia('(prefers-reduced-motion:reduce)').matches)return;showered=true;for(var i=0;i<26;i++){var p=document.createElement('span');p.className='petal';p.textContent=['🌼','🌸','🏵️','✨'][i%4];p.style.left=(Math.random()*100)+'vw';p.style.setProperty('--dx',(Math.random()*120-60)+'px');p.style.animationDuration=(3+Math.random()*3)+'s';p.style.animationDelay=(Math.random()*1.5)+'s';document.body.append(p);setTimeout(function(n){n.remove()}.bind(null,p),8000)}});
 })();
