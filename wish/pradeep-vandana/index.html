@@ -7,7 +7,7 @@
 <meta name="description" content="Amit ki taraf se Mummy-Papa (Pradeep & Vandana) ke liye anniversary gaana 🎶">
 <meta property="og:title" content="Happy Anniversary Mummy Papa 💐 (Pradeep & Vandana)">
 <meta property="og:description" content="Amit ki taraf se, aapke naam ka gaana 🎶 Tap to listen.">
-<meta property="og:image" content="https://jhoomwave.com/img/wish/anniversary_og.jpg">
+<meta property="og:image" content="https://jhoomwave.com/img/wish/mummy_papa_og.jpg">
 <meta property="og:type" content="music.song">
 <meta name="theme-color" content="#FFE1EC">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -31,7 +31,7 @@ body{min-height:100dvh;color:var(--ink);font:400 16px/1.55 Poppins,system-ui,san
 .banner h2{margin:2px 0 0;font:900 34px/1.05 Poppins;background:linear-gradient(100deg,#E0A526,#F0407F 60%,#FF7A45);-webkit-background-clip:text;background-clip:text;color:transparent}
 .banner p{margin:6px 0 0;color:var(--mute);font-weight:600}
 .art{position:relative;margin:20px auto 0;width:100%;border-radius:28px;padding:6px;background:linear-gradient(135deg,#FFD36B,#F0407F,#FFD36B);box-shadow:0 18px 40px rgb(240 64 127/.25);transition:transform .5s cubic-bezier(.2,.9,.3,1)}
-.art img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 35%;border-radius:23px;background:#fff}
+.art img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 40%;border-radius:23px;background:#fff}
 .art .ph{display:grid;place-items:center;aspect-ratio:4/5;border-radius:23px;background:radial-gradient(circle at 50% 35%,#fff 0%,#FFE6F0 55%,#FFD9A8 100%);text-align:center;padding:24px}
 .art .ph b{display:block;font:400 46px/1 'Great Vibes',cursive;color:var(--pink)}
 .art .ph span{display:block;font:900 26px Poppins;color:var(--ink);margin-top:8px}
@@ -88,8 +88,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:3px solid var(
   </header>
 
   <div class="art" id="art">
-    <div class="ph"><div><div class="rings">💍💐</div><b>Happy Anniversary</b><span>Pradeep &amp; Vandana</span><small>Shaadi ki saalgirah mubarak ho! 🎊</small></div></div>
-    <span class="badge">🎶 Aapke liye gaane</span>
+    <img src="/img/wish/mummy_papa.jpg" alt="Mummy Papa: Pradeep ji aur Vandana ji" width="1000" height="1250">
+    <span class="badge">💖 Pradeep &amp; Vandana 💖</span>
   </div>
 
   <div class="meta">
@@ -143,7 +143,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:3px solid var(
   function pick(i,play){cur=i;a.src=TRACKS[i].src;document.querySelector('.meta h1').textContent=TRACKS[i].t;document.querySelector('.meta p').textContent='Amit · '+TRACKS[i].s;
     document.querySelectorAll('#pl button').forEach((b,j)=>{b.setAttribute('aria-current',String(j===i));b.querySelector('.now').textContent=j===i?'▶ playing':'';});
     seek.value=0;seek.style.setProperty('--p','0%');$('cur').textContent='0:00';
-    try{navigator.mediaSession&&(navigator.mediaSession.metadata=new MediaMetadata({title:TRACKS[i].t,artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/anniversary_card.jpg',sizes:'1080x1350',type:'image/jpeg'}]}));}catch(e){}
+    try{navigator.mediaSession&&(navigator.mediaSession.metadata=new MediaMetadata({title:TRACKS[i].t,artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/mummy_papa.jpg',sizes:'1040x1300',type:'image/jpeg'}]}));}catch(e){}
     if(play)go();}
   TRACKS.forEach((tr,i)=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';
     const em=document.createElement('span');em.className='em';em.textContent=tr.e;const tx=document.createElement('span');tx.textContent=tr.t;const sm=document.createElement('small');sm.textContent=tr.s;tx.append(sm);const nw=document.createElement('span');nw.className='now';
@@ -164,7 +164,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border:3px solid var(
   seek.addEventListener('input',()=>{seek.dragging=true;seek.style.setProperty('--p',seek.value+'%');$('cur').textContent=fmt(seek.value/100*(a.duration||0));});
   seek.addEventListener('change',()=>{if(a.duration)a.currentTime=seek.value/100*a.duration;seek.dragging=false;});
   $('heart').addEventListener('click',e=>{const b=e.currentTarget;b.classList.toggle('on');b.textContent=b.classList.contains('on')?'♥':'♡';if(b.classList.contains('on'))rain(12);});
-  if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/anniversary_card.jpg',sizes:'1080x1350',type:'image/jpeg'}]});
+  if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/mummy_papa.jpg',sizes:'1040x1300',type:'image/jpeg'}]});
     navigator.mediaSession.setActionHandler('play',go);navigator.mediaSession.setActionHandler('pause',()=>a.pause());
     navigator.mediaSession.setActionHandler('seekbackward',()=>{a.currentTime=Math.max(0,a.currentTime-10);});navigator.mediaSession.setActionHandler('seekforward',()=>{a.currentTime=Math.min(a.duration,a.currentTime+10);});}catch(e){}}
   pick(0,false);
