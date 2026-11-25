@@ -66,7 +66,7 @@ h1{font:400 clamp(26px,7.5vw,34px)/1.2 'Tiro Devanagari Hindi',serif;text-align:
 .duo img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 30%}
 .duo figcaption{text-align:center;padding:6px;font:400 16px/1.3 'Tiro Devanagari Hindi',serif}
 .note{margin:14px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;font:400 17px/1.8 'Tiro Devanagari Hindi',serif;text-align:center}
-.note p{margin:0}.note .sig{color:var(--gold);margin-top:6px}
+.note p{margin:0}.note .to{font:700 20px/1.3 Poppins,sans-serif;color:#fff;margin-bottom:10px;letter-spacing:.3px}.note .to .nm{white-space:nowrap}.note .to .amp{color:var(--gold);font-weight:500;margin:0 6px}.note p+p{margin-top:6px}.note .sig{color:var(--gold);margin-top:6px}
 .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .btn{display:flex;align-items:center;justify-content:center;gap:6px;min-height:52px;padding:10px;border-radius:14px;font-weight:700;font-size:15px;text-decoration:none;color:#1C0B33;background:var(--gold);text-align:center}
 .btn.wa{grid-column:1/-1;background:#25D366;color:#06260f;font-size:17px}
@@ -186,15 +186,16 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
   </div>
 
   <section class="note" lang="hi">
-    <p><span translate="no" class="notranslate">Mummy-Papa</span> और <span translate="no" class="notranslate">Roshan-Pankhuri</span>,<br>आप दोनों जोड़ियाँ यूँ ही हँसती रहें, नाचती रहें,<br>हर साल ऐसे ही धूम मचाती रहें। 🎉</p>
-    <p class="sig">सालगिरह की ढेरों बधाई! – अमित</p>
+    <p class="to notranslate" translate="no"><span class="nm">Mummy-Papa</span> <span class="amp">&amp;</span> <span class="nm">Roshan-Pankhuri</span></p>
+    <p>आप दोनों जोड़ियों का प्यार यूँ ही खिलता रहे,<br>घर में हँसी यूँ ही गूँजती रहे,<br>और हर साल ऐसे ही मिलकर धूम मचाते रहें। 🎉</p>
+    <p class="sig">सालगिरह की ढेरों बधाई! <span class="notranslate" translate="no">— Amit</span></p>
   </section>
 
   <section class="bw" id="bless" aria-label="शुभकामनाएँ">
     <span class="eyebrow">Wishes &amp; Blessings</span><h2>शुभकामनाएँ और आशीर्वाद</h2>
     <p class="hint">दोनों जोड़ियों को बधाई दीजिए, बड़े अपना आशीर्वाद। मंज़ूरी के बाद सब यहाँ पढ़ पाएँगे।</p>
     <form id="bf" autocomplete="on">
-      <input id="bn" name="name" maxlength="40" placeholder="आपका नाम" required>
+      <input id="bn" name="name" maxlength="40" placeholder="आपका नाम (जैसे: शर्मा अंकल, प्रिया दीदी)" required>
       <div class="qk" id="qk"><button type="button">हैप्पी एनिवर्सरी</button><button type="button">जोड़ी सलामत रहे</button><button type="button">ऐसे ही मुस्कुराते रहो</button><button type="button">बहुत सुंदर गाना!</button><button type="button">सदा खुश रहो</button></div>
       <textarea id="bm" maxlength="280" placeholder="अपनी शुभकामना या आशीर्वाद लिखें…" required></textarea>
       <button class="btn cta send" type="submit" id="bs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg><span>शुभकामना भेजें</span></button>
