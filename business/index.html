@@ -38,6 +38,14 @@
 .demo select,.demo input,.demo textarea{background:var(--night);border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);font:400 15px var(--body);width:100%}
 .out{padding:14px;border-radius:12px;border:1px dashed var(--pink);white-space:pre-wrap;font-size:14px;color:#D9D0EC}
 @media (max-width:860px){.demo{grid-template-columns:1fr}}
+.ld{display:grid;gap:10px;margin-top:18px}
+.ld-k{margin:8px 0 0;font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.ld-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ld-chips button{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--night);color:var(--ink);font:600 14px var(--body);cursor:pointer}
+.ld-chips button[aria-pressed="true"]{background:linear-gradient(100deg,#7B2FF7,#FF2E88);border-color:transparent}
+.ld-player{display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;background:var(--night);border:1px solid var(--line)}
+.ld-player small{display:block;color:var(--mute)}
+.ld-play{width:52px;height:52px;flex:none;border-radius:50%;border:0;background:linear-gradient(135deg,#7B2FF7,#FF2E88 60%,#FF8A00);color:#fff;font-size:20px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -89,12 +97,23 @@
 
 <section><div class="wrap">
   <div class="demo" id="demo">
-    <div><span class="eb">Book a demo</span><h2 style="margin-top:12px">Tell us about your business</h2><p class="muted">Fill this and tap Send. We reply on WhatsApp or email within a day. Prefer Instagram? Copy the message and DM <b>@jhoomwave</b>.</p></div>
+    <div><span class="eb">Live demo</span><h2 style="margin-top:12px">See it work for <span class="g">your business</span>, right now</h2>
+      <div class="ld">
+        <p class="ld-k">1 · Hear it for your kind of business</p>
+        <div class="ld-chips" id="ld-chips"></div>
+        <div class="ld-player" id="ld-player" hidden><button type="button" class="ld-play" id="ld-play" aria-label="Play">▶</button><div><b id="ld-title"></b><small id="ld-sub"></small></div></div>
+        <p class="ld-k">2 · Talk to a real person</p>
+        <button type="button" class="btn pri" id="ld-chat">💬 Chat with our team now</button>
+        <p class="ld-k">3 · Or book a 15-min call (WhatsApp or video)</p>
+        <p class="muted" style="margin:0">Pick a time in the form 👉 and tap Send. We confirm on WhatsApp.</p>
+      </div>
+      <p class="muted" style="margin-top:14px">Fill this and tap Send. We reply on WhatsApp or email within a day. Prefer Instagram? Copy the message and DM <b>@jhoomwave</b>.</p></div>
     <form id="df">
       <label>I am a<select id="d-who"><option>Wedding planner</option><option>Venue / hotel</option><option>DJ</option><option>Company / HR</option><option>Shop / café</option><option>School</option><option>Bakery / gift shop</option><option>Agency / brand</option><option>Other</option></select></label>
       <label>Business name<input id="d-name" maxlength="80" placeholder="e.g. Shubh Weddings, Jaipur"></label>
       <label>City<input id="d-city" maxlength="40" placeholder="e.g. Jaipur"></label>
       <label>Events or orders per month<select id="d-vol"><option>1–5</option><option>6–20</option><option>21–50</option><option>50+</option></select></label>
+      <label>Best time for a 15-min call (India time)<select id="d-time"></select></label>
       <label>What do you need?<textarea id="d-need" rows="3" maxlength="400" placeholder="Couple entries for 8 weddings in December"></textarea></label>
       <button class="btn pri" type="submit">Prepare my message</button>
       <div class="out" id="d-out" hidden></div>
@@ -114,15 +133,34 @@
 <script src="/js/enquiry.js"></script>
 <script>
 (function(){const $=id=>document.getElementById(id);let msg='';
+/* live demo: real samples by business type, live chat, call slots */
+const DEMO={'Wedding planner':['/audio/wedding/entry_dashing_kabir_ishita.mp3','Couple entry · Kabir & Ishita','The kind of entry song you can add to every wedding'],
+ 'DJ':['/audio/showcase/jhoomwave_dj_voice_male_arjun.mp3','AI DJ host voice','Hinglish MC lines between your songs'],
+ 'Company / HR':['/audio/showcase/corporate_anthem_rise_together_english.mp3','Team anthem · Rise Together','A song for your company, with your team names'],
+ 'Awards night':['/audio/showcase/corporate_awards_announcer_english.mp3','Awards announcer','Names announced like a live show'],
+ 'Café / shop':['/audio/showcase/jhoomwave_announce_airline.mp3','Fun announcement','Birthday shout-outs your customers film and share'],
+ 'School':['/audio/showcase/jhoomu_elephant_hindi.mp3','Jhoomu the elephant','Kids characters that say each child\'s name']};
+const au=new Audio();au.preload='none';
+Object.keys(DEMO).forEach((k,i)=>{const b=document.createElement('button');b.type='button';b.textContent=k;b.setAttribute('aria-pressed','false');
+ b.addEventListener('click',()=>{document.querySelectorAll('#ld-chips button').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');
+  const [src,t,sub]=DEMO[k];$('ld-title').textContent=t;$('ld-sub').textContent=sub;$('ld-player').hidden=false;au.src=src;try{window.jwSolo&&jwSolo(au)}catch(x){}au.play().then(()=>{$('ld-play').textContent='❚❚'}).catch(()=>{});});
+ $('ld-chips').append(b);});
+$('ld-play').addEventListener('click',()=>{if(au.paused){au.play().catch(()=>{});$('ld-play').textContent='❚❚'}else{au.pause();$('ld-play').textContent='▶'}});
+au.addEventListener('ended',()=>{$('ld-play').textContent='▶'});
+$('ld-chat').addEventListener('click',()=>{const who=$('d-who').value;window.jwChat?jwChat.open(`Hi! I'm a ${who}. I'd like a quick live demo of JHOOMWAVE for my business.`):location.href='https://www.instagram.com/jhoomwave/';});
+(function(){const sel=$('d-time'),now=new Date();const fmt=d=>d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',timeZone:'Asia/Kolkata'});
+ const o0=document.createElement('option');o0.textContent='Any time, call me';sel.append(o0);
+ for(let d=0;d<4;d++){const day=new Date(now.getTime()+d*864e5);[11,13,16,18,20].forEach(h=>{const ist=new Date(day.toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));if(d===0&&ist.getHours()>=h-1)return;
+  const o=document.createElement('option');o.textContent=`${d===0?'Today':d===1?'Tomorrow':fmt(day)} · ${h>12?h-12:h}:00 ${h>=12?'PM':'AM'}`;sel.append(o);});}})();
 $('df').addEventListener('submit',e=>{e.preventDefault();
- msg=`Hi JHOOMWAVE! Demo request\nI am a: ${$('d-who').value}\nBusiness: ${$('d-name').value||'-'}\nCity: ${$('d-city').value||'-'}\nVolume: ${$('d-vol').value} per month\nNeed: ${$('d-need').value||'-'}`;
+ msg=`Hi JHOOMWAVE! Demo request\nI am a: ${$('d-who').value}\nBusiness: ${$('d-name').value||'-'}\nCity: ${$('d-city').value||'-'}\nVolume: ${$('d-vol').value} per month\nCall time: ${$('d-time').value}\nNeed: ${$('d-need').value||'-'}`;
  $('d-out').textContent=msg;$('d-out').hidden=false;$('d-act').hidden=false;try{window.gtag&&gtag('event','demo_request',{who:$('d-who').value})}catch(x){}});
 $('d-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(msg);$('d-copy').textContent='Copied ✓'}catch(x){const r=document.createRange();r.selectNodeContents($('d-out'));getSelection().removeAllRanges();getSelection().addRange(r);$('d-copy').textContent='Select & copy'}});
 })();
 </script>
 <script>
 window.jwWireForm&&jwWireForm({form:'df',actions:'d-act',collect:()=>{const v=id=>(document.getElementById(id)||{}).value||'';
-  return {kind:'business',name:v('d-name')||'Business enquiry',business:v('d-name'),city:v('d-city'),message:`${v('d-who')} · ${v('d-vol')} events/orders a month\n${v('d-need')}`};}});
+  return {kind:'business',name:v('d-name')||'Business enquiry',business:v('d-name'),city:v('d-city'),message:`Demo request · ${v('d-who')} · ${v('d-vol')} events/orders a month\nCall time (IST): ${v('d-time')}\n${v('d-need')}`};}});
 </script>
 <nav class="tb" aria-label="Quick"><a href="/"><span aria-hidden="true">🏠</span>Home</a><a href="/#shop"><span aria-hidden="true">🎵</span>Songs</a><a href="/#make" class="mk"><span aria-hidden="true">＋</span>Make</a><a href="/weddings/"><span aria-hidden="true">💍</span>Weddings</a><a href="/kids/"><span aria-hidden="true">🧸</span>Kids</a></nav>
 <script src="/js/nav.js"></script>

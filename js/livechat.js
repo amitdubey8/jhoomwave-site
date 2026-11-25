@@ -131,7 +131,7 @@
   });
   $('.lc-new').addEventListener('click', () => { chat = null; seen = []; cursor = 0; store.set(null); log.textContent = ''; view(); msgIn.focus(); });
 
-  window.jwChat = { open: () => open(true) };
+  window.jwChat = { open: (prefill) => { open(true); if (prefill && !chat) msgIn.value = String(prefill).slice(0, 1000); } };
   document.querySelectorAll('[data-chat]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); open(true); }));
   view(); checkStatus();
   if (chat) { poll(); schedule(); }
