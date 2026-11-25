@@ -1,7 +1,7 @@
 /* JHOOMWAVE website → Office. Sends a form straight to the team's Office (Supabase RPC submit_enquiry).
    Off until JW_OFFICE has a url + publishable key; then forms show a "Send to JHOOMWAVE" button.
    The publishable key can only call submit_enquiry (it can't read anything) — see office-app migrations. */
-window.JW_OFFICE = window.JW_OFFICE || { url: '', key: '' };
+window.JW_OFFICE = window.JW_OFFICE || { url: 'https://srcclctqfkagpolhocqf.supabase.co', key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyY2NsY3RxZmthZ3BvbGhvY3FmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NDY1OTYsImV4cCI6MjExMTEyMjU5Nn0.0_T3iBE2ssrABWWbL8hkLqOOvpany5uP2LSFlhi0G54' }; // public anon key: can only call submit_enquiry
 window.jwOfficeOn = () => !!(window.JW_OFFICE.url && window.JW_OFFICE.key);
 window.jwSendEnquiry = async function (e) {
   if (!window.jwOfficeOn()) return { ok: false, why: 'off' };

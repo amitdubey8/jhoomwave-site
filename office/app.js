@@ -189,8 +189,9 @@
     'creator-jhoomi': ['💃', '#FF2E88', '#FFD23F'], 'creator-veer': ['🎧', '#7B2FF7', '#2EE59D'], 'creator-noor': ['🌙', '#3D7BFF', '#FF2E88'],
     'support-anaya': ['💬', '#2EE59D', '#FF8A00'], 'support-sam': ['🧰', '#00C2FF', '#FF8A00'],
     hr: ['🌸', '#FF2E88', '#2EE59D'], perf: ['🎯', '#FF8A00', '#7B2FF7'], seo: ['🔎', '#00C2FF', '#FFD23F'], community: ['🤳', '#FF2E88', '#00C2FF'], video: ['🎬', '#7B2FF7', '#FF8A00'],
+    ops: ['📦', '#FF8A00', '#2EE59D'], trust: ['🛡️', '#3D7BFF', '#2EE59D'],
   };
-  const TEAMS = ['Leadership', 'Tech squad', 'Music studio', 'Marketing & creators', 'Sales & global', 'Support desk', 'Finance', 'People & culture'];
+  const TEAMS = ['Leadership', 'Tech squad', 'Music studio', 'Marketing & creators', 'Sales & global', 'Support desk', 'Operations & trust', 'Finance', 'People & culture'];
   const monday = (d) => { const x = new Date(d); const k = (x.getDay() + 6) % 7; x.setDate(x.getDate() - k); return x.toISOString().slice(0, 10); };
   const MOOD = { working: '🎧 In the zone', waiting: '☕ Waiting on someone', blocked: '🚧 Blocked', planned: '🪑 Joining soon' };
   function ago(s) {
