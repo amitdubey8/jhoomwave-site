@@ -98,6 +98,7 @@
     const { data, error } = await sb.from('members').select('*').eq('user_id', user.id).maybeSingle();
     if (error || !data || !data.active) return show('v-denied');
     ME = data;
+    const meBox = document.querySelector('.top .me'); if (meBox && !meBox.querySelector('.radioplayer')) meBox.prepend(studioBtn());
     $('me-email').textContent = data.name || data.email; $('me-role').textContent = data.role;
     buildNav(); show('v-app'); route();
   }
@@ -136,7 +137,7 @@
   addEventListener('hashchange', route);
   async function route() {
     if (!ME) return;
-    stopLive(); liveTimers.forEach(clearInterval); liveTimers = [];
+    stopLive(); liveTimers.forEach((t) => (t && t.clear ? t.clear() : clearInterval(t))); liveTimers = [];
     let r = location.hash.slice(1);
     if (!allowed(r)) r = 'office';
     document.querySelectorAll('#nav a').forEach((a) => a.setAttribute('aria-current', a.getAttribute('data-r') === r ? 'page' : 'false'));
@@ -248,18 +249,31 @@
   };
   const radio = { el: null, list: [], i: 0, theme: 'studio' };
   function radioList() { const extra = THEME_SONGS[document.body.dataset.theme] || []; return [...extra, ...BASE.filter((b) => !extra.some((e) => e.src === b.src))]; }
+  let actx = null, analyser = null, abuf = null;
+  function radioLevel() { if (!analyser || !radio.el || radio.el.paused) return 0; analyser.getByteFrequencyData(abuf); let s = 0; for (let i = 0; i < 24; i++) s += abuf[i]; return s / (24 * 255); }
+  function radioBands(n) { if (!analyser || !radio.el || radio.el.paused) return null; analyser.getByteFrequencyData(abuf); const out = []; for (let i = 0; i < n; i++) out.push(abuf[Math.floor(Math.pow(i / n, 1.6) * abuf.length * 0.6)] / 255); return out; }
+  function hookAnalyser() {
+    if (analyser || !radio.el) return;
+    try { const AC = window.AudioContext || window.webkitAudioContext; actx = new AC(); const src = actx.createMediaElementSource(radio.el); analyser = actx.createAnalyser(); analyser.fftSize = 256; abuf = new Uint8Array(analyser.frequencyBinCount); src.connect(analyser); analyser.connect(actx.destination); } catch (e) { analyser = null; }
+  }
+  const radioPref = () => { try { return localStorage.getItem('jw_radio') !== 'off'; } catch (e) { return true; } };
+  const setRadioPref = (on) => { try { localStorage.setItem('jw_radio', on ? 'on' : 'off'); } catch (e) {} };
+  // browsers allow sound only after a tap: the first tap anywhere in the Office starts the radio (unless you turned it off)
+  addEventListener('pointerdown', () => { if (ME && radioPref() && (!radio.el || (!radio.el.src))) radioPlay(0); }, { once: true, capture: true });
   function radioPlay(i) {
     radio.list = radioList(); radio.i = ((i % radio.list.length) + radio.list.length) % radio.list.length;
-    if (!radio.el) { radio.el = new Audio(); radio.el.volume = 0.35; radio.el.addEventListener('ended', () => radioPlay(radio.i + 1)); radio.el.addEventListener('error', () => radioPlay(radio.i + 1)); }
+    if (!radio.el) { radio.el = new Audio(); radio.el.volume = 0.35; radio.el.addEventListener('ended', () => radioPlay(radio.i + 1)); radio.el.addEventListener('error', () => { radio.fails = (radio.fails || 0) + 1; if (radio.fails < radio.list.length) radioPlay(radio.i + 1); else { radio.el.removeAttribute('src'); radioUI(); } }); radio.el.addEventListener('playing', () => { radio.fails = 0; }); }
+    hookAnalyser(); if (actx && actx.state === 'suspended') actx.resume();
     radio.el.src = radio.list[radio.i].src; radio.el.play().catch(() => toast('Tap play again to start the music')); radioUI();
   }
   function radioUI() { document.querySelectorAll('.radioplayer').forEach((w) => { const on = radio.el && !radio.el.paused;
     w.querySelector('.rp-play').textContent = on ? '⏸' : '▶'; w.querySelector('.rp-name').textContent = radio.el && radio.list[radio.i] ? '🎵 ' + radio.list[radio.i].name : '🎵 Studio radio'; w.classList.toggle('on', !!on); }); }
   function studioBtn() {
     const w = h('span', { class: 'radioplayer' },
-      h('button', { type: 'button', class: 'rp-play', 'aria-label': 'Play or pause studio radio', onclick: () => { if (!radio.el || !radio.el.src) radioPlay(0); else if (radio.el.paused) { radio.el.play().catch(() => {}); } else radio.el.pause(); setTimeout(radioUI, 50); } }, '▶'),
+      h('button', { type: 'button', class: 'rp-play', 'aria-label': 'Play or pause studio radio', onclick: (e) => { e.stopPropagation(); if (!radio.el || !radio.el.src) { setRadioPref(true); radioPlay(0); } else if (radio.el.paused) { setRadioPref(true); if (actx) actx.resume(); radio.el.play().catch(() => {}); } else { setRadioPref(false); radio.el.pause(); } setTimeout(radioUI, 50); } }, '▶'),
+      h('span', { class: 'rp-eq', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i')),
       h('span', { class: 'rp-name' }, '🎵 Studio radio'),
-      h('button', { type: 'button', class: 'rp-next', 'aria-label': 'Next song', onclick: () => radioPlay(radio.i + 1) }, '⏭'));
+      h('button', { type: 'button', class: 'rp-next', 'aria-label': 'Next song', onclick: (e) => { e.stopPropagation(); setRadioPref(true); radioPlay(radio.i + 1); } }, '⏭'));
     setTimeout(radioUI, 0); return w;
   }
   const THEMES = {
@@ -314,7 +328,7 @@
         h('span', { class: 'hqtime' }, `${ph[1]} ${tfmt(now)} · ${ph[2]} · ${ph[3]}`),
         h('span', { class: 'hqtime' }, fresh ? `🌡️ ${Number(vibe.temp_c).toFixed(0)}°C · ${vibe.condition || ''}` : '🌤️ Weather arrives with the next team huddle'),
         ME.role === 'owner' ? themePicker((vibe && vibe.theme) || 'studio') : h('span', { class: 'hqtime' }, 'Theme: ' + ((THEMES[(vibe && vibe.theme) || 'studio'] || THEMES.studio)[0]))),
-      h('p', { class: 'hello' }, `${greet()}, ${first} 👋 `, studioBtn()),
+      h('p', { class: 'hello' }, `${greet()}, ${first} 👋`),
       h('h1', {}, 'The JHOOMWAVE studio is ', h('span', { class: 'g' }, word)),
       h('p', { class: 'sub' }, h('b', {}, `${busy} of ${agents.length}`), ' teammates in the zone · next team huddle in ', h('b', {}, nextHuddle())),
       h('div', { class: 'goal' },
@@ -485,7 +499,7 @@
   const CAMS = [['CAM 01 · STUDIO FLOOR', 1, '50% 50%'], ['CAM 02 · SEA LOUNGE', 1.9, '56% 52%'], ['CAM 03 · DJ CORNER', 2.1, '80% 56%'], ['CAM 04 · PANTRY', 2.2, '88% 68%']];
   let liveTimers = [], soundOn = false, helloAudio = null;
   async function pageLive(page) {
-    liveTimers.forEach(clearInterval); liveTimers = [];
+    liveTimers.forEach((t) => (t && t.clear ? t.clear() : clearInterval(t))); liveTimers = [];
     const [ag, msgs] = await Promise.all([sb.from('agents').select('*').order('sort'), sb.from('messages').select('author,text,at,room').like('room', '%').order('at', { ascending: false }).limit(30)]);
     (ag.data || []).forEach((x) => { if (x.avatar) AV[x.id] = x.avatar; });
     const on = (ag.data || []).filter((x) => x.status !== 'planned' || x.id === 'dog');
@@ -532,7 +546,50 @@
       pin.classList.add('talk');
       if (m) { ticker.textContent = `💬 ${m.author}: ${m.text.slice(0, 110)}`; }
     }, 3500));
-    if (matchMedia('(prefers-reduced-motion: no-preference)').matches) world.classList.add('pan');
+    const calm = !matchMedia('(prefers-reduced-motion: no-preference)').matches;
+    if (!calm) world.classList.add('pan');
+    // ambient life: sea shimmer, string lights, chai steam, neon glow on the beat, a music equalizer
+    world.append(h('div', { class: 'sea', 'aria-hidden': 'true' }), h('div', { class: 'neonglow', 'aria-hidden': 'true' }),
+      h('div', { class: 'steam', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
+      h('div', { class: 'lights', 'aria-hidden': 'true' }, Array.from({ length: 18 }, (_, i) => { const d = h('i'); d.style.cssText = `left:${4 + i * 5.3}%;top:${3 + Math.sin(i * 0.9) * 2.5 + (i % 2) * 1.5}%;animation-delay:${(i * 0.37) % 2}s`; return d; })));
+    const eqv = h('div', { class: 'cameq', 'aria-hidden': 'true' }, Array.from({ length: 28 }, () => h('i'))); stage.append(eqv);
+    const glow = world.querySelector('.neonglow'), bars = [...eqv.children];
+    let raf = 0; const loop = () => { raf = requestAnimationFrame(loop); const lv = radioLevel(), b = radioBands(bars.length);
+      glow.style.opacity = String(0.35 + Math.min(0.65, lv * 1.6)); bars.forEach((x, i) => { x.style.height = (b ? 6 + b[i] * 60 : 4) + 'px'; }); };
+    if (!calm) { loop(); liveTimers.push({ clear: () => cancelAnimationFrame(raf) }); }
+    // people move a little; someone takes a chai break; Bruno wanders; cameras cycle like CCTV
+    const free = SPOTS.slice(on.length);
+    const pantry = [[86, 72], [90, 69], [93, 66]];
+    liveTimers.push(setInterval(() => {
+      const names = Object.keys(pins).filter((n) => n !== 'Bruno'); if (!names.length || calm) return;
+      const n = names[Math.floor(Math.random() * names.length)], pin = pins[n], home = [pin.style.left, pin.style.top], [pl, pt] = pantry[Math.floor(Math.random() * pantry.length)];
+      pin.classList.add('walk'); pin.style.left = pl + '%'; pin.style.top = pt + '%'; pin.querySelector('.bub').textContent = '☕ Chai break!'; pin.classList.add('talk');
+      setTimeout(() => { pin.style.left = home[0]; pin.style.top = home[1]; pin.classList.remove('talk'); setTimeout(() => pin.classList.remove('walk'), 2600); }, 7000);
+    }, 16000));
+    if (pins.Bruno) liveTimers.push(setInterval(() => { if (calm) return; const sp = (free.length ? free : SPOTS)[Math.floor(Math.random() * (free.length || SPOTS.length))]; pins.Bruno.classList.add('walk'); pins.Bruno.style.left = sp[0] + '%'; pins.Bruno.style.top = sp[1] + '%'; }, 9000));
+    // live task board overlay (control-room style)
+    const board = h('aside', { class: 'taskhud' });
+    const pref = sessionStorage.getItem('jw_taskhud'); let showBoard = pref ? pref !== 'off' : innerWidth > 640; board.hidden = !showBoard;
+    async function fillBoard() {
+      const day = new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
+      const [td, ac, ag2] = await Promise.all([sb.from('todos').select('*').eq('day', day), sb.from('activity').select('*').order('at', { ascending: false }).limit(8), sb.from('agents').select('id,name,now_doing,status').order('sort')]);
+      const todos = td.data || [], rows = [];
+      for (const a of ag2.data || []) {
+        const mine = todos.filter((t) => t.agent_id === a.id); if (!mine.length && a.status === 'planned') continue;
+        const done = mine.filter((t) => t.status === 'done').length, doing = mine.find((t) => t.status === 'doing');
+        const bar = h('i'); bar.style.width = (mine.length ? (done / mine.length) * 100 : 0) + '%';
+        rows.push(h('li', {}, avatar(a.id, 26), h('div', { class: 'tl' }, h('b', {}, a.name), h('span', {}, doing ? '🔨 ' + doing.title : (a.now_doing || '—')), h('div', { class: 'tbar' }, bar)), h('small', {}, mine.length ? `${done}/${mine.length}` : '')));
+      }
+      board.replaceChildren(h('div', { class: 'th' }, h('span', { class: 'rec' }, '●'), ' LIVE TASKS ', h('small', {}, `${todos.filter((t) => t.status === 'done').length}/${todos.length} done today`)),
+        h('ul', { class: 'tlist' }, rows), h('div', { class: 'th2' }, '⚡ Just now'),
+        h('ul', { class: 'tfeed' }, (ac.data || []).slice(0, 5).map((x) => h('li', {}, h('b', {}, x.who + ' '), x.what.slice(0, 90), h('small', {}, ' · ' + ago(x.at))))));
+    }
+    stage.append(board); fillBoard(); liveTimers.push(setInterval(fillBoard, 60000));
+    const boardBtn = h('button', { type: 'button', onclick: (e) => { showBoard = !showBoard; board.hidden = !showBoard; sessionStorage.setItem('jw_taskhud', showBoard ? 'on' : 'off'); e.currentTarget.textContent = showBoard ? '📋 Tasks on' : '📋 Tasks off'; } }, showBoard ? '📋 Tasks on' : '📋 Tasks off');
+    let auto = sessionStorage.getItem('jw_autocam') !== 'off';
+    const autoBtn = h('button', { type: 'button', onclick: (e) => { auto = !auto; sessionStorage.setItem('jw_autocam', auto ? 'on' : 'off'); e.currentTarget.textContent = auto ? '🔁 Auto' : '⏸ Auto'; } }, auto ? '🔁 Auto' : '⏸ Auto');
+    camBtns.prepend(autoBtn, boardBtn);
+    liveTimers.push(setInterval(() => { if (auto) { cam = (cam + 1) % CAMS.length; setCam(); } }, 15000));
     stopLive();
     try { liveSub = sb.channel('office-live').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (pl) => { const m = pl.new; if (m && m.text) { feed.unshift(m); k = 0; } }).subscribe(); } catch (e) {}
   }
