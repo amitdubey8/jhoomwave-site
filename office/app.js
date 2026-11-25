@@ -761,16 +761,26 @@
     const rows = data || [], weekAgo = Date.now() - 7 * 864e5;
     const n = (f) => rows.filter(f).length;
     const LANG = { hinglish: 'Hinglish', hindi: 'Hindi', punjabi: 'Punjabi', english: 'English' };
-    const stat = (v, l) => h('div', { class: 'kchip' }, h('div', {}, h('div', { class: 'v' }, String(v)), h('div', { class: 'l' }, l)));
     const peopleBox = async (id, td) => {
       const { data: ps } = await sb.from('people').select('name,relation,pronunciation,birthday,anniversary').eq('user_id', id).order('created_at');
       td.replaceChildren(...((ps || []).length ? ps.map((p) => h('div', { class: 'sub' }, `${p.name}${p.relation ? ' (' + p.relation + ')' : ''}${p.pronunciation ? ' · say ' + p.pronunciation : ''}${p.birthday ? ' · 🎂 ' + p.birthday : ''}${p.anniversary ? ' · 💍 ' + p.anniversary : ''}`)) : [h('div', { class: 'sub' }, 'No people saved.')]));
     };
+    const stat = (v, l) => h('div', { class: 'kchip' }, h('div', {}, h('div', { class: 'v' }, String(v)), h('div', { class: 'l' }, l)));
+    const since = new Date(Date.now() - 30 * 864e5).toISOString();
+    const vq = await sb.from('visits').select('anon_id,at,region,page,ref,utm,is_return').gte('at', since).order('at', { ascending: false }).limit(5000);
+    const vs = vq.error ? [] : (vq.data || []), dayAgo = Date.now() - 864e5;
+    const uniq = (arr) => new Set(arr.map((v) => v.anon_id)).size;
+    const top = (key) => { const c = {}; vs.forEach((v) => { const k = v[key] || '(direct)'; c[k] = (c[k] || 0) + 1; }); return Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, n]) => `${k} ${n}`).join(' · ') || '—'; };
+    const visitBox = vq.error ? null : h('section', { class: 'board', style: 'margin:14px 0' },
+      h('div', { class: 'sech' }, h('h2', {}, '🌍 Website visitors'), h('small', {}, 'only people who tapped OK on the cookie notice · last 30 days')),
+      h('div', { class: 'chips2' }, stat(uniq(vs.filter((v) => new Date(v.at) > dayAgo)), 'Visitors today'), stat(uniq(vs.filter((v) => new Date(v.at) > weekAgo)), 'Visitors 7 days'), stat(uniq(vs), 'Visitors 30 days'), stat(vs.length ? Math.round((uniq(vs.filter((v) => v.is_return)) / uniq(vs)) * 100) + '%' : '—', 'Came back')),
+      h('p', { class: 'small' }, h('b', {}, 'Regions: '), top('region')), h('p', { class: 'small' }, h('b', {}, 'Pages: '), top('page')), h('p', { class: 'small' }, h('b', {}, 'Came from: '), top('ref')), h('p', { class: 'small' }, h('b', {}, 'Campaigns: '), top('utm')));
     page.replaceChildren(
       h('h1', {}, 'Customers'),
       h('p', { class: 'mut' }, 'People who signed up at jhoomwave.com/account. Contact them only about their own orders, or with offers if they ticked "offers".'),
       h('div', { class: 'chips2' }, stat(rows.length, 'Signed up'), stat(n((r) => new Date(r.joined_at) > weekAgo), 'New this week'), stat(n((r) => r.name), 'Finished setup'),
         stat(n((r) => r.orders_count > 0), 'Asked for a song'), stat(n((r) => r.offers_ok), 'OK with offers'), stat(n((r) => r.voice_interest), 'My voice waitlist')),
+      visitBox,
       table([
         { t: 'Customer', v: (r) => [h('b', {}, r.name || '(setup not finished)'), h('div', { class: 'sub' }, r.email || ''), r.phone ? h('div', { class: 'sub' }, '📞 ' + r.phone) : null] },
         { t: 'Joined', v: (r) => [fmtDate(r.joined_at), h('div', { class: 'sub' }, 'last seen ' + (r.last_sign_in ? ago(r.last_sign_in) : '—'))] },
