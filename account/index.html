@@ -39,6 +39,15 @@
 .empty{color:var(--mute);font-size:14.5px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:420px){.two{grid-template-columns:1fr}}
 .x{background:none;border:0;color:var(--soft);font-size:20px;cursor:pointer;min-width:44px;min-height:44px}
+.lk{font-size:14px;text-decoration:underline;color:var(--mute)}
+.danger{border-color:#FF6B6B!important;color:#FFB0B0}
+.welcome{position:relative;text-align:left}
+.wl-burst{position:absolute;inset:-40px -20px auto;height:220px;background:radial-gradient(closest-side,rgb(255 46 136/.35),transparent),radial-gradient(closest-side at 70% 40%,rgb(123 47 247/.35),transparent);filter:blur(20px);z-index:-1;animation:wl 2.4s ease-in-out infinite alternate}
+@keyframes wl{to{transform:scale(1.15) translateY(10px)}}
+.wl-steps{display:grid;gap:10px;margin:22px 0}
+.wl-steps>div{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;background:var(--night-2);border:1px solid var(--line)}
+.wl-steps>div>b{font-size:26px;line-height:1}.wl-steps span{color:var(--mute);font-size:14.5px}.wl-steps span b{display:block;color:var(--ink);font-size:16px}
+@media (prefers-reduced-motion:reduce){.wl-burst{animation:none}}
 .soon{display:inline-block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:#24123E;color:var(--gold)}
 [hidden]{display:none!important}
 </style>
@@ -52,10 +61,10 @@
         <div class="jn-menu" role="menu"><a class="jn-di" href="/#shop" role="menuitem"><span class="jn-ic">🎂</span><span><b>Song Shop</b><small>A song for one person, with their name</small></span></a><a class="jn-di" href="/music/" role="menuitem"><span class="jn-ic">🎙</span><span><b>JHOOMWAVE Music</b><small>Our own songs: Chaand Se Zyada, the Anthem</small></span></a><a class="jn-di" href="/anthem/" role="menuitem"><span class="jn-ic">🎶</span><span><b>JHOOMWAVE Anthem</b><small>Watch our official music video</small></span></a><a class="jn-di" href="/studio/" role="menuitem"><span class="jn-ic">🎧</span><span><b>Studio · hear samples</b><small>Songs, characters, anthems, announcements</small></span></a><a class="jn-di" href="/studio/#announce" role="menuitem"><span class="jn-ic">✈️</span><span><b>Fun announcements</b><small>Airline, station, cricket… with your names</small></span></a><a class="jn-di" href="/console/" role="menuitem"><span class="jn-ic">🎛</span><span><b>Booth (for parties)</b><small>The DJ and host that runs your night</small></span></a></div></div>
       <a class="jn-l" href="/weddings/">Weddings</a><a class="jn-l" href="/kids/">Kids</a><a class="jn-l" href="/business/">For Business</a><a class="jn-l" href="/pricing/">Pricing</a>
     </div>
-    <div class="jn-cta"><a class="jn-ig" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener" aria-label="JHOOMWAVE on Instagram (@jhoomwave)"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg></a><a class="jn-ghost" href="/business/#demo">Book a demo</a><a class="jn-pri" href="/#make">Make my song</a></div>
+    <div class="jn-cta"><a class="jn-acc" href="/account/" aria-label="My account" title="My account">👤</a><a class="jn-ig" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener" aria-label="JHOOMWAVE on Instagram (@jhoomwave)"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg></a><a class="jn-ghost" href="/business/#demo">Book a demo</a><a class="jn-pri" href="/#make">Make my song</a></div>
     <button class="jn-burger" type="button" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
   </div>
-  <div class="jn-sheet" hidden><a href="/#shop"><span>🎂</span>Song Shop</a><a href="/music/"><span>🎙</span>JHOOMWAVE Music</a><a href="/anthem/"><span>🎶</span>JHOOMWAVE Anthem</a><a href="/studio/"><span>🎧</span>Studio · hear samples</a><a href="/studio/#announce"><span>✈️</span>Fun announcements</a><a href="/console/"><span>🎛</span>Booth (for parties)</a><a href="/weddings/"><span>💍</span>Weddings</a><a href="/kids/"><span>🧸</span>Kids</a><a href="/business/"><span>💼</span>For Business</a><a href="/pricing/"><span>🏷</span>Pricing</a><a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener"><span>📸</span>Follow @jhoomwave on Instagram</a><div class="jn-sc"><a class="jn-ghost" href="/business/#demo">Book a demo</a><a class="jn-pri" href="/#make">Make my song</a></div></div>
+  <div class="jn-sheet" hidden><a href="/#shop"><span>🎂</span>Song Shop</a><a href="/music/"><span>🎙</span>JHOOMWAVE Music</a><a href="/anthem/"><span>🎶</span>JHOOMWAVE Anthem</a><a href="/studio/"><span>🎧</span>Studio · hear samples</a><a href="/studio/#announce"><span>✈️</span>Fun announcements</a><a href="/console/"><span>🎛</span>Booth (for parties)</a><a href="/weddings/"><span>💍</span>Weddings</a><a href="/kids/"><span>🧸</span>Kids</a><a href="/business/"><span>💼</span>For Business</a><a href="/pricing/"><span>🏷</span>Pricing</a><a href="/account/"><span>👤</span>My account</a><a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener"><span>📸</span>Follow @jhoomwave on Instagram</a><div class="jn-sc"><a class="jn-ghost" href="/business/#demo">Book a demo</a><a class="jn-pri" href="/#make">Make my song</a></div></div>
 </nav>
 <main class="wrap">
 <div class="acc">
@@ -71,6 +80,13 @@
       <form id="f-email" novalidate>
         <div class="f"><label for="in-email">Your email</label><input id="in-email" type="email" inputmode="email" autocomplete="email" required placeholder="you@example.com"></div>
         <button class="btn pri btnw" type="submit" id="b-send">Email me a sign-in link</button>
+        <p style="margin:10px 0 0;text-align:center"><button class="x lk" type="button" id="b-usepass">I have a password</button></p>
+      </form>
+      <form id="f-pass" hidden novalidate>
+        <div class="f"><label for="pw-email">Email</label><input id="pw-email" type="email" autocomplete="email" required></div>
+        <div class="f"><label for="pw-pass">Password</label><input id="pw-pass" type="password" autocomplete="current-password" required minlength="8"></div>
+        <button class="btn pri btnw" type="submit">Sign in</button>
+        <p style="margin:10px 0 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><button class="x lk" type="button" id="b-forgot">Forgot password?</button><button class="x lk" type="button" id="b-nopass">Use email link instead</button></p>
       </form>
       <form id="f-code" hidden novalidate>
         <p class="lead" style="margin:0 0 12px">📩 Check your inbox (and spam). <b>Tap the link</b> in the email and you are in. Got a 6-digit code instead? Type it here.</p>
@@ -81,6 +97,32 @@
       <p class="msg" id="m-in" role="status"></p>
     </div>
     <p class="lead" style="font-size:13px;margin-top:14px">By continuing you agree to our <a href="/terms/">Terms</a> and <a href="/privacy/">Privacy policy</a>. Your Office/staff login is separate.</p>
+  </section>
+
+  <!-- set a new password (after "forgot password" email) -->
+  <section id="v-reset" hidden>
+    <span class="eb">My JHOOMWAVE</span>
+    <h1>Set a <span class="g">new password</span></h1>
+    <form class="card" id="f-reset" novalidate style="margin-top:18px">
+      <div class="f"><label for="rs-pass">New password (8+ characters)</label><input id="rs-pass" type="password" autocomplete="new-password" minlength="8" required></div>
+      <button class="btn pri btnw" type="submit">Save password</button>
+      <p class="msg" id="m-reset" role="status"></p>
+    </form>
+  </section>
+
+  <!-- welcome, once, right after setup -->
+  <section id="v-welcome" hidden class="welcome">
+    <div class="wl-burst" aria-hidden="true"></div>
+    <span class="eb">You're in 🎉</span>
+    <h1>Welcome to the <span class="g">JHOOMWAVE family</span>, <span id="wl-name"></span>!</h1>
+    <p class="lead">Jhoomi has a hello for you. Tap play 👇</p>
+    <button class="btn pri" type="button" id="wl-play">▶ Hear Jhoomi's welcome</button>
+    <div class="wl-steps">
+      <div><b>🎵</b><span><b>Ask for a song</b>Type a name, we send a <strong>free preview</strong> on WhatsApp.</span></div>
+      <div><b>👨‍👩‍👧</b><span><b>Save your people</b>Names, how to say them, birthdays. Next song in one tap.</span></div>
+      <div><b>🎙️</b><span><b>My voice (soon)</b>Songs in your own voice, for the family and the car.</span></div>
+    </div>
+    <button class="btn pri btnw" type="button" id="wl-go">Let's make my first song →</button>
   </section>
 
   <!-- first time: 20-second setup -->
@@ -163,8 +205,22 @@
       <label class="tick"><input type="checkbox" id="me-offers"> Festival offers and new songs</label>
       <button class="btn pri btnw" type="submit" style="margin-top:16px">Save</button>
       <p class="msg" id="m-me" role="status"></p>
-      <p style="margin:16px 0 0;display:flex;gap:16px;flex-wrap:wrap"><button class="x" style="font-size:14px;text-decoration:underline" type="button" id="b-out">Sign out</button><a href="#" data-chat style="font-size:14px;color:var(--mute);align-self:center">Delete my account (chat with us)</a></p>
+      <p style="margin:16px 0 0"><button class="x lk" type="button" id="b-out">Sign out</button></p>
     </form>
+    <form class="card" id="f-setpass" hidden novalidate>
+      <h3 style="margin:0 0 6px">🔑 Password (optional)</h3>
+      <p class="empty" style="margin:0 0 12px">Sign in faster with email + password. The email link keeps working too.</p>
+      <div class="f"><label for="np-pass">New password (8+ characters)</label><input id="np-pass" type="password" autocomplete="new-password" minlength="8"></div>
+      <button class="btn btnw" type="submit">Save password</button>
+      <p class="msg" id="m-pass" role="status"></p>
+    </form>
+    <div class="card" id="c-delete" hidden>
+      <h3 style="margin:0 0 6px">🗑️ Delete my account</h3>
+      <p class="empty" style="margin:0 0 12px">This removes your login, profile and saved people for good. Bills of paid orders are kept as the law requires. Type <b>DELETE</b> to confirm.</p>
+      <div class="f"><input id="del-confirm" autocomplete="off" aria-label="Type DELETE to confirm" placeholder="DELETE"></div>
+      <button class="btn btnw danger" type="button" id="b-del">Delete my account</button>
+      <p class="msg" id="m-del" role="status"></p>
+    </div>
   </section>
 
 </div>

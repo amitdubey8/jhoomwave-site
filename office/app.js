@@ -125,6 +125,7 @@
     tech: { label: '🛠️ Tech board', roles: ['owner', 'viewer'], render: pageTech },
     leads: { label: '💼 Leads', roles: ['owner', 'sales'], render: pageLeads },
     webchat: { label: '🟢 Website chat', roles: ['owner', 'support', 'sales'], render: pageWebChat },
+    customers: { label: '👤 Customers', roles: ['owner', 'support', 'sales'], render: pageCustomers },
     enquiries: { label: '💬 Enquiries', roles: ['owner', 'support', 'sales'], render: pageEnquiries },
     orders: { label: '🎵 Orders', roles: ['owner', 'support'], render: pageOrders },
     social: { label: '📣 Social', roles: ['owner', 'marketing'], render: pageSocial },
@@ -752,6 +753,31 @@
         { t: 'Status', v: (r) => statusSelect(r.status, LEAD_ST, (s) => save('leads', r.id, { status: s })) },
         { t: 'Follow up', v: (r) => { const d = h('input', { type: 'date', value: r.next_follow_up || '', 'aria-label': 'Next follow-up' }); d.addEventListener('change', () => save('leads', r.id, { next_follow_up: d.value || null })); return d; } },
       ], data, 'No leads here yet.'));
+  }
+
+  // ---------------------------------------------------------------- Customers (website accounts at jhoomwave.com/account)
+  async function pageCustomers(page) {
+    const { data, error } = await sb.rpc('customers_admin'); if (error) throw error;
+    const rows = data || [], weekAgo = Date.now() - 7 * 864e5;
+    const n = (f) => rows.filter(f).length;
+    const LANG = { hinglish: 'Hinglish', hindi: 'Hindi', punjabi: 'Punjabi', english: 'English' };
+    const stat = (v, l) => h('div', { class: 'kchip' }, h('div', {}, h('div', { class: 'v' }, String(v)), h('div', { class: 'l' }, l)));
+    const peopleBox = async (id, td) => {
+      const { data: ps } = await sb.from('people').select('name,relation,pronunciation,birthday,anniversary').eq('user_id', id).order('created_at');
+      td.replaceChildren(...((ps || []).length ? ps.map((p) => h('div', { class: 'sub' }, `${p.name}${p.relation ? ' (' + p.relation + ')' : ''}${p.pronunciation ? ' · say ' + p.pronunciation : ''}${p.birthday ? ' · 🎂 ' + p.birthday : ''}${p.anniversary ? ' · 💍 ' + p.anniversary : ''}`)) : [h('div', { class: 'sub' }, 'No people saved.')]));
+    };
+    page.replaceChildren(
+      h('h1', {}, 'Customers'),
+      h('p', { class: 'mut' }, 'People who signed up at jhoomwave.com/account. Contact them only about their own orders, or with offers if they ticked "offers".'),
+      h('div', { class: 'chips2' }, stat(rows.length, 'Signed up'), stat(n((r) => new Date(r.joined_at) > weekAgo), 'New this week'), stat(n((r) => r.name), 'Finished setup'),
+        stat(n((r) => r.orders_count > 0), 'Asked for a song'), stat(n((r) => r.offers_ok), 'OK with offers'), stat(n((r) => r.voice_interest), 'My voice waitlist')),
+      table([
+        { t: 'Customer', v: (r) => [h('b', {}, r.name || '(setup not finished)'), h('div', { class: 'sub' }, r.email || ''), r.phone ? h('div', { class: 'sub' }, '📞 ' + r.phone) : null] },
+        { t: 'Joined', v: (r) => [fmtDate(r.joined_at), h('div', { class: 'sub' }, 'last seen ' + (r.last_sign_in ? ago(r.last_sign_in) : '—'))] },
+        { t: 'Likes', v: (r) => [LANG[r.language] || '—', r.offers_ok ? h('div', { class: 'sub' }, '✓ offers OK') : null, r.voice_interest ? h('div', { class: 'sub' }, '🎙️ wants My voice') : null] },
+        { t: 'Songs', v: (r) => r.orders_count ? h('a', { href: '#orders' }, `${r.orders_count} request${r.orders_count > 1 ? 's' : ''} →`) : '0' },
+        { t: 'People', v: (r) => { const td = h('div', {}); if (!r.people_count) return '0'; const b = h('button', { type: 'button', class: 'lnk', onclick: () => peopleBox(r.user_id, td) }, `Show ${r.people_count}`); td.append(b); return td; } },
+      ], rows, 'No customers yet. Share jhoomwave.com/account!'));
   }
 
   // ---------------------------------------------------------------- Enquiries
