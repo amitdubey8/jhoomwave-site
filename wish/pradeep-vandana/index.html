@@ -54,6 +54,12 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .hint{text-align:center;color:var(--mute);font-size:12.5px;margin:10px 0 0;min-height:18px}
 .card{margin-top:26px;padding:20px;border-radius:22px;background:rgb(255 255 255/.06);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .card h2{margin:0 0 12px;font:800 15px Poppins;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.pl ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.pl li button{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;border:1px solid transparent;background:rgb(255 255 255/.05);color:var(--ink);font:600 15px Poppins;text-align:left;cursor:pointer}
+.pl li button[aria-current=true]{border-color:var(--pink);background:rgb(255 79 154/.12)}
+.pl .em{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--pink));font-size:20px;flex:none}
+.pl small{display:block;color:var(--mute);font-weight:500;font-size:12.5px}
+.pl .now{margin-left:auto;color:var(--gold);font-size:12px}
 .lyr{font-family:'Tiro Devanagari Hindi',serif;font-size:20px;line-height:1.75}
 .lyr p{margin:0 0 14px}.lyr .ch{color:var(--gold)}
 .note{font-family:'Tiro Devanagari Hindi',serif;font-size:19px;line-height:1.7}.note p{margin:0 0 10px}.note .sig{text-align:right;color:var(--gold);margin:12px 0 0}
@@ -88,6 +94,8 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
   </div>
   <p class="hint" id="hint">▶ dabaiye, gaana shuru ho jaayega 🎶</p>
 
+  <section class="card pl" aria-label="A song for you"><h2>🎁 A song for you · 4 styles</h2><ol id="pl"></ol></section>
+
   <section class="card" aria-label="Lyrics"><h2>Lyrics</h2>
     <div class="lyr" lang="hi">
       <p>पच्चीस नवंबर, इंदौर की वो शाम,<br>पापा ने थामा, मम्मी का हाथ।</p>
@@ -114,6 +122,20 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
 <script>
 (function(){
   const $=id=>document.getElementById(id),a=$('song'),seek=$('seek');
+  const TRACKS=[
+    {t:'Mummy Papa ❤️',s:'Emotional · cinematic',e:'🎻',src:'/audio/wish/pradeep_vandana_from_amit.mp3'},
+    {t:'Pachchees November',s:'Retro 80s Bollywood duet',e:'📻',src:'/audio/wish/pv_retro80s.mp3'},
+    {t:'Mubarak Ho',s:'Sufi qawwali',e:'🕌',src:'/audio/wish/pv_sufi.mp3'},
+    {t:'Royal Jodi',s:'Aura · grand entry',e:'👑',src:'/audio/wish/pv_aura.mp3'}];
+  let cur=0;
+  function pick(i,play){cur=i;a.src=TRACKS[i].src;document.querySelector('.meta h1').textContent=TRACKS[i].t;document.querySelector('.meta p').textContent='Amit · '+TRACKS[i].s;
+    document.querySelectorAll('#pl button').forEach((b,j)=>{b.setAttribute('aria-current',String(j===i));b.querySelector('.now').textContent=j===i?'▶ playing':'';});
+    seek.value=0;seek.style.setProperty('--p','0%');$('cur').textContent='0:00';
+    try{navigator.mediaSession&&(navigator.mediaSession.metadata=new MediaMetadata({title:TRACKS[i].t,artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/pradeep_vandana.jpg',sizes:'900x1200',type:'image/jpeg'}]}));}catch(e){}
+    if(play)go();}
+  TRACKS.forEach((tr,i)=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';
+    const em=document.createElement('span');em.className='em';em.textContent=tr.e;const tx=document.createElement('span');tx.textContent=tr.t;const sm=document.createElement('small');sm.textContent=tr.s;tx.append(sm);const nw=document.createElement('span');nw.className='now';
+    b.append(em,tx,nw);b.addEventListener('click',()=>pick(i,true));li.append(b);$('pl').append(li);});
   const PLAY='<path d="M8 5v14l11-7z"/>',PAUSE='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
   const fmt=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
   const petals=['🌸','🌹','💮','🌼','✨','💖'];
@@ -126,13 +148,14 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
   a.addEventListener('play',ui);a.addEventListener('pause',ui);
   a.addEventListener('loadedmetadata',()=>{$('dur').textContent=fmt(a.duration);});
   a.addEventListener('timeupdate',()=>{if(!a.duration||seek.dragging)return;const p=a.currentTime/a.duration*100;seek.value=p;seek.style.setProperty('--p',p+'%');$('cur').textContent=fmt(a.currentTime);});
-  a.addEventListener('ended',()=>{rain(30);ui();$('hint').textContent='💐 Happy Anniversary Mummy Papa! Dobara sunne ke liye ▶';});
+  a.addEventListener('ended',()=>{rain(30);if(cur<TRACKS.length-1){pick(cur+1,true);}else{ui();$('hint').textContent='💐 Happy Anniversary Mummy Papa! Dobara sunne ke liye ▶';}});
   seek.addEventListener('input',()=>{seek.dragging=true;seek.style.setProperty('--p',seek.value+'%');$('cur').textContent=fmt(seek.value/100*(a.duration||0));});
   seek.addEventListener('change',()=>{if(a.duration)a.currentTime=seek.value/100*a.duration;seek.dragging=false;});
   $('heart').addEventListener('click',e=>{const b=e.currentTarget;b.classList.toggle('on');b.textContent=b.classList.contains('on')?'♥':'♡';if(b.classList.contains('on'))rain(12);});
   if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/pradeep_vandana.jpg',sizes:'900x1200',type:'image/jpeg'}]});
     navigator.mediaSession.setActionHandler('play',go);navigator.mediaSession.setActionHandler('pause',()=>a.pause());
     navigator.mediaSession.setActionHandler('seekbackward',()=>{a.currentTime=Math.max(0,a.currentTime-10);});navigator.mediaSession.setActionHandler('seekforward',()=>{a.currentTime=Math.min(a.duration,a.currentTime+10);});}catch(e){}}
+  pick(0,false);
   go();
   document.addEventListener('pointerdown',e=>{if(a.paused&&!a.dataset.rained&&!e.target.closest('a,button,input'))go();},{once:true});
   const msg='💐 Happy Anniversary Mummy Papa (Pradeep & Vandana)! 25 November, Indore 🎶\n\nUnke liye ek special gaana, suniye 👇\n'+location.href.split('#')[0]+'\n\n– Amit ❤️\n\n🎵 Made with love by JHOOMWAVE\nApno ke naam ka gaana banwaiye: https://jhoomwave.com\n📸 Follow: https://instagram.com/jhoomwave';
