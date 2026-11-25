@@ -7,78 +7,90 @@
 <meta name="description" content="Amit ki taraf se Mummy-Papa (Pradeep & Vandana) ke liye anniversary gaana 🎶">
 <meta property="og:title" content="Happy Anniversary Mummy Papa 💐 (Pradeep & Vandana)">
 <meta property="og:description" content="Amit ki taraf se, aapke naam ka gaana 🎶 Tap to listen.">
-<meta property="og:image" content="https://jhoomwave.com/img/wish/pradeep_vandana_og.jpg">
+<meta property="og:image" content="https://jhoomwave.com/img/wish/anniversary_og.jpg">
 <meta property="og:type" content="music.song">
-<meta name="theme-color" content="#1A0820">
+<meta name="theme-color" content="#FFE1EC">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Tiro+Devanagari+Hindi&family=Great+Vibes&display=swap">
-<link rel="preload" as="image" href="/img/wish/pradeep_vandana.jpg">
+
 <style>
-:root{--gold:#F2C46D;--pink:#FF4F9A;--ink:#FFF7EC;--mute:#D9C2D6;--line:rgb(242 196 109/.22)}
+:root{--gold:#E0A526;--pink:#F0407F;--ink:#4A1030;--mute:#8A5A6E;--line:rgb(240 64 127/.18);--card:#FFFFFF}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
-body{min-height:100dvh;color:var(--ink);font:400 16px/1.55 Poppins,system-ui,sans-serif;background:#12061F;overflow-x:hidden}
-.bg{position:fixed;inset:-10%;z-index:0;background:url(/img/wish/pradeep_vandana.jpg) center 30%/cover;filter:blur(48px) saturate(1.4) brightness(.45);transform:scale(1.2)}
-.bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgb(18 6 31/.2),rgb(18 6 31/.85) 70%,#12061F)}
-.petal{position:fixed;top:-40px;z-index:2;pointer-events:none;font-size:22px;animation:fall linear forwards}
-@keyframes fall{to{transform:translateY(110dvh) rotate(540deg);opacity:.15}}
-.app{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 22px 40px}
-.top{display:flex;align-items:center;justify-content:space-between;color:var(--mute);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
-.top>div{text-align:center}.top b{display:block;color:var(--ink);letter-spacing:.02em;text-transform:none;font-size:14px}
-.ic{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;border:0;background:rgb(255 255 255/.08);color:var(--ink);font-size:18px;cursor:pointer}
-.art{position:relative;margin:22px auto 0;aspect-ratio:1/1;width:100%;border-radius:26px;overflow:hidden;box-shadow:0 30px 70px rgb(0 0 0/.55),0 0 0 1px rgb(255 255 255/.08);transition:transform .6s cubic-bezier(.2,.9,.3,1)}
-.art img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;display:block}
-.art::after{content:"";position:absolute;inset:auto 0 0;height:45%;background:linear-gradient(transparent,rgb(18 6 31/.85))}
-.art .cap{position:absolute;left:18px;right:18px;bottom:16px;z-index:1}
-.art .cap i{display:block;font:400 34px/1 'Great Vibes',cursive;color:#fff;text-shadow:0 4px 18px rgb(255 79 154/.6)}
-.art .cap span{font:800 13px Poppins;letter-spacing:.16em;color:var(--gold)}
-body:not(.playing) .art{transform:scale(.9)}
-.meta{display:flex;align-items:center;gap:12px;margin-top:22px}
+body{min-height:100dvh;color:var(--ink);font:400 16px/1.55 Poppins,system-ui,sans-serif;background:linear-gradient(165deg,#FFF6E6 0%,#FFE1EC 45%,#FFEFC9 100%);overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(40% 25% at 10% 8%,rgb(255 199 87/.45),transparent),radial-gradient(45% 30% at 95% 30%,rgb(255 120 170/.35),transparent),radial-gradient(50% 30% at 20% 95%,rgb(255 214 120/.4),transparent)}
+.balloon{position:fixed;z-index:0;bottom:-120px;width:46px;height:58px;border-radius:50% 50% 46% 46%;opacity:.85;animation:rise linear infinite;pointer-events:none}
+.balloon::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:60px;background:rgb(74 16 48/.25)}
+@keyframes rise{to{transform:translateY(-130dvh) translateX(30px) rotate(8deg)}}
+.petal{position:fixed;top:-40px;z-index:3;pointer-events:none;font-size:22px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110dvh) rotate(540deg);opacity:.2}}
+.app{position:relative;z-index:1;max-width:460px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 20px 40px}
+.banner{text-align:center}
+.banner .tag{display:inline-block;padding:6px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--pink);font:700 12px Poppins;letter-spacing:.14em}
+.banner h1{margin:10px 0 0;font:400 54px/1 'Great Vibes',cursive;color:var(--pink);text-shadow:0 3px 0 #fff}
+.banner h2{margin:2px 0 0;font:900 34px/1.05 Poppins;background:linear-gradient(100deg,#E0A526,#F0407F 60%,#FF7A45);-webkit-background-clip:text;background-clip:text;color:transparent}
+.banner p{margin:6px 0 0;color:var(--mute);font-weight:600}
+.art{position:relative;margin:20px auto 0;width:100%;border-radius:28px;padding:6px;background:linear-gradient(135deg,#FFD36B,#F0407F,#FFD36B);box-shadow:0 18px 40px rgb(240 64 127/.25);transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+.art img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 35%;border-radius:23px;background:#fff}
+.art .ph{display:grid;place-items:center;aspect-ratio:4/5;border-radius:23px;background:radial-gradient(circle at 50% 35%,#fff 0%,#FFE6F0 55%,#FFD9A8 100%);text-align:center;padding:24px}
+.art .ph b{display:block;font:400 46px/1 'Great Vibes',cursive;color:var(--pink)}
+.art .ph span{display:block;font:900 26px Poppins;color:var(--ink);margin-top:8px}
+.art .ph small{display:block;color:var(--mute);margin-top:10px;font-weight:600}
+.art .ph .rings{font-size:64px}
+.art .badge{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);white-space:nowrap;padding:8px 18px;border-radius:999px;background:#fff;color:var(--pink);font:800 14px Poppins;box-shadow:0 8px 20px rgb(240 64 127/.25)}
+body.playing .art{transform:scale(1.02)}
+.meta{display:flex;align-items:center;gap:12px;margin-top:30px}
 .meta div{flex:1;min-width:0}
-.meta h1{margin:0;font:800 23px/1.2 Poppins;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.meta p{margin:2px 0 0;color:var(--mute);font-size:14.5px}
-.heart{font-size:26px;background:none;border:0;cursor:pointer;color:var(--pink);transition:transform .2s;min-width:44px;min-height:44px}.heart.on{transform:scale(1.25)}
-.seek{margin-top:18px}
+.meta h1{margin:0;font:800 22px/1.2 Poppins;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta p{margin:2px 0 0;color:var(--mute);font-size:14px}
+.heart{font-size:28px;background:none;border:0;cursor:pointer;color:var(--pink);transition:transform .2s;min-width:44px;min-height:44px}.heart.on{transform:scale(1.25)}
+.seek{margin-top:14px}
 input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:22px;background:transparent;margin:0;cursor:pointer}
-input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--pink)) 0/var(--p,0%) 100% no-repeat,rgb(255 255 255/.18)}
-input[type=range]::-moz-range-track{height:5px;border-radius:5px;background:rgb(255 255 255/.18)}
-input[type=range]::-moz-range-progress{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--pink))}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;margin-top:-5.5px;box-shadow:0 2px 8px rgb(0 0 0/.4)}
-input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:#fff}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--pink)) 0/var(--p,0%) 100% no-repeat,rgb(74 16 48/.12)}
+input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:rgb(74 16 48/.12)}
+input[type=range]::-moz-range-progress{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--pink))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--pink);margin-top:-6px}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border:3px solid var(--pink);border-radius:50%;background:#fff}
 .times{display:flex;justify-content:space-between;color:var(--mute);font-size:12px;font-variant-numeric:tabular-nums;margin-top:2px}
-.ctl{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:0 6px}
+.ctl{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:0 6px}
 .ctl .sm{width:52px;height:52px;display:grid;place-items:center;border:0;background:none;color:var(--ink);cursor:pointer}
 .ctl .sm svg{width:30px;height:30px}
-.big{width:78px;height:78px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--pink));box-shadow:0 12px 34px rgb(255 79 154/.45);transition:transform .15s}
-.big:active{transform:scale(.94)}.big svg{width:34px;height:34px;fill:#2A0A2E}
-.hint{text-align:center;color:var(--mute);font-size:12.5px;margin:10px 0 0;min-height:18px}
-.card{margin-top:26px;padding:20px;border-radius:22px;background:rgb(255 255 255/.06);border:1px solid var(--line);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.card h2{margin:0 0 12px;font:800 15px Poppins;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.big{width:80px;height:80px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(135deg,#FFC24D,var(--pink));box-shadow:0 12px 30px rgb(240 64 127/.4);transition:transform .15s}
+.big:active{transform:scale(.94)}.big svg{width:34px;height:34px;fill:#fff}
+.hint{text-align:center;color:var(--mute);font-size:13px;margin:10px 0 0;min-height:18px;font-weight:600}
+.card{margin-top:24px;padding:20px;border-radius:22px;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px rgb(240 64 127/.1)}
+.card h2{margin:0 0 12px;font:800 15px Poppins;letter-spacing:.08em;text-transform:uppercase;color:var(--pink)}
 .pl ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.pl li button{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;border:1px solid transparent;background:rgb(255 255 255/.05);color:var(--ink);font:600 15px Poppins;text-align:left;cursor:pointer}
-.pl li button[aria-current=true]{border-color:var(--pink);background:rgb(255 79 154/.12)}
-.pl .em{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--pink));font-size:20px;flex:none}
+.pl li button{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;border:1px solid transparent;background:#FFF3F7;color:var(--ink);font:600 15px Poppins;text-align:left;cursor:pointer}
+.pl li button[aria-current=true]{border-color:var(--pink);background:#FFE3EE}
+.pl .em{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#FFC24D,var(--pink));font-size:20px;flex:none}
 .pl small{display:block;color:var(--mute);font-weight:500;font-size:12.5px}
-.pl .now{margin-left:auto;color:var(--gold);font-size:12px}
+.pl .now{margin-left:auto;color:var(--pink);font-size:12px;white-space:nowrap}
 .lyr{font-family:'Tiro Devanagari Hindi',serif;font-size:20px;line-height:1.75}
-.lyr p{margin:0 0 14px}.lyr .ch{color:var(--gold)}
-.note{font-family:'Tiro Devanagari Hindi',serif;font-size:19px;line-height:1.7}.note p{margin:0 0 10px}.note .sig{text-align:right;color:var(--gold);margin:12px 0 0}
+.lyr p{margin:0 0 14px}.lyr .ch{color:var(--pink)}
+.note{font-family:'Tiro Devanagari Hindi',serif;font-size:19px;line-height:1.7}.note p{margin:0 0 10px}.note .sig{text-align:right;color:var(--pink);margin:12px 0 0}
 .btns{display:flex;flex-direction:column;gap:10px;margin-top:22px}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;border-radius:14px;font:700 15.5px Poppins;text-decoration:none;border:0;cursor:pointer;color:#fff}
-.wa{background:#25D366;color:#062e16}.dl{background:rgb(255 255 255/.1);border:1px solid var(--line)}.mk{background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00)}.ig{background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)}
-.foot{text-align:center;color:var(--mute);font-size:12px;margin-top:24px}.foot a{color:var(--gold)}
-.eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px;margin-right:6px;vertical-align:-1px}.eq i{width:3px;background:var(--gold);height:4px;border-radius:2px}
-body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){animation-delay:.2s!important}.eq i:nth-child(3){animation-delay:.4s!important}
-@keyframes eq{50%{height:12px}}
-@media (prefers-reduced-motion:reduce){.petal,.eq i{animation:none!important}.art{transition:none}}
+.wa{background:#25D366;color:#062e16}.dl{background:#fff;color:var(--ink);border:1px solid var(--line)}.mk{background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00)}.ig{background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)}
+.foot{text-align:center;color:var(--mute);font-size:12px;margin-top:24px}.foot a{color:var(--pink)}
+.eq{display:none}
+@media (prefers-reduced-motion:reduce){.petal,.balloon{animation:none!important;display:none}.art{transition:none}}
 </style>
 </head>
 <body>
 <div class="bg" aria-hidden="true"></div>
 <main class="app">
-  <div class="top"><span class="ic" aria-hidden="true">💐</span><div>Now playing<b><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>Anniversary Special</b></div><button class="ic" id="share" type="button" aria-label="Share">↗</button></div>
+  <header class="banner">
+    <span class="tag">🎉 25 NOVEMBER · INDORE 🎉</span>
+    <h1>Happy Anniversary</h1>
+    <h2>Mummy Papa 💖</h2>
+    <p>Pradeep &amp; Vandana · with love from Amit</p>
+  </header>
 
-  <div class="art"><img src="/img/wish/pradeep_vandana.jpg" alt="Pradeep ji aur Vandana ji" width="900" height="1200"><div class="cap"><span>25 NOVEMBER · INDORE</span><i>Happy Anniversary</i></div></div>
+  <div class="art" id="art">
+    <div class="ph"><div><div class="rings">💍💐</div><b>Happy Anniversary</b><span>Pradeep &amp; Vandana</span><small>Shaadi ki saalgirah mubarak ho! 🎊</small></div></div>
+    <span class="badge">🎶 Aapke liye gaane</span>
+  </div>
 
   <div class="meta">
     <div><h1>Mummy Papa ❤️</h1><p>Amit · for Pradeep &amp; Vandana</p></div>
@@ -94,15 +106,14 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
   </div>
   <p class="hint" id="hint">▶ dabaiye, gaana shuru ho jaayega 🎶</p>
 
-  <section class="card pl" aria-label="A song for you"><h2>🎁 A song for you · 4 styles</h2><ol id="pl"></ol></section>
+  <section class="card pl" aria-label="A song for you"><h2>🎁 A song for you · 5 styles</h2><ol id="pl"></ol></section>
 
   <section class="card" aria-label="Lyrics"><h2>Lyrics</h2>
     <div class="lyr" lang="hi">
-      <p>पच्चीस नवंबर, इंदौर की वो शाम,<br>पापा ने थामा, मम्मी का हाथ।</p>
-      <p>उस दिन से बंधी, जो प्यार की डोर,<br>आज भी उतनी ही पक्की, उतना ही साथ।</p>
-      <p>आपकी उँगली पकड़ के, चलना सीखा मैंने,<br>आपकी दुआओं से, सपने बुने मैंने।</p>
-      <p class="ch">प्रदीप और वंदना, मेरे मम्मी पापा,<br>आपसे ही रौशन है, मेरा सारा जहाँ 💕</p>
-      <p>मम्मी की ममता, पापा का वो प्यार,<br>आपसे ही महका है, ये पूरा घर-बार।</p>
+      <p class="ch">ढोल बजाओ, आज फिर से शादी है,<br>मम्मी पापा की, आज फिर से शादी है! 🥁</p>
+      <p>पच्चीस नवंबर, इंदौर वाली बारात,<br>घोड़ी पे पापा, और तारों भरी रात।</p>
+      <p>मम्मी शरमाई, जब डाली वरमाला,<br>उस दिन से घर में, हुआ है उजाला।</p>
+      <p class="ch">प्रदीप जी दूल्हे, वंदना जी दुल्हन,<br>सालगिरह मुबारक, नाचे सारा आँगन! 💃🕺</p>
     </div>
   </section>
 
@@ -123,6 +134,7 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
 (function(){
   const $=id=>document.getElementById(id),a=$('song'),seek=$('seek');
   const TRACKS=[
+    {t:'Aaj Phir Se Shaadi Hai! 🥁',s:'Shaadi wala josh · dhol & baraat',e:'🥁',src:'/audio/wish/pv_shaadi.mp3'},
     {t:'Mummy Papa ❤️',s:'Emotional · cinematic',e:'🎻',src:'/audio/wish/pradeep_vandana_from_amit.mp3'},
     {t:'Pachchees November',s:'Retro 80s Bollywood duet',e:'📻',src:'/audio/wish/pv_retro80s.mp3'},
     {t:'Mubarak Ho',s:'Sufi qawwali',e:'🕌',src:'/audio/wish/pv_sufi.mp3'},
@@ -131,14 +143,14 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
   function pick(i,play){cur=i;a.src=TRACKS[i].src;document.querySelector('.meta h1').textContent=TRACKS[i].t;document.querySelector('.meta p').textContent='Amit · '+TRACKS[i].s;
     document.querySelectorAll('#pl button').forEach((b,j)=>{b.setAttribute('aria-current',String(j===i));b.querySelector('.now').textContent=j===i?'▶ playing':'';});
     seek.value=0;seek.style.setProperty('--p','0%');$('cur').textContent='0:00';
-    try{navigator.mediaSession&&(navigator.mediaSession.metadata=new MediaMetadata({title:TRACKS[i].t,artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/pradeep_vandana.jpg',sizes:'900x1200',type:'image/jpeg'}]}));}catch(e){}
+    try{navigator.mediaSession&&(navigator.mediaSession.metadata=new MediaMetadata({title:TRACKS[i].t,artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/anniversary_card.jpg',sizes:'1080x1350',type:'image/jpeg'}]}));}catch(e){}
     if(play)go();}
   TRACKS.forEach((tr,i)=>{const li=document.createElement('li'),b=document.createElement('button');b.type='button';
     const em=document.createElement('span');em.className='em';em.textContent=tr.e;const tx=document.createElement('span');tx.textContent=tr.t;const sm=document.createElement('small');sm.textContent=tr.s;tx.append(sm);const nw=document.createElement('span');nw.className='now';
     b.append(em,tx,nw);b.addEventListener('click',()=>pick(i,true));li.append(b);$('pl').append(li);});
   const PLAY='<path d="M8 5v14l11-7z"/>',PAUSE='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
   const fmt=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
-  const petals=['🌸','🌹','💮','🌼','✨','💖'];
+  const petals=['🎉','🎊','💖','🌸','✨','🎈'];
   function rain(n){for(let i=0;i<n;i++){const p=document.createElement('span');p.className='petal';p.textContent=petals[i%petals.length];p.style.left=Math.random()*100+'vw';p.style.animationDuration=(5+Math.random()*5)+'s';p.style.animationDelay=(Math.random()*2.5)+'s';document.body.append(p);setTimeout(()=>p.remove(),12000);}}
   function ui(){const on=!a.paused;document.body.classList.toggle('playing',on);$('ico').innerHTML=on?PAUSE:PLAY;$('play').setAttribute('aria-label',on?'Pause':'Play');}
   function go(){a.play().then(()=>{$('hint').textContent='';if(!a.dataset.rained){a.dataset.rained='1';rain(26);}}).catch(()=>{$('hint').textContent='▶ dabaiye, gaana shuru ho jaayega 🎶';});}
@@ -152,7 +164,7 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
   seek.addEventListener('input',()=>{seek.dragging=true;seek.style.setProperty('--p',seek.value+'%');$('cur').textContent=fmt(seek.value/100*(a.duration||0));});
   seek.addEventListener('change',()=>{if(a.duration)a.currentTime=seek.value/100*a.duration;seek.dragging=false;});
   $('heart').addEventListener('click',e=>{const b=e.currentTarget;b.classList.toggle('on');b.textContent=b.classList.contains('on')?'♥':'♡';if(b.classList.contains('on'))rain(12);});
-  if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/pradeep_vandana.jpg',sizes:'900x1200',type:'image/jpeg'}]});
+  if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/anniversary_card.jpg',sizes:'1080x1350',type:'image/jpeg'}]});
     navigator.mediaSession.setActionHandler('play',go);navigator.mediaSession.setActionHandler('pause',()=>a.pause());
     navigator.mediaSession.setActionHandler('seekbackward',()=>{a.currentTime=Math.max(0,a.currentTime-10);});navigator.mediaSession.setActionHandler('seekforward',()=>{a.currentTime=Math.min(a.duration,a.currentTime+10);});}catch(e){}}
   pick(0,false);
@@ -160,7 +172,8 @@ body.playing .eq i{animation:eq .9s ease-in-out infinite}.eq i:nth-child(2){anim
   document.addEventListener('pointerdown',e=>{if(a.paused&&!a.dataset.rained&&!e.target.closest('a,button,input'))go();},{once:true});
   const msg='💐 Happy Anniversary Mummy Papa (Pradeep & Vandana)! 25 November, Indore 🎶\n\nUnke liye ek special gaana, suniye 👇\n'+location.href.split('#')[0]+'\n\n– Amit ❤️\n\n🎵 Made with love by JHOOMWAVE\nApno ke naam ka gaana banwaiye: https://jhoomwave.com\n📸 Follow: https://instagram.com/jhoomwave';
   $('wa').href='https://wa.me/?text='+encodeURIComponent(msg);
-  $('share').addEventListener('click',async()=>{const url=location.href.split('#')[0];if(navigator.share){try{await navigator.share({title:'Happy Anniversary Mummy Papa',text:'💐 Pradeep & Vandana ke liye ek special gaana 🎶',url});}catch(e){}}else{try{await navigator.clipboard.writeText(url);$('hint').textContent='Link copy ho gaya ✓';}catch(e){}}});
+  $('share')&&$('share').addEventListener('click',async()=>{const url=location.href.split('#')[0];if(navigator.share){try{await navigator.share({title:'Happy Anniversary Mummy Papa',text:'💐 Pradeep & Vandana ke liye ek special gaana 🎶',url});}catch(e){}}else{try{await navigator.clipboard.writeText(url);$('hint').textContent='Link copy ho gaya ✓';}catch(e){}}});
+  ['#FF6B9D','#FFC24D','#FF8A5B','#B37CFF','#4FC3F7','#FF4F7F'].forEach((c,i)=>{const bl=document.createElement('span');bl.className='balloon';bl.style.background=c;bl.style.left=(5+i*16)+'vw';bl.style.animationDuration=(14+i*2)+'s';bl.style.animationDelay=(i*1.7)+'s';document.body.prepend(bl);});
   rain(10);
 })();
 </script>
