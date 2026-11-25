@@ -775,12 +775,23 @@
       h('div', { class: 'sech' }, h('h2', {}, '🌍 Website visitors'), h('small', {}, 'only people who tapped OK on the cookie notice · last 30 days')),
       h('div', { class: 'chips2' }, stat(uniq(vs.filter((v) => new Date(v.at) > dayAgo)), 'Visitors today'), stat(uniq(vs.filter((v) => new Date(v.at) > weekAgo)), 'Visitors 7 days'), stat(uniq(vs), 'Visitors 30 days'), stat(vs.length ? Math.round((uniq(vs.filter((v) => v.is_return)) / uniq(vs)) * 100) + '%' : '—', 'Came back')),
       h('p', { class: 'small' }, h('b', {}, 'Regions: '), top('region')), h('p', { class: 'small' }, h('b', {}, 'Pages: '), top('page')), h('p', { class: 'small' }, h('b', {}, 'Came from: '), top('ref')), h('p', { class: 'small' }, h('b', {}, 'Campaigns: '), top('utm')));
+    const [wp, wh, wv, wb] = await Promise.all([sb.from('wish_pages').select('slug,title'), sb.from('wish_hearts').select('slug'), sb.from('wish_views').select('slug'), sb.from('wish_blessings').select('id,slug,name,msg,at,hidden').order('at', { ascending: false }).limit(300)]);
+    const cnt = (q, slug) => (q.data || []).filter((r) => r.slug === slug).length;
+    const wishBox = wp.error ? null : h('section', { class: 'board', style: 'margin:14px 0' },
+      h('div', { class: 'sech' }, h('h2', {}, '💌 Wish pages'), h('small', {}, 'hearts, views and blessings (आशीर्वाद) from family links')),
+      ...(wp.data || []).map((w) => h('details', { class: 'more' },
+        h('summary', {}, `${w.title} · ❤️ ${cnt(wh, w.slug)} · 👀 ${cnt(wv, w.slug)} · 🙏 ${(wb.data || []).filter((b) => b.slug === w.slug && !b.hidden).length}`),
+        h('p', { class: 'small' }, h('a', { href: 'https://jhoomwave.com/wish/' + w.slug + '/', target: '_blank', rel: 'noopener' }, 'Open page ↗')),
+        ...(wb.data || []).filter((b) => b.slug === w.slug).map((b) => h('div', { class: 'sub', style: 'margin:6px 0;' + (b.hidden ? 'opacity:.5' : '') },
+          h('b', {}, b.name), ' · ' + ago(b.at) + ' — ', b.msg, ' ',
+          h('button', { type: 'button', class: 'lnk', onclick: async (e) => { const { error: er } = await sb.from('wish_blessings').update({ hidden: !b.hidden }).eq('id', b.id); if (er) { e.target.textContent = 'Not allowed'; return; } b.hidden = !b.hidden; e.target.textContent = b.hidden ? 'Show again' : 'Hide'; e.target.parentNode.style.opacity = b.hidden ? '.5' : '1'; } }, b.hidden ? 'Show again' : 'Hide'))))));
     page.replaceChildren(
       h('h1', {}, 'Customers'),
       h('p', { class: 'mut' }, 'People who signed up at jhoomwave.com/account. Contact them only about their own orders, or with offers if they ticked "offers".'),
       h('div', { class: 'chips2' }, stat(rows.length, 'Signed up'), stat(n((r) => new Date(r.joined_at) > weekAgo), 'New this week'), stat(n((r) => r.name), 'Finished setup'),
         stat(n((r) => r.orders_count > 0), 'Asked for a song'), stat(n((r) => r.offers_ok), 'OK with offers'), stat(n((r) => r.voice_interest), 'My voice waitlist')),
       visitBox,
+      wishBox,
       table([
         { t: 'Customer', v: (r) => [h('b', {}, r.name || '(setup not finished)'), h('div', { class: 'sub' }, r.email || ''), r.phone ? h('div', { class: 'sub' }, '📞 ' + r.phone) : null] },
         { t: 'Joined', v: (r) => [fmtDate(r.joined_at), h('div', { class: 'sub' }, 'last seen ' + (r.last_sign_in ? ago(r.last_sign_in) : '—'))] },

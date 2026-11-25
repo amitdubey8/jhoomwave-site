@@ -82,6 +82,32 @@ h1{font:400 clamp(26px,7.5vw,34px)/1.2 'Tiro Devanagari Hindi',serif;text-align:
 .chips span{font-size:13px;padding:5px 11px;border-radius:99px;background:rgb(255 255 255/.1);border:1px solid rgb(255 255 255/.15)}
 .bc .btn{width:100%}
 .bc .ig{display:inline-block;margin-top:12px;color:#fff;text-decoration:none;font-weight:700;font-size:14px}
+.eng{display:flex;align-items:center;gap:10px;margin:14px 0 0}
+.hb{display:flex;align-items:center;gap:8px;border:0;border-radius:99px;padding:10px 18px;font:700 16px/1 Poppins;cursor:pointer;color:#fff;background:rgb(255 255 255/.12);border:1px solid rgb(255 255 255/.18);transition:transform .15s}
+.hb:active{transform:scale(.92)}.hb .h{font-size:22px;line-height:1;transition:transform .3s}
+.hb.on{background:linear-gradient(90deg,var(--pink),#FF6B9E);border-color:transparent}.hb.on .h{transform:scale(1.15)}
+.eng .vw{margin-left:auto;font-size:13px;color:var(--mute)}
+.eng .bl{border:0;background:none;color:var(--gold);font:700 14px Poppins;cursor:pointer;padding:8px 4px}
+.fly{position:fixed;pointer-events:none;font-size:26px;z-index:50;animation:fly 1.6s ease-out forwards}
+@keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),-260px) scale(1.4) rotate(var(--r))}}
+.petal{position:fixed;top:-30px;pointer-events:none;z-index:40;font-size:22px;animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(540deg);opacity:.85}}
+.bw{margin:16px 0;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
+.bw h2{margin:0 0 2px;font:400 24px/1.3 'Tiro Devanagari Hindi',serif;color:var(--gold)}
+.bw .hint{margin:0 0 12px;font-size:13px;color:var(--mute)}
+.bw input,.bw textarea{width:100%;border-radius:12px;border:1px solid rgb(255 255 255/.2);background:rgb(0 0 0/.25);color:#fff;font:400 16px/1.5 Poppins,'Tiro Devanagari Hindi',sans-serif;padding:11px 12px;margin-bottom:8px}
+.bw textarea{min-height:76px;resize:vertical}
+.qk{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px;scrollbar-width:none}
+.qk button{flex:none;border:1px solid rgb(255 209 102/.4);background:rgb(255 209 102/.08);color:var(--ink);border-radius:99px;padding:6px 11px;font:400 14px 'Tiro Devanagari Hindi',Poppins,serif;cursor:pointer}
+.bw .send{width:100%;border:0;cursor:pointer}
+.bw .msg{min-height:20px;margin:8px 0 0;font-size:14px;text-align:center}
+.bl-list{display:grid;gap:10px;margin-top:14px}
+.bl-item{padding:12px 14px;border-radius:14px;background:rgb(255 255 255/.06);border-left:3px solid var(--gold);animation:pop .4s ease}
+.bl-item p{margin:0;font:400 17px/1.6 'Tiro Devanagari Hindi',Poppins,serif;white-space:pre-wrap;word-break:break-word}
+.bl-item b{display:block;margin-top:4px;color:var(--gold);font-size:14px}.bl-item b small{color:var(--mute);font-weight:400}
+.bl-empty{text-align:center;color:var(--mute);font-size:14px;margin:8px 0 0}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fly,.petal{display:none}.bl-item{animation:none}}
 footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer a{color:var(--gold)}
 
 </style>
@@ -107,6 +133,12 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
     </div>
   </section>
 
+  <div class="eng">
+    <button class="hb" id="hb" type="button" aria-pressed="false" aria-label="प्यार भेजें"><span class="h">🤍</span><span id="hc">प्यार भेजें</span></button>
+    <button class="bl" type="button" id="goBless">🙏 आशीर्वाद दें</button>
+    <span class="vw" id="vw"></span>
+  </div>
+
   <h1>दो जोड़ी, डबल धमाल! 🎉</h1>
   <p class="sub">Happy Anniversary</p>
 
@@ -118,6 +150,19 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
   <section class="note" lang="hi">
     <p>मम्मी-पापा और रोशन-पंखुड़ी,<br>आप दोनों जोड़ियाँ यूँ ही हँसती रहें, नाचती रहें,<br>हर साल ऐसे ही धूम मचाती रहें। 🎉</p>
     <p class="sig">सालगिरह की ढेरों बधाई! – अमित</p>
+  </section>
+
+  <section class="bw" id="bless" aria-label="आशीर्वाद">
+    <h2>🙏 आशीर्वाद की किताब</h2>
+    <p class="hint">दोनों जोड़ियों के लिए अपनी दुआ लिखिए, सब यहाँ पढ़ पाएँगे।</p>
+    <form id="bf" autocomplete="on">
+      <input id="bn" name="name" maxlength="40" placeholder="आपका नाम (जैसे: बुआ, मामा जी, नीता)" required>
+      <div class="qk" id="qk"><button type="button">सदा खुश रहो 🙏</button><button type="button">जोड़ी सलामत रहे ❤️</button><button type="button">बहुत सुंदर गाना! 🎶</button><button type="button">सालगिरह मुबारक 💐</button><button type="button">भगवान सदा साथ रहें 🪔</button></div>
+      <textarea id="bm" maxlength="280" placeholder="अपना आशीर्वाद लिखें…" required></textarea>
+      <button class="btn cta send" type="submit" id="bs">💌 आशीर्वाद भेजें</button>
+      <p class="msg" id="bmsg" role="status"></p>
+    </form>
+    <div class="bl-list" id="bll"></div>
   </section>
 
   <div class="btns">
@@ -159,6 +204,34 @@ footer{text-align:center;color:var(--mute);font-size:12px;margin-top:18px}footer
   if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'दो जोड़ी, डबल धमाल!',artist:'Amit · JHOOMWAVE',album:'Happy Anniversary',artwork:[{src:'/img/wish/dojodi_cover.jpg',sizes:'720x1280',type:'image/jpeg'}]})}catch(e){}}
   var msg='🎉✨ *दो जोड़ी, डबल धमाल!* ✨🎉\n\n💐 Happy Anniversary 💐\n❤️ मम्मी-पापा (प्रदीप जी एवं वंदना जी)\n❤️ रोशन और पंखुड़ी\n\nदोनों जोड़ियों के लिए एक खास गाना और वीडियो, ज़रूर देखिए 👇\n'+location.href.split('#')[0].split('?')[0]+'\n\n– अमित ❤️\n\n🎵 *Made with love by JHOOMWAVE*\nअपनों के नाम का गाना बनवाइए 👉 https://jhoomwave.com\n📸 Instagram: @jhoomwave';
   document.getElementById('wa').href='https://wa.me/?text='+encodeURIComponent(msg);
+
+  // ---- hearts, views, blessings (stored by JHOOMWAVE, no ad trackers)
+  var SB='https://srcclctqfkagpolhocqf.supabase.co/rest/v1/rpc/',KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyY2NsY3RxZmthZ3BvbGhvY3FmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NDY1OTYsImV4cCI6MjExMTEyMjU5Nn0.0_T3iBE2ssrABWWbL8hkLqOOvpany5uP2LSFlhi0G54',SLUG='do-jodi';
+  function rpc(fn,body){return fetch(SB+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY,Authorization:'Bearer '+KEY},body:JSON.stringify(body)}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
+  var anon;try{anon=localStorage.getItem('jw_wish_id')}catch(e){}
+  if(!anon){anon=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now()).replace(/-/g,'').slice(0,24);try{localStorage.setItem('jw_wish_id',anon)}catch(e){}}
+  var hb=document.getElementById('hb'),hc=document.getElementById('hc'),vw=document.getElementById('vw'),bll=document.getElementById('bll'),liked=false,hearts=0;
+  function heartUI(){hb.classList.toggle('on',liked);hb.setAttribute('aria-pressed',liked);hb.querySelector('.h').textContent=liked?'❤️':'🤍';hc.textContent=hearts?(hearts+' प्यार'):'प्यार भेजें'}
+  function ago(iso){var m=Math.round((Date.now()-new Date(iso))/60000);if(m<1)return 'अभी';if(m<60)return m+' मिनट पहले';var h=Math.round(m/60);if(h<24)return h+' घंटे पहले';return Math.round(h/24)+' दिन पहले'}
+  function item(b,top){var d=document.createElement('div');d.className='bl-item';var p=document.createElement('p');p.textContent=b.msg;var n=document.createElement('b');n.textContent='– '+b.name+' ';var sm=document.createElement('small');sm.textContent='· '+ago(b.at);n.appendChild(sm);d.append(p,n);if(top)bll.prepend(d);else bll.append(d)}
+  function empty(){if(!bll.children.length){var e=document.createElement('p');e.className='bl-empty';e.id='ble';e.textContent='सबसे पहला आशीर्वाद आप दीजिए 🙏';bll.append(e)}}
+  rpc('wish_stats',{p_slug:SLUG,p_anon:anon}).then(function(d){if(!d){empty();return}hearts=d.hearts;liked=d.liked;heartUI();if(d.views>1)vw.textContent='👀 '+d.views+' बार देखा गया';(d.blessings||[]).forEach(function(b){item(b)});empty()});
+  function burst(x,y){for(var i=0;i<9;i++){var s=document.createElement('span');s.className='fly';s.textContent=['❤️','💖','💕','🌸','✨'][i%5];s.style.left=(x-13)+'px';s.style.top=(y-13)+'px';s.style.setProperty('--dx',(Math.random()*160-80)+'px');s.style.setProperty('--r',(Math.random()*90-45)+'deg');s.style.animationDelay=(i*60)+'ms';document.body.append(s);setTimeout(function(n){n.remove()}.bind(null,s),2000)}}
+  hb.addEventListener('click',function(e){var r=hb.getBoundingClientRect();burst(r.left+30,r.top+10);if(navigator.vibrate)navigator.vibrate(20);if(liked)return;liked=true;hearts++;heartUI();rpc('wish_heart',{p_slug:SLUG,p_anon:anon}).then(function(n){if(typeof n==='number'){hearts=n;heartUI()}})});
+  document.getElementById('goBless').addEventListener('click',function(){document.getElementById('bless').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){document.getElementById('bn').focus({preventScroll:true})},500)});
+  var bn=document.getElementById('bn'),bm=document.getElementById('bm'),bs=document.getElementById('bs'),bmsg=document.getElementById('bmsg');
+  try{bn.value=localStorage.getItem('jw_wish_name')||''}catch(e){}
+  document.getElementById('qk').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){bm.value=(bm.value?bm.value.trim()+' ':'')+e.target.textContent;bm.focus()}});
+  var ERR={name:'अपना नाम लिखिए 🙂',msg:'थोड़ा सा आशीर्वाद लिखिए 🙂',link:'कृपया लिंक न डालें 🙏',words:'कृपया अच्छे शब्दों में लिखें 🙏',limit:'आज के लिए आपके 3 आशीर्वाद पहुँच गए ❤️',busy:'अभी बहुत लोग लिख रहे हैं, थोड़ी देर में कोशिश करें',closed:'यह पेज अभी आशीर्वाद नहीं ले रहा'};
+  document.getElementById('bf').addEventListener('submit',function(e){e.preventDefault();var n=bn.value.trim(),m=bm.value.trim();if(!n){bmsg.textContent=ERR.name;return}if(m.length<2){bmsg.textContent=ERR.msg;return}
+    bs.disabled=true;bmsg.textContent='भेज रहे हैं…';
+    rpc('wish_bless',{p_slug:SLUG,p_anon:anon,p_name:n,p_msg:m}).then(function(r){bs.disabled=false;
+      if(!r){bmsg.textContent='नेटवर्क की दिक्कत, दोबारा भेजें';return}
+      if(r.error){bmsg.textContent=ERR[r.error]||'दोबारा कोशिश करें';return}
+      try{localStorage.setItem('jw_wish_name',n)}catch(e){}
+      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='आपका आशीर्वाद पहुँच गया! 🙏❤️';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
+  // marigold petals when the song starts for the first time
+  var showered=false;v.addEventListener('play',function(){if(showered||matchMedia('(prefers-reduced-motion:reduce)').matches)return;showered=true;for(var i=0;i<26;i++){var p=document.createElement('span');p.className='petal';p.textContent=['🌼','🌸','🏵️','✨'][i%4];p.style.left=(Math.random()*100)+'vw';p.style.setProperty('--dx',(Math.random()*120-60)+'px');p.style.animationDuration=(3+Math.random()*3)+'s';p.style.animationDelay=(Math.random()*1.5)+'s';document.body.append(p);setTimeout(function(n){n.remove()}.bind(null,p),8000)}});
 })();
 </script>
 </body>
