@@ -442,3 +442,17 @@ body[data-theme="neon80s"] .ava{border:3px solid #000}
 /* truth checks: verified leads, proof on done to-dos */
 .chip.ok{color:#3ddc97}.chip.warn{color:#ffb347}
 .todoboard li .proof{display:block;font-size:11px;opacity:.7;margin:2px 0 0 22px;word-break:break-word}
+/* website chat inbox */
+.availbtn{appearance:none;border:1px solid rgb(255 255 255/.18);background:#1F1035;color:#F6F1FF;border-radius:999px;padding:8px 14px;font:600 13.5px inherit;cursor:pointer}
+.availbtn.on{border-color:#3ddc97;box-shadow:0 0 0 3px rgb(61 220 151/.18)}
+.sitem.wc{flex-wrap:nowrap}.sitem.wc .wcn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sitem.wc small{opacity:.6;font-size:11px}
+.sitem.closed{opacity:.55}
+.wcfeed{display:flex;flex-direction:column;gap:8px;padding:12px}
+.wcm{max-width:78%;padding:8px 12px 6px;border-radius:14px;background:#24123E;font-size:14.5px}
+.wcm p{margin:0;white-space:pre-wrap;word-break:break-word}.wcm small{display:block;font-size:11px;font-weight:700;color:#FF8AC2}.wcm time{display:block;font-size:10.5px;opacity:.6;text-align:right}
+.wcm.visitor{align-self:flex-start}.wcm.staff{align-self:flex-end;background:linear-gradient(100deg,#5B20C9,#C21F6E)}
+.wcm.system{align-self:center;background:none;border:1px dashed rgb(255 255 255/.16);color:#B3A6CC;font-size:12.5px;text-align:center}
+.wcdraft{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;margin-bottom:6px;border-radius:10px;background:#1F1035;font-size:13px;color:#D9CCF0}
+.wcdraft span{flex:1}
+.nbadge{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:999px;background:#FF2E88;color:#fff;font-size:11px;line-height:18px;text-align:center}
+.nbadge[hidden]{display:none}

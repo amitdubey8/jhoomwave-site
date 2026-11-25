@@ -62,3 +62,42 @@ button,a{touch-action:manipulation}
 video,audio{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .vc,.fp,.vw{-webkit-touch-callout:none}
 .ig-btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;height:42px;padding:0 16px;border-radius:999px;background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00);color:#fff!important;font:700 14px "Inter",system-ui,sans-serif;text-decoration:none}
+
+/* Live chat with the team (lives in Jhoomi's corner) */
+.jh-chat{display:flex;align-items:center;gap:8px;width:100%;min-height:46px;margin-top:10px;padding:0 14px;border-radius:14px;border:0;cursor:pointer;color:#fff;
+  background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00);font:700 14.5px "Inter",system-ui,sans-serif;box-shadow:0 8px 22px rgb(255 46 136/.3)}
+.jh-chat i,.lc-st i{width:9px;height:9px;border-radius:50%;background:#8F82AA;flex:none}
+.jh-chat.on i,.lc.on .lc-st i{background:#3DFFA2;box-shadow:0 0 0 3px rgb(61 255 162/.22)}
+.lc{position:absolute;right:0;bottom:72px;width:min(380px,calc(100vw - 24px));height:min(560px,calc(100dvh - 190px));display:flex;flex-direction:column;
+  padding:14px;border-radius:22px;background:#170A28;border:1px solid rgb(255 255 255/.12);box-shadow:0 24px 60px rgb(0 0 0/.6);color:#F6F1FF;font-family:"Inter",system-ui,sans-serif;animation:jh-pop .3s ease}
+.lc[hidden]{display:none}
+.lc header{position:relative;display:flex;align-items:center;gap:10px;padding:0 30px 10px 0;border-bottom:1px solid rgb(255 255 255/.08)}
+.lc-ava{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7B2FF7,#FF2E88 60%,#FF8A00);font:900 13px "Poppins",system-ui,sans-serif;flex:none}
+.lc header b{font:800 16px "Poppins",system-ui,sans-serif}.lc-st{display:flex;align-items:center;gap:6px;color:#B3A6CC;font-size:12px}
+.lc-x{position:absolute;top:-4px;right:-6px;width:36px;height:36px;border:0;background:none;color:#B3A6CC;font-size:24px;cursor:pointer}
+.lc-log{flex:1;overflow:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:8px;padding:12px 2px}
+.lc-m{max-width:85%;padding:9px 12px 6px;border-radius:14px;font-size:14.5px;line-height:1.45}
+.lc-m p{margin:0;white-space:pre-wrap;word-break:break-word}.lc-m time{display:block;margin-top:2px;font-size:10.5px;opacity:.6;text-align:right}
+.lc-m small{display:block;margin-bottom:2px;font-size:11px;font-weight:700;color:#FF8AC2}
+.lc-m.visitor{align-self:flex-end;background:linear-gradient(100deg,#5B20C9,#C21F6E);border-bottom-right-radius:4px}
+.lc-m.staff{align-self:flex-start;background:#24123E;border-bottom-left-radius:4px}
+.lc-m.system{align-self:center;max-width:95%;background:none;border:1px dashed rgb(255 255 255/.16);color:#B3A6CC;font-size:13px;text-align:center}
+.lc-start{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-top:12px}
+.lc-hi{margin:0;padding:10px 12px;border-radius:14px 14px 14px 4px;background:#24123E;font-size:14px;line-height:1.45}
+.lc-start label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:#B3A6CC;font-weight:600}
+.lc-start textarea,.lc-start input:not([type=checkbox]),.lc-send input{width:100%;min-width:0;border-radius:12px;border:1px solid rgb(255 255 255/.14);background:#0E0518;color:#F6F1FF;padding:10px 12px;font:500 15px "Inter",system-ui,sans-serif;resize:none}
+.lc-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media (max-width:420px){.lc-row{grid-template-columns:1fr}}
+.lc-start .lc-ok{flex-direction:row;align-items:center;gap:8px;color:#F6F1FF;font-weight:500}.lc-ok[hidden]{display:none}
+.lc-ok input{width:18px;height:18px;accent-color:#FF2E88}
+.lc-trap{position:absolute;left:-9999px;width:1px;height:1px}
+.lc-go{min-height:46px;border:0;border-radius:12px;background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00);color:#fff;font:700 15px "Inter",system-ui,sans-serif;cursor:pointer}
+.lc-go:disabled{opacity:.6}
+.lc-send{display:flex;gap:8px;padding-top:8px}.lc-send[hidden]{display:none}
+.lc-send button{width:46px;height:44px;flex:none;border-radius:12px;border:0;background:linear-gradient(100deg,#7B2FF7,#FF2E88);color:#fff;font-size:18px;cursor:pointer}
+.lc-err{margin:4px 0 0;min-height:0;color:#FFB0B0;font-size:12.5px}.lc-err:empty{display:none}
+.lc-note{margin:8px 0 0;color:#9F92BA;font-size:11px;line-height:1.4}.lc-note a,.lc-new{color:#FF8AC2;background:none;border:0;padding:0;font:inherit;cursor:pointer;text-decoration:underline}
+.lc-badge{position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#FF2E88;color:#fff;font:800 12px/22px "Inter",system-ui,sans-serif;text-align:center;box-shadow:0 0 0 2px #0E0518}
+.jh-btn{position:relative}
+.lc-solo{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45}
+@media (max-width:760px){.lc-solo{bottom:calc(76px + env(safe-area-inset-bottom,0px));right:12px}}
+.lc-fab{position:relative;width:58px;height:58px;border-radius:50%;border:0;background:linear-gradient(135deg,#7B2FF7,#FF2E88 60%,#FF8A00);font-size:26px;cursor:pointer;box-shadow:0 10px 30px rgb(0 0 0/.5)}

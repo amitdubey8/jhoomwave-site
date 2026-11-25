@@ -100,10 +100,11 @@
     ME = data;
     const meBox = document.querySelector('.top .me'); if (meBox && !meBox.querySelector('.radioplayer')) meBox.prepend(studioBtn());
     $('me-email').textContent = data.name || data.email; $('me-role').textContent = data.role;
-    buildNav(); show('v-app'); route();
+    buildNav(); show('v-app'); route(); webchatBoot();
   }
   document.querySelectorAll('[data-signout]').forEach((b) => b.addEventListener('click', signOut));
   async function signOut(msg) {
+    try { if (ME && availOn()) await sb.from('chat_presence').upsert({ user_id: ME.user_id, name: firstName(), available: false, seen_at: new Date().toISOString() }); } catch (e) {}
     await sb.auth.signOut(); ME = null; show('v-login');
     $('f-code').hidden = true; $('f-email').hidden = false;
     $('login-msg').textContent = typeof msg === 'string' ? msg : 'Signed out.';
@@ -123,6 +124,7 @@
     meetings: { label: '📅 Meetings', roles: ALL, render: pageMeetings },
     tech: { label: '🛠️ Tech board', roles: ['owner', 'viewer'], render: pageTech },
     leads: { label: '💼 Leads', roles: ['owner', 'sales'], render: pageLeads },
+    webchat: { label: '🟢 Website chat', roles: ['owner', 'support', 'sales'], render: pageWebChat },
     enquiries: { label: '💬 Enquiries', roles: ['owner', 'support', 'sales'], render: pageEnquiries },
     orders: { label: '🎵 Orders', roles: ['owner', 'support'], render: pageOrders },
     social: { label: '📣 Social', roles: ['owner', 'marketing'], render: pageSocial },
@@ -495,6 +497,76 @@
       liveSub = sb.channel('office-chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'room=eq.' + room }, bump)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, bump).subscribe();
     } catch (e) { console.warn('live chat off', e); }
+  }
+
+  // ---------------------------------------------------------------- Website chat (visitors on jhoomwave.com ↔ a real person here)
+  const WC_ROLES = ['owner', 'support', 'sales'];
+  const firstName = () => String((ME && (ME.name || ME.email)) || 'Team').split(/[ @]/)[0].slice(0, 30) || 'Team';
+  const availOn = () => { try { return localStorage.getItem('jw_avail') === 'on'; } catch (e) { return false; } };
+  let wcBeat = 0, wcAlert = null, wcUnread = 0;
+  async function heartbeat(on) {
+    if (!ME || !WC_ROLES.includes(ME.role)) return;
+    const { error } = await sb.from('chat_presence').upsert({ user_id: ME.user_id, name: firstName(), available: !!on, seen_at: new Date().toISOString() });
+    if (error) console.warn('presence', error.message);
+  }
+  function setAvail(on) {
+    try { localStorage.setItem('jw_avail', on ? 'on' : 'off'); } catch (e) {}
+    clearInterval(wcBeat); heartbeat(on); if (on) wcBeat = setInterval(() => heartbeat(true), 45000);
+    document.querySelectorAll('.availbtn').forEach(paintAvail);
+  }
+  function paintAvail(b) { const on = availOn(); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = on ? '🟢 Available for website chat' : '⚪ Away (tap to go available)'; }
+  function wcBadge() { const a = document.querySelector('#nav a[data-r="webchat"] .nl'); if (!a) return; let b = a.querySelector('.nbadge'); if (!b) { b = h('span', { class: 'nbadge' }); a.append(b); } b.textContent = wcUnread || ''; b.hidden = !wcUnread; }
+  function ping() { try { const AC = window.AudioContext || window.webkitAudioContext; const c = new AC(); const o = c.createOscillator(), g = c.createGain(); o.frequency.value = 880; g.gain.setValueAtTime(0.0001, c.currentTime); g.gain.exponentialRampToValueAtTime(0.2, c.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.35); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime + 0.4); } catch (e) {} }
+  function webchatBoot() {
+    if (!ME || !WC_ROLES.includes(ME.role)) return;
+    if (availOn()) setAvail(true);
+    if (wcAlert) return;
+    try {
+      wcAlert = sb.channel('office-webchat-alert').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_chat_messages' }, (pl) => {
+        const m = pl.new; if (!m || m.sender !== 'visitor') return;
+        if (location.hash.slice(1) === 'webchat') { const open = sessionStorage.getItem('jw_wc'); if (open === m.chat_id) return; }
+        wcUnread++; wcBadge(); ping(); toast('💬 New message on the website chat');
+      }).subscribe();
+    } catch (e) { console.warn('chat alerts off', e); }
+  }
+  async function pageWebChat(page) {
+    wcUnread = 0; wcBadge();
+    const { data: chats, error } = await sb.from('live_chats').select('*').order('last_visitor_at', { ascending: false }).limit(60); if (error) throw error;
+    const pres = (await sb.from('chat_presence').select('*')).data || [];
+    const fresh = (x) => x.available && Date.now() - new Date(x.seen_at) < 120000;
+    const onNow = pres.filter(fresh).map((x) => x.name);
+    let cur = sessionStorage.getItem('jw_wc'); const list = (chats || []).slice().sort((a, b) => (a.status === b.status ? 0 : a.status === 'open' ? -1 : 1));
+    if (!list.some((c) => c.id === cur)) cur = list[0] ? list[0].id : null;
+    const waiting = (c) => c.status === 'open' && (!c.last_staff_at || new Date(c.last_visitor_at) > new Date(c.last_staff_at));
+    const pick = (id) => { sessionStorage.setItem('jw_wc', id); rerender(); };
+    const ab = h('button', { type: 'button', class: 'availbtn', onclick: () => { setAvail(!availOn()); rerender(); } }); paintAvail(ab);
+    const side = h('aside', { class: 'sside' }, h('div', { class: 'sgroup' }, `Chats (${list.filter(waiting).length} waiting)`),
+      list.length ? list.map((c) => h('button', { type: 'button', class: 'sitem wc' + (c.id === cur ? ' on' : '') + (c.status === 'closed' ? ' closed' : ''), onclick: () => pick(c.id) },
+        h('span', { class: 'pres ' + (waiting(c) ? 'on' : 'off') }), h('span', { class: 'wcn' }, c.name || 'Visitor'), h('small', {}, ago(c.last_visitor_at)))) : h('p', { class: 'mut small', style: 'padding:8px' }, 'No chats yet.'));
+    const top = h('div', { class: 'bar' }, h('h1', { class: 'grow' }, 'Website chat'), ab);
+    const info = h('p', { class: 'mut' }, onNow.length ? `Visitors see "Online now" (available: ${onNow.join(', ')}). Keep this Office open to stay online.` : 'Nobody is available, so visitors see "Away" and are asked for WhatsApp/email. Tap Available to start answering live.');
+    if (!cur) { page.replaceChildren(top, info, h('div', { class: 'slack' }, side, h('section', { class: 'smain' }, h('p', { class: 'mut', style: 'padding:16px' }, 'When someone writes in the chat on jhoomwave.com (inside Jhoomi), it shows up here.')))); return; }
+    const c = list.find((x) => x.id === cur);
+    const { data: msgs, error: me } = await sb.from('live_chat_messages').select('*').eq('chat_id', cur).order('id').limit(300); if (me) throw me;
+    const head = h('header', { class: 'shead' }, h('b', {}, c.name || 'Visitor'),
+      h('small', { class: 'mut' }, [c.contact ? '📞 ' + c.contact + (c.consent ? ' (OK to contact)' : ' (no consent)') : 'No contact given', c.page ? ' · from ' + c.page : '', ' · started ' + fmtDate(c.created_at)].join('')),
+      h('button', { type: 'button', class: 'lnk', onclick: async () => { if (await save('live_chats', c.id, { status: c.status === 'open' ? 'closed' : 'open', updated_at: new Date().toISOString() })) rerender(); } }, c.status === 'open' ? 'Close chat' : 'Reopen'));
+    const feed = h('div', { class: 'sfeed wcfeed', role: 'log', 'aria-live': 'polite' }, (msgs || []).map((m) => h('div', { class: 'wcm ' + m.sender },
+      m.sender === 'staff' ? h('small', {}, (m.author || 'Team') + (m.user_id === ME.user_id ? ' (you)' : '')) : m.sender === 'visitor' ? h('small', {}, c.name || 'Visitor') : null,
+      h('p', {}, m.text), h('time', {}, new Date(m.at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' })))));
+    const ta = h('textarea', { id: 'wc-in', maxlength: 1000, rows: 2, placeholder: `Reply to ${c.name || 'the visitor'} as ${firstName()} · JHOOMWAVE` });
+    const draft = c.ai_draft ? h('div', { class: 'wcdraft' }, h('span', {}, '✦ AI draft: ' + c.ai_draft), h('button', { type: 'button', class: 'btn2', onclick: () => { ta.value = c.ai_draft; ta.focus(); } }, 'Use draft')) : null;
+    const send = async () => { const t = ta.value.trim(); if (!t) return;
+      const { error: e2 } = await sb.from('live_chat_messages').insert({ chat_id: c.id, sender: 'staff', author: firstName(), user_id: ME.user_id, text: t });
+      if (e2) return fail(e2); ta.value = ''; rerender(); };
+    ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
+    const f = h('form', { class: 'scompose' }, draft, h('div', { class: 'srow' }, ta, h('button', { class: 'btn', type: 'submit' }, 'Send')));
+    f.addEventListener('submit', (e) => { e.preventDefault(); send(); });
+    page.replaceChildren(top, info, h('div', { class: 'slack' }, side, h('section', { class: 'smain' }, head, feed, f)));
+    feed.scrollTop = feed.scrollHeight;
+    stopLive();
+    try { let t = 0; liveSub = sb.channel('office-webchat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_chat_messages' }, () => { clearTimeout(t); t = setTimeout(() => { if (location.hash.slice(1) === 'webchat' && document.activeElement !== ta) rerender(); }, 300); })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'live_chats' }, () => { clearTimeout(t); t = setTimeout(() => { if (location.hash.slice(1) === 'webchat' && !ta.value) rerender(); }, 300); }).subscribe(); } catch (e) {}
   }
 
   // ---------------------------------------------------------------- Live studio cam (a virtual view built from live data; not real CCTV)
