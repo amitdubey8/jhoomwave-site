@@ -116,9 +116,35 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
  .rcol .card:first-child{margin-top:0}
  .rcol .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 }
+
+/* ---- refined wishes wall (designer pass) */
+.bw h2,.bw h2{letter-spacing:.2px}
+.bw .eyebrow{display:block;font:700 11px/1 Poppins;letter-spacing:2.4px;text-transform:uppercase;color:rgb(255 209 102/.85);margin-bottom:6px}
+.qk button{font-size:13px;padding:7px 12px;background:transparent;border-color:rgb(255 255 255/.22)}
+.qk button:hover{border-color:rgb(255 209 102/.7)}
+.bl-list{gap:0;margin-top:18px;border-top:1px solid rgb(255 255 255/.1)}
+.wi{display:flex;gap:12px;padding:14px 2px;border-bottom:1px solid rgb(255 255 255/.08);animation:pop .4s ease}
+.wi.pend{opacity:.8}
+.wi .av{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:700 16px/1 'Tiro Devanagari Hindi',Poppins,serif;color:#1C0B33;background:linear-gradient(135deg,#FFE29A,#FFB347)}
+.wi .wb{flex:1;min-width:0}
+.wi .wh{display:flex;align-items:baseline;gap:8px}.wi .wh strong{font:700 15px Poppins,'Tiro Devanagari Hindi',sans-serif}.wi .wh time{font-size:12px;opacity:.6}
+.wi p{margin:2px 0 0;font:400 17px/1.6 'Tiro Devanagari Hindi',Poppins,serif;white-space:pre-wrap;word-break:break-word}
+.wi .pd{display:inline-block;margin-top:6px;font-size:11px;letter-spacing:.3px;padding:3px 9px;border-radius:99px;border:1px dashed rgb(255 255 255/.3);opacity:.8}
+.wi .rp{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgb(255 209 102/.08);border-left:2px solid #FFD166}
+.wi .rp span{display:block;font:700 12px/1.2 Poppins,'Tiro Devanagari Hindi',sans-serif;color:#FFD166;margin-bottom:4px}
+.wi .rp p{font-size:16px;margin:0}
+.thx{margin:0 0 16px;padding:18px 18px 16px;border-radius:18px;background:linear-gradient(135deg,rgb(255 209 102/.16),rgb(255 46 136/.10));border:1px solid rgb(255 209 102/.35);position:relative;overflow:hidden}
+.thx:before{content:"\201C";position:absolute;right:14px;top:-18px;font:900 120px/1 Georgia,serif;color:rgb(255 209 102/.18)}
+.thx span{display:block;font:700 13px/1 Poppins,'Tiro Devanagari Hindi',sans-serif;letter-spacing:.5px;color:#FFD166;margin-bottom:8px}
+.thx p{margin:0;font:400 19px/1.65 'Tiro Devanagari Hindi',serif}
+.thx b{display:block;margin-top:8px;font:600 14px Poppins,'Tiro Devanagari Hindi',sans-serif;opacity:.85}
+.hb .h{display:grid;place-items:center}.hb svg{width:20px;height:20px}
+.send{display:flex!important;align-items:center;justify-content:center;gap:8px}.send svg{width:18px;height:18px}
+.bl-empty{padding:18px 0;opacity:.7}
 </style>
 </head>
 <body>
+<script src="/js/jw-brand.js"></script>
 <div class="bg" aria-hidden="true"></div>
 <main class="app">
 <div class="lcol">
@@ -150,8 +176,8 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   </div>
   <p class="hint" id="hint">▶ dabaiye, gaana shuru ho jaayega 🎶</p>
   <div class="eng">
-    <button class="hb" id="hb" type="button" aria-pressed="false" aria-label="प्यार भेजें"><span class="h">🤍</span><span id="hc">प्यार भेजें</span></button>
-    <button class="bl" type="button" id="goBless">💐 विश करें</button>
+    <button class="hb" id="hb" type="button" aria-pressed="false" aria-label="प्यार भेजें"><span class="h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-9.5-9.1C1 8.4 3.2 5 6.6 5c2 0 3.4 1.1 4.4 2.6C12 6.1 13.4 5 15.4 5 18.8 5 21 8.4 19.5 11.9 17.5 16.4 12 21 12 21z"/></svg></span><span id="hc">प्यार भेजें</span></button>
+    <button class="bl" type="button" id="goBless">शुभकामना लिखें</button>
     <span class="vw" id="vw"></span>
   </div>
 
@@ -178,13 +204,13 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   </section>
 
   <section class="card bw" id="bless" aria-label="शुभकामनाएँ">
-    <h2>💐 शुभकामनाएँ और आशीर्वाद</h2>
+    <span class="eyebrow">Wishes &amp; Blessings</span><h2>शुभकामनाएँ और आशीर्वाद</h2>
     <p class="hint2">मम्मी-पापा को बधाई दीजिए, बड़े अपना आशीर्वाद। मंज़ूरी के बाद सब यहाँ पढ़ पाएँगे।</p>
     <form id="bf" autocomplete="on">
       <input id="bn" name="name" maxlength="40" placeholder="आपका नाम (जैसे: बुआ, मामा जी, स्वाति)" required>
-      <div class="qk" id="qk"><button type="button">हैप्पी एनिवर्सरी 💐</button><button type="button">जोड़ी सलामत रहे ❤️</button><button type="button">ऐसे ही मुस्कुराते रहो 😊</button><button type="button">बहुत सुंदर गाना! 🎶</button><button type="button">सदा सुहागन रहो 🙏</button></div>
+      <div class="qk" id="qk"><button type="button">हैप्पी एनिवर्सरी</button><button type="button">जोड़ी सलामत रहे</button><button type="button">ऐसे ही मुस्कुराते रहो</button><button type="button">बहुत सुंदर गाना!</button><button type="button">सदा सुहागन रहो</button></div>
       <textarea id="bm" maxlength="280" placeholder="अपनी शुभकामना या आशीर्वाद लिखें…" required></textarea>
-      <button class="send" type="submit" id="bs">💌 शुभकामना भेजें</button>
+      <button class="send" type="submit" id="bs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg><span>शुभकामना भेजें</span></button>
       <p class="msg" id="bmsg" role="status"></p>
     </form>
     <div class="bl-list" id="bll"></div>
@@ -241,11 +267,18 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   var anon;try{anon=localStorage.getItem('jw_wish_id')}catch(e){}
   if(!anon){anon=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now()).replace(/-/g,'').slice(0,24);try{localStorage.setItem('jw_wish_id',anon)}catch(e){}}
   var hb=document.getElementById('hb'),hc=document.getElementById('hc'),vw=document.getElementById('vw'),bll=document.getElementById('bll'),top=document.getElementById('heart'),liked=false,hearts=0;
-  function heartUI(){hb.classList.toggle('on',liked);hb.setAttribute('aria-pressed',liked);hb.querySelector('.h').textContent=liked?'❤️':'🤍';hc.textContent=hearts?(hearts+' प्यार'):'प्यार भेजें';if(top){top.classList.toggle('on',liked);top.textContent=liked?'♥':'♡'}}
+  function heartUI(){hb.classList.toggle('on',liked);hb.setAttribute('aria-pressed',liked);hb.querySelector('.h').innerHTML=liked?'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-9.5-9.1C1 8.4 3.2 5 6.6 5c2 0 3.4 1.1 4.4 2.6C12 6.1 13.4 5 15.4 5 18.8 5 21 8.4 19.5 11.9 17.5 16.4 12 21 12 21z"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-9.5-9.1C1 8.4 3.2 5 6.6 5c2 0 3.4 1.1 4.4 2.6C12 6.1 13.4 5 15.4 5 18.8 5 21 8.4 19.5 11.9 17.5 16.4 12 21 12 21z"/></svg>';hc.textContent=hearts?(hearts+' प्यार'):'प्यार भेजें';if(top){top.classList.toggle('on',liked);top.textContent=liked?'♥':'♡'}}
   function ago(iso){var m=Math.round((Date.now()-new Date(iso))/60000);if(m<1)return 'अभी';if(m<60)return m+' मिनट पहले';var h=Math.round(m/60);if(h<24)return h+' घंटे पहले';return Math.round(h/24)+' दिन पहले'}
-  function item(b,first){var d=document.createElement('div');d.className='bl-item';var p=document.createElement('p');p.textContent=b.msg;var n=document.createElement('b');n.textContent='– '+b.name+' ';var sm=document.createElement('small');sm.textContent='· '+ago(b.at);n.appendChild(sm);d.append(p,n);if(b.pending){var w=document.createElement('small');w.className='pend';w.textContent='⏳ मंज़ूरी के बाद सबको दिखेगी';d.append(w);d.style.opacity='.85'}if(first)bll.prepend(d);else bll.append(d)}
-  function empty(){if(!bll.children.length){var e=document.createElement('p');e.className='bl-empty';e.id='ble';e.textContent='सबसे पहली शुभकामना आप दीजिए 💐';bll.append(e)}}
-  rpc('wish_stats',{p_slug:SLUG,p_anon:anon}).then(function(d){if(!d){empty();return}hearts=d.hearts;liked=d.liked;heartUI();if(d.views>1)vw.textContent='👀 '+d.views+' बार देखा गया';(d.blessings||[]).forEach(function(b){item(b)});empty()});
+  function item(b,first){var d=document.createElement('article');d.className='wi'+(b.pending?' pend':'');
+    var av=document.createElement('div');av.className='av';av.textContent=(b.name||'?').trim().charAt(0);
+    var bd=document.createElement('div');bd.className='wb';
+    var hd=document.createElement('div');hd.className='wh';var nm=document.createElement('strong');nm.textContent=b.name;var tt=document.createElement('time');tt.textContent=ago(b.at);hd.append(nm,tt);
+    var p=document.createElement('p');p.textContent=b.msg;bd.append(hd,p);
+    if(b.pending){var w=document.createElement('span');w.className='pd';w.textContent='मंज़ूरी के बाद सबको दिखेगी';bd.append(w)}
+    if(b.reply){var r=document.createElement('div');r.className='rp';var rl=document.createElement('span');rl.textContent=(window.__couple||'जोड़ी')+' का जवाब';var rt=document.createElement('p');rt.textContent=b.reply;r.append(rl,rt);bd.append(r)}
+    d.append(av,bd);if(first)bll.prepend(d);else bll.append(d)}
+  function empty(){if(!bll.children.length){var e=document.createElement('p');e.className='bl-empty';e.id='ble';e.textContent='सबसे पहली शुभकामना आप लिखिए।';bll.append(e)}}
+  rpc('wish_stats',{p_slug:SLUG,p_anon:anon}).then(function(d){if(!d){empty();return}window.__couple=d.couple||'';if(d.thanks){var tx=document.createElement('div');tx.className='thx';var l=document.createElement('span');l.textContent='धन्यवाद';var q=document.createElement('p');q.textContent=d.thanks;var by=document.createElement('b');by.textContent='— '+(d.couple||'');tx.append(l,q,by);bll.parentNode.insertBefore(tx,bll)}hearts=d.hearts;liked=d.liked;heartUI();if(d.views>1)vw.textContent='👀 '+d.views+' बार देखा गया';(d.blessings||[]).forEach(function(b){item(b)});empty()});
   function burst(x,y){for(var i=0;i<9;i++){var s=document.createElement('span');s.className='fly';s.textContent=['❤️','💖','💕','🌸','✨'][i%5];s.style.left=(x-13)+'px';s.style.top=(y-13)+'px';s.style.setProperty('--dx',(Math.random()*160-80)+'px');s.style.setProperty('--r',(Math.random()*90-45)+'deg');s.style.animationDelay=(i*60)+'ms';document.body.append(s);setTimeout(function(n){n.remove()}.bind(null,s),2000)}}
   function love(el){var r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+10);if(navigator.vibrate)navigator.vibrate(20);if(liked)return;liked=true;hearts++;heartUI();rpc('wish_heart',{p_slug:SLUG,p_anon:anon}).then(function(n){if(typeof n==='number'){hearts=n;heartUI()}})}
   hb.addEventListener('click',function(){love(hb)});
@@ -261,7 +294,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
       if(!r){bmsg.textContent='नेटवर्क की दिक्कत, दोबारा भेजें';return}
       if(r.error){bmsg.textContent=ERR[r.error]||'दोबारा कोशिश करें';return}
       try{localStorage.setItem('jw_wish_name',n)}catch(e){}
-      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='आपकी शुभकामना पहुँच गई! 💐 मंज़ूरी के बाद सबको दिखेगी ❤️';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
+      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='शुभकामना पहुँच गई। मंज़ूरी के बाद सबको दिखेगी।';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
   })();
 
   if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/mummy_papa.jpg',sizes:'1040x1300',type:'image/jpeg'}]});
@@ -279,5 +312,6 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   rain(10);
 })();
 </script>
+<script src="/js/wish-owner.js" data-slug="pradeep-vandana" defer></script>
 </body>
 </html>
