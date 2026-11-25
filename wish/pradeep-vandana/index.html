@@ -105,11 +105,22 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .bl-empty{text-align:center;color:var(--mute);font-size:14px;margin:8px 0 0}
 @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.fly{display:none}.bl-item{animation:none}}
+@media (min-width:900px){
+ .app{max-width:1120px;display:grid;grid-template-columns:minmax(360px,440px) 1fr;gap:40px;align-items:start;padding-top:calc(40px + env(safe-area-inset-top))}
+ .lcol{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;scrollbar-width:none}
+ .lcol .art img{max-height:34vh;width:auto;margin:0 auto;display:block}
+ .lcol .banner h1{font-size:44px}
+ .lcol .diya,.lcol .banner .tag{display:none}
+ .lcol .art{max-width:280px;margin-left:auto;margin-right:auto}
+ .rcol .card:first-child{margin-top:0}
+ .rcol .btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+}
 </style>
 </head>
 <body>
 <div class="bg" aria-hidden="true"></div>
 <main class="app">
+<div class="lcol">
   <header class="banner">
     <span class="tag">25 NOVEMBER · INDORE</span>
     <p class="shubh">॥ शुभ विवाह वर्षगाँठ ॥</p>
@@ -120,7 +131,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   </header>
 
   <div class="art" id="art">
-    <img src="/img/wish/mummy_papa.jpg" alt="Mummy Papa: Pradeep ji aur Vandana ji" width="1000" height="1250">
+    <img fetchpriority="high" decoding="async" src="/img/wish/mummy_papa.jpg" alt="Mummy Papa: Pradeep ji aur Vandana ji" width="1000" height="1250">
     <span class="badge">🌼 सदा सुहागन, सदा खुशहाल 🌼</span>
   </div>
 
@@ -143,6 +154,8 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
     <span class="vw" id="vw"></span>
   </div>
 
+</div>
+<div class="rcol">
   <section class="card pl" aria-label="A song for you"><h2>🎁 A song for you · 6 gaane</h2><ol id="pl"></ol></section>
 
   <section class="card" aria-label="Lyrics"><h2>Lyrics</h2>
@@ -182,6 +195,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
     <a class="btn ig" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">📸 Follow @jhoomwave</a>
   </div>
   <p class="foot">🙏 Made with love and respect by <a href="https://jhoomwave.com">JHOOMWAVE</a><br>Song made with AI voices on lyrics written for this family.</p>
+</div>
 </main>
 <audio id="song" src="/audio/wish/pradeep_vandana_from_amit.mp3" preload="auto"></audio>
 <script>
