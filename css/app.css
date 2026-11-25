@@ -61,7 +61,7 @@ button,a{touch-action:manipulation}
 
 video,audio{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .vc,.fp,.vw{-webkit-touch-callout:none}
-.ig-btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;height:42px;padding:0 16px;border-radius:999px;background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00);color:#fff!important;font:700 14px "Inter",system-ui,sans-serif;text-decoration:none}
+.ig-btn,.ft a.ig-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;height:44px;min-height:44px;padding:0 16px;border-radius:999px;background:linear-gradient(100deg,#7B2FF7,#FF2E88 60%,#FF8A00);color:#fff!important;font:700 14px "Inter",system-ui,sans-serif;text-decoration:none}
 
 /* Live chat with the team (lives in Jhoomi's corner) */
 .jh-chat{display:flex;align-items:center;gap:8px;width:100%;min-height:46px;margin-top:10px;padding:0 14px;border-radius:14px;border:0;cursor:pointer;color:#fff;
@@ -105,3 +105,7 @@ video,audio{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none
 .lc-contact div{display:flex;gap:6px}.lc-contact input{flex:1;min-width:0;height:40px;border-radius:10px;border:1px solid rgb(255 255 255/.14);background:#0E0518;color:#F6F1FF;padding:0 10px;font:500 14px "Inter",system-ui,sans-serif}
 .lc-contact button{height:40px;padding:0 14px;border:0;border-radius:10px;background:linear-gradient(100deg,#7B2FF7,#FF2E88);color:#fff;font-weight:700;cursor:pointer}
 .lc-contact small{color:#9F92BA;font-size:11px}
+
+/* Tap targets (phones): small inline links get a 44px-tall hit area without changing the line layout; consent boxes 20px */
+.tbl td span a,p.muted a,.note a,a.chat-link{display:inline-block;padding:12px 2px;margin:-12px 0}
+.jw-consent input[type=checkbox],.lc-ok input[type=checkbox]{width:20px!important;height:20px!important;min-width:20px;flex:none;margin-top:1px!important;accent-color:#FF2E88}

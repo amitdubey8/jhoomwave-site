@@ -38,8 +38,15 @@
       ['Who sings?', "Songs are sung by JHOOMWAVE Voices, our synthetic voices. We write every lyric ourselves and never copy anyone's song."],
       ['Which languages?', 'We make songs in Hindi, Hinglish, Punjabi and English. Message us for other languages.']]
   };
-  const KEYS = [/kya|what|about|hai kya|jhoomwave/i, /order|kaise|how do|buy|book|khareed|banwa/i, /price|kitne|cost|rate|₹|rs|paisa|charge|kitna paisa/i,
-    /time|kab|kitni der|how long|minute|jaldi|fast/i, /sing|gaata|gaati|voice|aawaz|awaaz|ai|real/i, /language|bhasha|hindi|english|punjabi|tamil|marathi|gujarati|bengali|telugu/i];
+  /* [answer index in Q, pattern]. Checked in this order: specific topics first, the generic "what is" rule last
+     (so "Price kya hai?" gets the price answer, not "What is JHOOMWAVE"). Word boundaries stop "rs" matching "first". */
+  const KEYS = [
+    [3, /\btime\b|\bkab\b|kitni der|kitna time|how long|\bminutes?\b|jaldi|\bfast\b|\bdays?\b|\bdin\b/i],
+    [2, /price|pricing|kitne|kitna|\bcost|\brate\b|₹|\brs\.?\b|\binr\b|paisa|paise|charge|daam|\bfees?\b|how much/i],
+    [4, /\bsing|\bgaata|\bgaati|\bgaayega|voice|aawaz|awaaz|\bai\b|\breal\b|singer/i],
+    [5, /language|bhasha|hindi|english|punjabi|tamil|marathi|gujarati|bengali|telugu/i],
+    [1, /\border|kaise|how do|\bbuy\b|\bbook\b|khareed|banwa|\bpay\b|payment/i],
+    [0, /\bkya\b|\bwhat\b|about|jhoomwave/i]];
 
   const pick = () => {
     try { const s = localStorage.getItem('jw_lang'); if (s && L[s]) return s; } catch (e) {}
@@ -125,14 +132,31 @@
   $('.jh-ask').addEventListener('submit', e => {
     e.preventDefault();
     const inp = $('.jh-ask input'), t = inp.value.trim(); if (!t) return;
-    const qs = Q[L[lang].a], i = KEYS.findIndex(r => r.test(t));
+    const qs = Q[L[lang].a], hit = KEYS.find(([, r]) => r.test(t)), i = hit ? hit[0] : -1;
     if (i >= 0) say(`/audio/jhoomi/q${i + 1}_${L[lang].a}.mp3`, qs[i][1]);
-    else { msg.innerHTML = ''; msg.append(L[lang].a === 'hi' ? 'Iska jawab main abhi nahi jaanti. Hamari team Instagram pe turant batayegi: ' : "I don't know that one yet. Our team will answer on Instagram: ");
-      const a = document.createElement('a'); a.href = 'https://www.instagram.com/jhoomwave/'; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'DM @jhoomwave'; msg.append(a); }
+    else { msg.innerHTML = ''; const hi = L[lang].a === 'hi';
+      msg.append(hi ? 'Iska jawab main abhi nahi jaanti. Hamari team se seedha baat kijiye, ya Instagram pe ' : "I don't know that one yet. Talk to our team directly, or ");
+      const a = document.createElement('a'); a.href = 'https://www.instagram.com/jhoomwave/'; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'DM @jhoomwave'; msg.append(a, '.');
+      const c = document.createElement('button'); c.type = 'button'; c.className = 'jh-chat';
+      const dot = document.createElement('i'), lab = document.createElement('span'); lab.textContent = '💬 Chat with our team'; c.append(dot, lab);
+      if (document.querySelector('.lc.on')) c.classList.add('on');
+      c.addEventListener('click', () => { if (window.jwChat && window.jwChat.open) window.jwChat.open(); });
+      msg.append(c); }
     inp.value = '';
   });
   addEventListener('keydown', e => { if (e.key === 'Escape' && !pan.hidden) open(false); });
   render();
+  /* Welcome bubble: at most once per session, and only after the visitor has scrolled 300px or spent 8 s here,
+     so it never covers the hero buttons on a phone the moment the page opens. */
   let seen = false; try { seen = !!sessionStorage.getItem('jw_bub'); } catch (e) {}
-  if (!seen) setTimeout(() => { if (pan.hidden) { bub.hidden = false; try { sessionStorage.setItem('jw_bub', '1'); } catch (e) {} } }, 2500);
+  if (!seen) {
+    let done = false, tm = 0;
+    const show = () => {
+      if (done) return; done = true; clearTimeout(tm); removeEventListener('scroll', onScroll);
+      if (pan.hidden) { bub.hidden = false; try { sessionStorage.setItem('jw_bub', '1'); } catch (e) {} }
+    };
+    const onScroll = () => { if ((window.scrollY || document.documentElement.scrollTop) >= 300) show(); };
+    addEventListener('scroll', onScroll, { passive: true });
+    tm = setTimeout(show, 8000);
+  }
 })();
