@@ -15,6 +15,7 @@
     for (const [k, v] of Object.entries(attrs || {})) {
       if (v == null || v === false) continue;
       if (k === 'class') e.className = v;
+      else if (k === 'style') e.style.cssText = v; // CSSOM: allowed by our CSP (a style attribute would be blocked)
       else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
       else e.setAttribute(k, v === true ? '' : v);
     }
@@ -116,6 +117,7 @@
   const ALL = ['owner', 'marketing', 'sales', 'support', 'viewer'];
   const ROUTES = {
     office: { label: '🏢 Office', roles: ALL, render: pageOffice },
+    live: { label: '📹 Live cam', roles: ALL, render: pageLive },
     chat: { label: '💬 Team chat', roles: ALL, render: pageChat },
     meetings: { label: '📅 Meetings', roles: ALL, render: pageMeetings },
     tech: { label: '🛠️ Tech board', roles: ['owner', 'viewer'], render: pageTech },
@@ -134,6 +136,7 @@
   addEventListener('hashchange', route);
   async function route() {
     if (!ME) return;
+    stopLive(); liveTimers.forEach(clearInterval); liveTimers = [];
     let r = location.hash.slice(1);
     if (!allowed(r)) r = 'office';
     document.querySelectorAll('#nav a').forEach((a) => a.setAttribute('aria-current', a.getAttribute('data-r') === r ? 'page' : 'false'));
@@ -233,16 +236,31 @@
     return ['day', '☀️', 'Sunny day at the studio', `sunset ${tfmt(set)}`];
   }
   const DESKS = [['Mumbai · HQ', 'Asia/Kolkata', 'All'], ['New York', 'America/New_York', 'Neil'], ['Dubai', 'Asia/Dubai', 'Sara'], ['London', 'Europe/London', 'Jas']];
-  // studio music: our own anthem, quietly, only when you press play
-  let studio = null;
+  // studio radio: only JHOOMWAVE's own original songs; the playlist follows the office theme
+  const T = (f, n) => ({ src: f, name: n });
+  const BASE = [T('../console/audio/jw_ai_sufi_house.mp3', 'Sufi Sunset'), T('../audio/music/chaand_se_zyada_preview.mp3', 'Chaand Se Zyada'), T('../console/audio/jhoom_04_mehndi_groove.mp3', 'Mehndi Groove'),
+    T('media/studio.mp3', 'Jhoom Jhoom JHOOMWAVE'), T('../console/audio/jw_ai_garba_glow.mp3', 'Garba Glow'), T('../console/audio/jw_ai_afro_desi.mp3', 'Afro Desi'), T('../console/audio/jw_ai_bollywood_bounce.mp3', 'Bollywood Bounce')];
+  const THEME_SONGS = {
+    thanksgiving: [T('../audio/music/grateful_for_you_preview.mp3', 'Grateful For You')], christmas: [T('../audio/music/merry_christmas_yaara_preview.mp3', 'Merry Merry Christmas Yaara')],
+    newyear: [T('media/studio.mp3', 'Jhoom Jhoom JHOOMWAVE'), T('../console/audio/jw_ai_bhangra_thunder.mp3', 'Bhangra Thunder')], diwali: [T('../audio/music/mann_mein_shyam_preview.mp3', 'Mann Mein Shyam'), T('../console/audio/jhoom_05_shaadi_anthem.mp3', 'Shaadi Anthem')],
+    traditional: [T('../console/audio/jhoom_05_shaadi_anthem.mp3', 'Shaadi Anthem'), T('../console/audio/jhoom_03_sangeet_nights.mp3', 'Sangeet Nights')], holi: [T('../console/audio/jw_ai_bollywood_bounce.mp3', 'Bollywood Bounce')],
+    neon80s: [T('../console/audio/jw_ai_desi_trap_royale.mp3', 'Desi Trap Royale')], halloween: [T('../console/audio/jw_ai_desi_trap_royale.mp3', 'Desi Trap Royale')],
+  };
+  const radio = { el: null, list: [], i: 0, theme: 'studio' };
+  function radioList() { const extra = THEME_SONGS[document.body.dataset.theme] || []; return [...extra, ...BASE.filter((b) => !extra.some((e) => e.src === b.src))]; }
+  function radioPlay(i) {
+    radio.list = radioList(); radio.i = ((i % radio.list.length) + radio.list.length) % radio.list.length;
+    if (!radio.el) { radio.el = new Audio(); radio.el.volume = 0.35; radio.el.addEventListener('ended', () => radioPlay(radio.i + 1)); radio.el.addEventListener('error', () => radioPlay(radio.i + 1)); }
+    radio.el.src = radio.list[radio.i].src; radio.el.play().catch(() => toast('Tap play again to start the music')); radioUI();
+  }
+  function radioUI() { document.querySelectorAll('.radioplayer').forEach((w) => { const on = radio.el && !radio.el.paused;
+    w.querySelector('.rp-play').textContent = on ? '⏸' : '▶'; w.querySelector('.rp-name').textContent = radio.el && radio.list[radio.i] ? '🎵 ' + radio.list[radio.i].name : '🎵 Studio radio'; w.classList.toggle('on', !!on); }); }
   function studioBtn() {
-    const b = h('button', { class: 'btn2 musicbtn', type: 'button', 'aria-pressed': studio && !studio.paused ? 'true' : 'false' }, studio && !studio.paused ? '⏸ Studio music' : '🎵 Studio music');
-    b.addEventListener('click', () => {
-      if (!studio) { studio = new Audio('media/studio.mp3'); studio.loop = true; studio.volume = 0.35; }
-      if (studio.paused) { studio.play().catch(() => toast('Tap again to start the music')); b.textContent = '⏸ Studio music'; b.setAttribute('aria-pressed', 'true'); }
-      else { studio.pause(); b.textContent = '🎵 Studio music'; b.setAttribute('aria-pressed', 'false'); }
-    });
-    return b;
+    const w = h('span', { class: 'radioplayer' },
+      h('button', { type: 'button', class: 'rp-play', 'aria-label': 'Play or pause studio radio', onclick: () => { if (!radio.el || !radio.el.src) radioPlay(0); else if (radio.el.paused) { radio.el.play().catch(() => {}); } else radio.el.pause(); setTimeout(radioUI, 50); } }, '▶'),
+      h('span', { class: 'rp-name' }, '🎵 Studio radio'),
+      h('button', { type: 'button', class: 'rp-next', 'aria-label': 'Next song', onclick: () => radioPlay(radio.i + 1) }, '⏭'));
+    setTimeout(radioUI, 0); return w;
   }
   const THEMES = {
     studio: ['🎛️ Studio', ''], thanksgiving: ['🦃 Thanksgiving', '🍂'], christmas: ['🎄 Christmas', '❄️'], diwali: ['🪔 Diwali', '✨'],
@@ -319,7 +337,10 @@
     const EMO = { revenue: '💸', customers: '🙌', orders: '🧾', spend: '🪙', credits: '🎙️', live: '🟢' };
     kids.push(h('div', { class: 'chips2' }, (k.data || []).map((x) => h('div', { class: 'kchip', title: x.note || '' }, h('span', { class: 'e' }, EMO[x.id] || '📊'), h('div', {}, h('div', { class: 'v' }, x.value), h('div', { class: 'l' }, x.label))))));
 
-    const [cb, aw] = await Promise.all([sb.from('coin_board').select('*').order('coins', { ascending: false }).limit(5), sb.from('awards').select('*').order('at', { ascending: false }).limit(4)]);
+    const istToday = new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
+    const [cb, aw, td] = await Promise.all([sb.from('coin_board').select('*').order('coins', { ascending: false }).limit(5), sb.from('awards').select('*').order('at', { ascending: false }).limit(4), sb.from('todos').select('*').eq('day', istToday).order('id')]);
+    const todos = td.data || [], todoOf = (id) => todos.filter((x) => x.agent_id === id);
+    const TICK = { done: '✅', doing: '🔨', todo: '⬜' };
     const nameOf = Object.fromEntries(agents.map((x) => [x.id, x.name]));
     const medal = ['🥇', '🥈', '🥉', '4', '5'];
     kids.push(h('div', { class: 'fame' },
@@ -342,6 +363,7 @@
         h('div', { class: 'dl' }, x.last_done ? h('div', {}, h('span', {}, '✅ Just finished: '), x.last_done) : null, x.next_up ? h('div', {}, h('span', {}, '⏭️ Up next: '), x.next_up) : null, x.goal ? h('div', {}, h('span', {}, '🎯 Goal: '), x.goal) : null),
         h('div', { class: 'when' }, (x.base_city ? '📍 ' + x.base_city + ' · ' : '') + 'updated ' + ago(x.updated_at)),
         x.vibe ? h('div', { class: 'offduty' }, '🎈 Off duty: ' + x.vibe) : null,
+        todoOf(x.id).length ? h('details', { class: 'tdc' }, h('summary', {}, `📋 Today ${todoOf(x.id).filter((t) => t.status === 'done').length}/${todoOf(x.id).length} done`), h('ul', {}, todoOf(x.id).map((t) => h('li', { class: t.status }, TICK[t.status] + ' ' + t.title)))) : null,
         x.desk ? h('div', { class: 'desktop', title: 'On the desk' }, h('span', { class: 'chair', 'aria-hidden': 'true' }, '🪑'), h('span', {}, x.desk)) : null,
         x.bio ? h('details', { class: 'persona' }, h('summary', {}, 'About ' + x.name), h('p', {}, x.bio)) : null);
     };
@@ -351,6 +373,13 @@
       kids.push(h('h3', { class: 'teamh' }, t || 'Team'), h('div', { class: 'floor' }, group.map(deskCard)));
     }
 
+    if (todos.length) {
+      const doneN = todos.filter((t) => t.status === 'done').length, doingN = todos.filter((t) => t.status === 'doing').length;
+      kids.push(h('div', { class: 'sech' }, h('h2', {}, "📋 Today's to-dos"), h('small', {}, `${doneN} done · ${doingN} in progress · ${todos.length - doneN - doingN} up next`)));
+      kids.push(h('div', { class: 'todoboard' }, agents.filter((x) => todoOf(x.id).length).map((x) => h('div', { class: 'tdcard' },
+        h('div', { class: 'tdh' }, avatar(x.id, 28), h('b', {}, x.name), h('small', { class: 'mut' }, `${todoOf(x.id).filter((t) => t.status === 'done').length}/${todoOf(x.id).length}`)),
+        h('ul', {}, todoOf(x.id).map((t) => h('li', { class: t.status }, h('span', {}, TICK[t.status]), t.title)))))));
+    }
     const radio = h('ul', { class: 'radio' }, (act.data || []).length ? act.data.map((x) => {
       const id = byName[x.who]; const d = DESK[id] || ['📣', '#7B2FF7', '#FF2E88'];
       const dot = h('span', { class: 'dot2' }, d[0]); dot.style.background = `linear-gradient(135deg,${d[1]}55,${d[2]}55)`;
@@ -376,26 +405,136 @@
     page.replaceChildren(...kids);
   }
 
-  // ---------------------------------------------------------------- Team chat
+  // ---------------------------------------------------------------- Team chat (Slack-style: channels, DMs, reactions, replies, live)
+  let liveSub = null;
+  function stopLive() { if (liveSub) { try { sb.removeChannel(liveSub); } catch (e) {} liveSub = null; } }
+  function richText(t) { // @mentions highlighted; everything else plain text
+    return String(t).split(/(@[A-Za-z][\w]*)/g).map((part) => (/^@[A-Za-z]/.test(part) ? h('span', { class: 'mention' }, part) : part));
+  }
+  const QUICK = ['👍', '🔥', '😂', '❤️', '🎉'];
+  let replyTo = null;
   async function pageChat(page) {
-    const [m, a] = await Promise.all([sb.from('messages').select('*').eq('room', 'team').order('at', { ascending: false }).limit(80), sb.from('agents').select('id,name,avatar')]);
-    (a.data || []).forEach((x) => { if (x.avatar) AV[x.id] = x.avatar; });
+    const room = sessionStorage.getItem('jw_ch') || 'team';
+    const [ch, ag, m] = await Promise.all([sb.from('channels').select('*').order('sort'), sb.from('agents').select('id,name,avatar,status,role').order('sort'),
+      sb.from('messages').select('*').eq('room', room).order('at', { ascending: false }).limit(120)]);
     if (m.error) throw m.error;
-    const byName = Object.fromEntries((a.data || []).map((x) => [x.name, x.id]));
-    const list = h('ul', { class: 'chat' }, (m.data || []).slice().reverse().map((x) => {
-      const mine = x.author_kind === 'staff';
-      const av = mine ? h('div', { class: 'ava me2' }, (x.author || '?').slice(0, 1).toUpperCase()) : avatar(byName[x.author], 36);
-      return h('li', { class: mine ? 'mine' : '' }, av, h('div', { class: 'msgb' }, h('div', { class: 'mh' }, h('b', {}, x.author), x.author_kind === 'ai' ? h('span', { class: 'aitag' }, '✦ AI') : null, h('small', {}, ago(x.at))), h('p', {}, x.text)));
-    }));
-    const ta = h('textarea', { id: 'chat-in', maxlength: 2000, placeholder: 'Message the team… e.g. "@Dev focus on Indore bakeries this week"' });
-    const send = h('button', { class: 'btn', type: 'submit' }, 'Send');
-    const f = h('form', { class: 'composer' }, ta, send);
-    f.addEventListener('submit', async (e) => { e.preventDefault(); const t = ta.value.trim(); if (!t) return;
-      send.disabled = true; const { error } = await sb.from('messages').insert({ room: 'team', author: ME.name || ME.email, author_kind: 'staff', user_id: ME.user_id, text: t }); send.disabled = false;
-      if (error) return fail(error); ta.value = ''; toast('Sent to the team'); rerender(); });
-    page.replaceChildren(h('div', { class: 'sech' }, h('h1', {}, '💬 Team chat'), h('small', {}, 'Tag anyone with @name. The team reads and replies at every huddle (every 4 hours).')),
-      (m.data || []).length ? list : h('p', { class: 'mut' }, 'No messages yet. Say hi to the team 👋'), f);
-    list.lastElementChild && list.lastElementChild.scrollIntoView({ block: 'nearest' });
+    (ag.data || []).forEach((x) => { if (x.avatar) AV[x.id] = x.avatar; });
+    const byName = Object.fromEntries((ag.data || []).map((x) => [x.name, x])), msgs = (m.data || []).slice().reverse();
+    const rx = msgs.length ? (await sb.from('reactions').select('*').in('message_id', msgs.map((x) => x.id))).data || [] : [];
+    const byId = Object.fromEntries(msgs.map((x) => [x.id, x]));
+    const go = (r) => { sessionStorage.setItem('jw_ch', r); replyTo = null; rerender(); };
+    // sidebar
+    const side = h('aside', { class: 'sside' },
+      h('div', { class: 'sgroup' }, 'Channels'), (ch.data || []).map((c) => h('button', { type: 'button', class: 'sitem' + (room === c.id ? ' on' : ''), onclick: () => go(c.id) }, h('span', { class: 'hash' }, '#'), c.name)),
+      h('div', { class: 'sgroup' }, 'Direct messages'), (ag.data || []).filter((x) => x.id !== 'dog').map((x) => h('button', { type: 'button', class: 'sitem dm' + (room === 'dm-' + x.id ? ' on' : ''), onclick: () => go('dm-' + x.id) },
+        h('span', { class: 'pres ' + (x.status === 'planned' ? 'off' : x.status === 'working' ? 'on' : 'away') }), avatar(x.id, 22), x.name)));
+    const chan = (ch.data || []).find((c) => c.id === room), dm = room.startsWith('dm-') ? (ag.data || []).find((x) => 'dm-' + x.id === room) : null;
+    const head = h('header', { class: 'shead' }, h('b', {}, dm ? dm.name : '# ' + (chan ? chan.name : room)), h('small', { class: 'mut' }, dm ? dm.role + ' · AI teammate, replies at the next huddle' : (chan && chan.topic) || ''));
+    // messages, grouped by day and by author
+    const list = h('div', { class: 'sfeed', role: 'log', 'aria-live': 'polite' });
+    let lastDay = '', prev = null;
+    for (const x of msgs) {
+      const day = new Date(x.at).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata' });
+      if (day !== lastDay) { list.append(h('div', { class: 'sday' }, h('span', {}, day))); lastDay = day; prev = null; }
+      const compact = prev && prev.author === x.author && new Date(x.at) - new Date(prev.at) < 5 * 60000 && !x.reply_to;
+      const who = byName[x.author], isStaff = x.author_kind === 'staff';
+      const av = compact ? h('span', { class: 'stime' }, new Date(x.at).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' }))
+        : isStaff ? h('div', { class: 'ava me2' }, (x.author || '?').slice(0, 1).toUpperCase()) : avatar(who ? who.id : '', 36);
+      const mine = rx.filter((r) => r.message_id === x.id), groups = {};
+      mine.forEach((r) => { (groups[r.emoji] = groups[r.emoji] || []).push(r.who); });
+      const parent = x.reply_to ? byId[x.reply_to] : null;
+      const actions = h('div', { class: 'sacts' }, QUICK.map((e) => h('button', { type: 'button', title: 'React ' + e, onclick: () => react(x.id, e) }, e)), h('button', { type: 'button', title: 'Reply', onclick: () => { replyTo = x; showReply(); ta.focus(); } }, '↩️'));
+      list.append(h('div', { class: 'smsg' + (compact ? ' compact' : '') }, av, h('div', { class: 'sbody' },
+        compact ? null : h('div', { class: 'smeta' }, h('b', {}, x.author), isStaff ? h('span', { class: 'aitag founder' }, ME && x.user_id === ME.user_id ? 'you' : 'team') : h('span', { class: 'aitag' }, x.author === 'Bruno' ? '🐾 Dog' : '✦ AI'), h('small', {}, ago(x.at))),
+        parent ? h('div', { class: 'squote' }, h('b', {}, parent.author + ': '), String(parent.text).slice(0, 120)) : null,
+        h('div', { class: 'stext' }, richText(x.text)),
+        Object.keys(groups).length ? h('div', { class: 'srx' }, Object.entries(groups).map(([e, w]) => h('button', { type: 'button', class: 'rx', title: w.join(', '), onclick: () => react(x.id, e) }, e + ' ' + w.length))) : null), actions));
+      prev = x;
+    }
+    if (!msgs.length) list.append(h('p', { class: 'mut', style: 'padding:16px' }, dm ? `Say hi to ${dm.name} 👋` : 'No messages yet.'));
+    // composer
+    const ta = h('textarea', { id: 'chat-in', maxlength: 2000, rows: 1, placeholder: dm ? `Message ${dm.name}` : `Message #${chan ? chan.name : room} — tag with @name` });
+    const rbar = h('div', { class: 'sreply', hidden: true });
+    function showReply() { rbar.replaceChildren(); if (!replyTo) { rbar.hidden = true; return; } rbar.hidden = false;
+      rbar.append(h('span', {}, '↩️ Replying to ', h('b', {}, replyTo.author), ': ' + String(replyTo.text).slice(0, 80)), h('button', { type: 'button', class: 'lnk', onclick: () => { replyTo = null; showReply(); } }, 'Cancel')); }
+    const send = async () => { const t = ta.value.trim(); if (!t) return;
+      const { error } = await sb.from('messages').insert({ room, author: ME.name || ME.email, author_kind: 'staff', user_id: ME.user_id, text: t, reply_to: replyTo ? replyTo.id : null });
+      if (error) return fail(error); ta.value = ''; replyTo = null; rerender(); };
+    ta.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
+    const f = h('form', { class: 'scompose' }, rbar, h('div', { class: 'srow' }, ta, h('button', { class: 'btn', type: 'submit' }, 'Send')));
+    f.addEventListener('submit', (e) => { e.preventDefault(); send(); });
+    async function react(id, emoji) {
+      const who = ME.name || ME.email; const ex = rx.find((r) => r.message_id === id && r.emoji === emoji && r.user_id === ME.user_id);
+      const { error } = ex ? await sb.from('reactions').delete().eq('id', ex.id) : await sb.from('reactions').insert({ message_id: id, emoji, who, user_id: ME.user_id });
+      if (error) return fail(error); rerender();
+    }
+    page.replaceChildren(h('div', { class: 'slack' }, side, h('section', { class: 'smain' }, head, list, f)));
+    showReply(); list.scrollTop = list.scrollHeight;
+    // live: new messages or reactions appear without refresh
+    stopLive();
+    try {
+      let t = 0; const bump = () => { clearTimeout(t); t = setTimeout(() => { if (location.hash.slice(1) === 'chat' || !location.hash) rerender(); }, 400); };
+      liveSub = sb.channel('office-chat').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: 'room=eq.' + room }, bump)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, bump).subscribe();
+    } catch (e) { console.warn('live chat off', e); }
+  }
+
+  // ---------------------------------------------------------------- Live studio cam (a virtual view built from live data; not real CCTV)
+  const SPOTS = [[12, 63, 'desk'], [24, 55, 'desk'], [33, 50, 'desk'], [40, 46, 'desk'], [28, 42, 'window'], [47, 57, 'beanbag'], [55, 49, 'sofa'], [62, 49, 'sofa'],
+    [53, 62, 'beanbag'], [74, 56, 'dj'], [81, 53, 'dj'], [86, 72, 'pantry'], [93, 66, 'pantry'], [58, 76, 'rug'], [67, 66, 'lounge'], [44, 70, 'rug']];
+  const CAMS = [['CAM 01 · STUDIO FLOOR', 1, '50% 50%'], ['CAM 02 · SEA LOUNGE', 1.9, '56% 52%'], ['CAM 03 · DJ CORNER', 2.1, '80% 56%'], ['CAM 04 · PANTRY', 2.2, '88% 68%']];
+  let liveTimers = [], soundOn = false, helloAudio = null;
+  async function pageLive(page) {
+    liveTimers.forEach(clearInterval); liveTimers = [];
+    const [ag, msgs] = await Promise.all([sb.from('agents').select('*').order('sort'), sb.from('messages').select('author,text,at,room').like('room', '%').order('at', { ascending: false }).limit(30)]);
+    (ag.data || []).forEach((x) => { if (x.avatar) AV[x.id] = x.avatar; });
+    const on = (ag.data || []).filter((x) => x.status !== 'planned' || x.id === 'dog');
+    let cam = Number(sessionStorage.getItem('jw_cam') || 0);
+    const stage = h('div', { class: 'camstage' }), world = h('div', { class: 'camworld' }, h('img', { class: 'camimg', src: 'media/studio.jpg', alt: 'Virtual JHOOMWAVE studio' }));
+    const pins = {};
+    on.slice(0, SPOTS.length).forEach((x, i) => {
+      const [l, t] = SPOTS[i];
+      const pin = h('div', { class: 'pin ' + x.status, style: `left:${l}%;top:${t}%`, tabindex: '0', role: 'button', 'aria-label': 'Say hi to ' + x.name }, h('div', { class: 'bub' }), avatar(x.id, 40), h('span', { class: 'pn' }, x.name));
+      pin.querySelector('.bub').textContent = x.now_doing || '';
+      const hello = () => {
+        Object.values(pins).forEach((q) => q.classList.remove('talk'));
+        const first = (ME.name || '').split(' ')[0] || 'boss';
+        pin.querySelector('.bub').textContent = x.id === 'dog' ? 'Woof woof! 🐾 *wags tail*' : `Hey ${first}! 👋 ${x.now_doing ? 'Abhi: ' + x.now_doing : 'Sab badhiya!'}`;
+        pin.classList.add('talk', 'wave');
+        setTimeout(() => pin.classList.remove('wave'), 1200);
+        if (soundOn && x.voice && x.voice !== 'dog') { try { if (helloAudio) helloAudio.pause(); helloAudio = new Audio('media/hello_' + x.voice + '.mp3'); helloAudio.volume = 0.8; helloAudio.play().catch(() => {}); } catch (e) {} }
+      };
+      pin.addEventListener('mouseenter', hello); pin.addEventListener('click', hello); pin.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hello(); } });
+      pins[x.name] = pin; world.append(pin);
+    });
+    const setCam = () => { const [, z, o] = CAMS[cam]; world.style.transformOrigin = o; world.style.setProperty('--z', z); world.style.transform = `scale(${z})`; label.textContent = CAMS[cam][0]; sessionStorage.setItem('jw_cam', cam); };
+    const label = h('span', {}), clock = h('span', { class: 'camclock' });
+    const tick = () => { clock.textContent = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }) + ' IST'; };
+    const ticker = h('div', { class: 'camticker' });
+    const feed = (msgs.data || []).slice(0, 12);
+    const camBtns = h('div', { class: 'cambtns' }, CAMS.map((c, i) => h('button', { type: 'button', onclick: () => { cam = i; setCam(); } }, 'CAM ' + (i + 1))),
+      h('button', { type: 'button', onclick: () => { (stage.requestFullscreen ? stage.requestFullscreen() : Promise.reject()).catch(() => toast('Full screen is not available here')); } }, '⛶ Full screen'),
+      h('button', { type: 'button', 'aria-pressed': String(soundOn), onclick: (e) => { soundOn = !soundOn; e.currentTarget.textContent = soundOn ? '🔊 Sound on' : '🔈 Sound off'; e.currentTarget.setAttribute('aria-pressed', String(soundOn)); } }, soundOn ? '🔊 Sound on' : '🔈 Sound off'));
+    stage.append(world, h('div', { class: 'scan', 'aria-hidden': 'true' }), h('div', { class: 'vig', 'aria-hidden': 'true' }),
+      h('div', { class: 'hud tl' }, h('span', { class: 'rec' }, '● REC'), label), h('div', { class: 'hud tr' }, clock), h('div', { class: 'hud bl' }, camBtns),
+      h('div', { class: 'hud br' }, h('span', { class: 'mut small' }, 'Virtual studio cam · built live from the team’s real status and chat')), ticker);
+    page.replaceChildren(h('div', { class: 'sech' }, h('h1', {}, '📹 Live studio cam'), h('small', {}, `${on.length} at their spots · hover or tap anyone to say hi`)), stage);
+    setCam(); tick();
+    // speech bubbles cycle between "now doing" and the latest chat lines
+    let k = 0;
+    liveTimers.push(setInterval(tick, 1000));
+    liveTimers.push(setInterval(() => {
+      const names = Object.keys(pins); if (!names.length) return;
+      const m = feed[k % Math.max(1, feed.length)]; k++;
+      Object.values(pins).forEach((p) => p.classList.remove('talk'));
+      const pin = m && pins[m.author] ? pins[m.author] : pins[names[k % names.length]];
+      if (m && pins[m.author]) { pin.querySelector('.bub').textContent = (m.room !== 'team' && !m.room.startsWith('dm-') ? '#' + m.room + ' · ' : '') + m.text.slice(0, 90); }
+      pin.classList.add('talk');
+      if (m) { ticker.textContent = `💬 ${m.author}: ${m.text.slice(0, 110)}`; }
+    }, 3500));
+    if (matchMedia('(prefers-reduced-motion: no-preference)').matches) world.classList.add('pan');
+    stopLive();
+    try { liveSub = sb.channel('office-live').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (pl) => { const m = pl.new; if (m && m.text) { feed.unshift(m); k = 0; } }).subscribe(); } catch (e) {}
   }
 
   // ---------------------------------------------------------------- Meetings + goals
