@@ -7,7 +7,7 @@
 <meta name="description" content="Pradeep ji aur Vandana ji ko shaadi ki saalgirah ki dher saari badhaai. Unke naam ka gaana suniye 🎶">
 <meta property="og:title" content="Happy Anniversary Pradeep & Vandana 💐">
 <meta property="og:description" content="Unke naam ka gaana, poore parivaar ki taraf se 🎶 Tap to listen.">
-<meta property="og:image" content="https://jhoomwave.com/img/og-weddings.jpg">
+<meta property="og:image" content="https://jhoomwave.com/img/wish/pradeep_vandana_og.jpg">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0E0518">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -26,13 +26,17 @@ h1{font:900 clamp(34px,10vw,54px)/1.02 Poppins,sans-serif;margin:16px 0 8px;lett
 h1 .g{background:linear-gradient(100deg,#F2C46D,#FF4F9A 60%,#FF9A5A);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hi{font-family:"Tiro Devanagari Hindi",serif;font-size:22px;color:var(--gold);margin:0}
 .sub{color:var(--mute);margin:6px 0 0}
-.ring{margin:26px auto 8px;width:200px;height:200px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#3A0F33 55%,transparent 56%),conic-gradient(from 0deg,#F2C46D,#FF4F9A,#F2C46D,#FF9A5A,#F2C46D);box-shadow:0 0 60px rgb(255 79 154/.35)}
+.photo{margin:24px auto 0;max-width:340px;position:relative}
+.photo img{display:block;width:100%;height:auto;border-radius:26px;border:3px solid transparent;background:linear-gradient(var(--n),var(--n)) padding-box,linear-gradient(135deg,#F2C46D,#FF4F9A,#F2C46D) border-box;box-shadow:0 20px 60px rgb(255 79 154/.3),0 0 0 8px rgb(242 196 109/.08);animation:glow 3s ease-in-out infinite alternate}
+@keyframes glow{to{box-shadow:0 20px 70px rgb(242 196 109/.45),0 0 0 12px rgb(255 79 154/.1)}}
+.photo figcaption{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);white-space:nowrap;padding:8px 16px;border-radius:999px;background:linear-gradient(100deg,#F2C46D,#FF4F9A);color:#2A0A2E;font:800 15px Poppins,sans-serif;box-shadow:0 8px 20px rgb(0 0 0/.35)}
+.ring{margin:40px auto 8px;width:200px;height:200px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#3A0F33 55%,transparent 56%),conic-gradient(from 0deg,#F2C46D,#FF4F9A,#F2C46D,#FF9A5A,#F2C46D);box-shadow:0 0 60px rgb(255 79 154/.35)}
 .ring.on{animation:spin 6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 .ring.on .play{animation:spinb 6s linear infinite}@keyframes spinb{to{transform:rotate(-360deg)}}
 .play{width:112px;height:112px;border-radius:50%;border:0;cursor:pointer;background:linear-gradient(135deg,#F2C46D,#FF4F9A);color:#2A0A2E;font:800 15px Poppins,sans-serif;box-shadow:0 10px 30px rgb(0 0 0/.4)}
 .play b{display:block;font-size:34px;line-height:1}
 .bar{height:6px;border-radius:6px;background:rgb(255 255 255/.12);overflow:hidden;margin:14px auto 0;max-width:280px}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#F2C46D,#FF4F9A)}
-.lyr{margin:26px 0;padding:20px;border-radius:22px;background:rgb(255 255 255/.05);border:1px solid var(--line);text-align:center;font-size:17px}
+.lyr{font-family:'Tiro Devanagari Hindi',Inter,serif;margin:26px 0;padding:20px;border-radius:22px;background:rgb(255 255 255/.05);border:1px solid var(--line);text-align:center;font-size:17px}
 .lyr p{margin:0 0 12px}.lyr .ch{color:var(--gold);font-weight:600}
 h2{font:800 22px Poppins,sans-serif;text-align:center;margin:30px 0 14px}
 .fam{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -56,14 +60,16 @@ h2{font:800 22px Poppins,sans-serif;text-align:center;margin:30px 0 14px}
     <p class="sub">Poore parivaar ki taraf se, aapke naam ka gaana 🎶<br><small>Gaana apne aap shuru na ho to ▶ dabaiye</small></p>
   </header>
 
+  <figure class="photo"><img src="/img/wish/pradeep_vandana.jpg" alt="Pradeep ji aur Vandana ji" width="900" height="1200"><figcaption>💐 Pradeep &amp; Vandana 💐</figcaption></figure>
   <div class="ring" id="ring"><button class="play" id="play" type="button" aria-label="Play the anniversary song"><b>▶</b>Suniye</button></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
 
-  <section class="lyr" aria-label="Lyrics">
-    <p>Pachchees November, Indore ki woh shaam,<br>Pradeep ne thaama, Vandana ka haath.</p>
-    <p>Saat pheron se shuru hua jo safar,<br>Aaj bhi utna hi pyaara, utna hi saath.</p>
-    <p class="ch">Pradeep aur Vandana, Vandana aur Pradeep,<br>Jodi tumhari rahe, hamesha dil ke kareeb 💕</p>
-    <p>Amit ki duaayein, Swati ka pyaar,<br>Nanhi Ira ki hansi se mehka parivaar.</p>
+  <section class="lyr" aria-label="Lyrics" lang="hi">
+    <p>पच्चीस नवंबर, इंदौर की वो शाम,<br>प्रदीप ने थामा, वंदना का हाथ।</p>
+    <p>सात फेरों से, शुरू हुआ जो सफ़र,<br>आज भी उतना ही प्यारा, उतना ही साथ।</p>
+    <p>हर मुश्किल में, तुमने हाथ ना छोड़ा,<br>हर ख़ुशी को, मिलके तुमने जोड़ा।</p>
+    <p class="ch">प्रदीप और वंदना, वंदना और प्रदीप,<br>जोड़ी तुम्हारी रहे, सदा दिल के क़रीब 💕</p>
+    <p>अमित की दुआएँ, स्वाति का प्यार,<br>नन्ही इरा की हँसी से, महका परिवार।</p>
   </section>
 
   <h2>Ashirwaad aur pyaar 🙏</h2>
@@ -86,7 +92,7 @@ h2{font:800 22px Poppins,sans-serif;text-align:center;margin:30px 0 14px}
   </div>
   <p class="foot">Made with love by <a href="/">JHOOMWAVE</a> · Song made with AI voices on lyrics written for this family.</p>
 </div>
-<audio id="song" src="/audio/wish/pradeep_vandana_anniversary.mp3" preload="metadata"></audio>
+<audio id="song" src="/audio/wish/pradeep_vandana_anniversary_v2.mp3" preload="metadata"></audio>
 <script>
 (function(){
   const a=document.getElementById('song'),b=document.getElementById('play'),r=document.getElementById('ring'),pr=document.getElementById('prog');
