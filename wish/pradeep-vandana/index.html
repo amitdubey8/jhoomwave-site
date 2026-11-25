@@ -102,6 +102,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .bl-item{padding:12px 14px;border-radius:14px;background:rgb(255 255 255/.06);border-left:3px solid var(--gold);animation:pop .4s ease}
 .bl-item p{margin:0;font:400 17px/1.6 'Tiro Devanagari Hindi',Poppins,serif;white-space:pre-wrap;word-break:break-word}
 .bl-item b{display:block;margin-top:4px;color:var(--gold);font-size:14px}.bl-item b small{color:var(--mute);font-weight:400}
+.bl-item .pend{display:block;margin-top:4px;font-size:12px;color:var(--mute)}
 .bl-empty{text-align:center;color:var(--mute);font-size:14px;margin:8px 0 0}
 @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.fly{display:none}.bl-item{animation:none}}
@@ -178,7 +179,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 
   <section class="card bw" id="bless" aria-label="आशीर्वाद">
     <h2>🙏 आशीर्वाद की किताब</h2>
-    <p class="hint2">मम्मी-पापा के लिए अपनी दुआ लिखिए, वे यहाँ सबके आशीर्वाद पढ़ेंगे।</p>
+    <p class="hint2">मम्मी-पापा के लिए अपनी दुआ लिखिए, मंज़ूरी के बाद वे यहाँ सबके आशीर्वाद पढ़ेंगे।</p>
     <form id="bf" autocomplete="on">
       <input id="bn" name="name" maxlength="40" placeholder="आपका नाम (जैसे: बुआ, मामा जी, स्वाति)" required>
       <div class="qk" id="qk"><button type="button">सदा सुहागन रहो 🙏</button><button type="button">जोड़ी सलामत रहे ❤️</button><button type="button">बहुत सुंदर गाना! 🎶</button><button type="button">सालगिरह मुबारक 💐</button><button type="button">भगवान सदा साथ रहें 🪔</button></div>
@@ -242,7 +243,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   var hb=document.getElementById('hb'),hc=document.getElementById('hc'),vw=document.getElementById('vw'),bll=document.getElementById('bll'),top=document.getElementById('heart'),liked=false,hearts=0;
   function heartUI(){hb.classList.toggle('on',liked);hb.setAttribute('aria-pressed',liked);hb.querySelector('.h').textContent=liked?'❤️':'🤍';hc.textContent=hearts?(hearts+' प्यार'):'प्यार भेजें';if(top){top.classList.toggle('on',liked);top.textContent=liked?'♥':'♡'}}
   function ago(iso){var m=Math.round((Date.now()-new Date(iso))/60000);if(m<1)return 'अभी';if(m<60)return m+' मिनट पहले';var h=Math.round(m/60);if(h<24)return h+' घंटे पहले';return Math.round(h/24)+' दिन पहले'}
-  function item(b,first){var d=document.createElement('div');d.className='bl-item';var p=document.createElement('p');p.textContent=b.msg;var n=document.createElement('b');n.textContent='– '+b.name+' ';var sm=document.createElement('small');sm.textContent='· '+ago(b.at);n.appendChild(sm);d.append(p,n);if(first)bll.prepend(d);else bll.append(d)}
+  function item(b,first){var d=document.createElement('div');d.className='bl-item';var p=document.createElement('p');p.textContent=b.msg;var n=document.createElement('b');n.textContent='– '+b.name+' ';var sm=document.createElement('small');sm.textContent='· '+ago(b.at);n.appendChild(sm);d.append(p,n);if(b.pending){var w=document.createElement('small');w.className='pend';w.textContent='⏳ मंज़ूरी के बाद सबको दिखेगा';d.append(w);d.style.opacity='.85'}if(first)bll.prepend(d);else bll.append(d)}
   function empty(){if(!bll.children.length){var e=document.createElement('p');e.className='bl-empty';e.id='ble';e.textContent='सबसे पहला आशीर्वाद आप दीजिए 🙏';bll.append(e)}}
   rpc('wish_stats',{p_slug:SLUG,p_anon:anon}).then(function(d){if(!d){empty();return}hearts=d.hearts;liked=d.liked;heartUI();if(d.views>1)vw.textContent='👀 '+d.views+' बार देखा गया';(d.blessings||[]).forEach(function(b){item(b)});empty()});
   function burst(x,y){for(var i=0;i<9;i++){var s=document.createElement('span');s.className='fly';s.textContent=['❤️','💖','💕','🌸','✨'][i%5];s.style.left=(x-13)+'px';s.style.top=(y-13)+'px';s.style.setProperty('--dx',(Math.random()*160-80)+'px');s.style.setProperty('--r',(Math.random()*90-45)+'deg');s.style.animationDelay=(i*60)+'ms';document.body.append(s);setTimeout(function(n){n.remove()}.bind(null,s),2000)}}
@@ -260,7 +261,7 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
       if(!r){bmsg.textContent='नेटवर्क की दिक्कत, दोबारा भेजें';return}
       if(r.error){bmsg.textContent=ERR[r.error]||'दोबारा कोशिश करें';return}
       try{localStorage.setItem('jw_wish_name',n)}catch(e){}
-      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='आपका आशीर्वाद पहुँच गया! 🙏❤️';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
+      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='आपका आशीर्वाद पहुँच गया! 🙏 मंज़ूरी के बाद सबको दिखेगा ❤️';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
   })();
 
   if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/mummy_papa.jpg',sizes:'1040x1300',type:'image/jpeg'}]});
