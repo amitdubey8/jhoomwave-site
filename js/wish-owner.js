@@ -56,11 +56,11 @@
     if (!list.length) box.append(el('p', { class: 's', text: 'अभी कोई शुभकामना नहीं आई। लिंक ग्रुप में शेयर कीजिए।' }));
     list.forEach(function (b) {
       var st = el('p', { class: 'ok', role: 'status' });
-      var inp = el('input', { maxlength: '200', placeholder: 'जवाब लिखें, जैसे: धन्यवाद बुआ जी' }); inp.value = b.reply || '';
+      var inp = el('input', { maxlength: '200', placeholder: 'अपना जवाब लिखें' }); inp.value = b.reply || '';
       var tag = b.hidden ? el('span', { class: 'tag', text: 'Hidden' }) : (b.approved ? el('span', { class: 'tag ok2', text: 'Live' }) : el('span', { class: 'tag wait', text: 'Needs approval' }));
       var act = function (a, txt) { st.textContent = '…'; return rpc('wish_owner_act', { p_slug: SLUG, p_key: key, p_id: b.id, p_action: a, p_text: txt || null }).then(function (r) { if (r && r.ok) { if (a === 'approve') { b.approved = true; b.hidden = false; } if (a === 'hide') b.hidden = true; if (a === 'reply') { b.reply = txt; b.approved = true; b.hidden = false; } render(); } else st.textContent = 'नहीं हो पाया'; }); };
       box.append(el('div', { class: 'w' }, [
-        el('p', { text: b.msg }), el('div', { class: 'who' }, [document.createTextNode('— ' + b.name), tag]),
+        el('p', { text: b.msg }), el('div', { class: 'who' }, [el('span', { translate: 'no', class: 'notranslate', text: '— ' + b.name }), tag]),
         el('div', { class: 'chips', style: 'margin-top:8px' }, REPLIES.map(function (r) { return el('button', { type: 'button', text: r, on: function () { inp.value = r; } }); })),
         inp,
         el('div', { class: 'row' }, [
@@ -71,7 +71,7 @@
 
     // 3) thank-you card with all names
     var auto = []; list.forEach(function (b) { if (!b.hidden && auto.indexOf(b.name) < 0) auto.push(b.name); });
-    var extra = el('textarea', { placeholder: 'ग्रुप में विश करने वालों के नाम जोड़ें, कॉमा से (जैसे: नीता चाची, हेमंत जी, इरा)' });
+    var extra = el('textarea', { placeholder: 'ग्रुप में विश करने वालों के नाम जोड़ें, कॉमा लगाकर' });
     var cv = el('canvas', { width: '1080', height: '1350' });
     var dl = el('a', { class: 'go ghost', style: 'display:none', download: 'Thank_You_' + SLUG + '.jpg', text: 'कार्ड डाउनलोड करें' });
     var wa = el('a', { class: 'go alt', style: 'display:none', target: '_blank', rel: 'noopener', text: 'WhatsApp पर भेजें' });
