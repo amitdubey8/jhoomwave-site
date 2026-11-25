@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0E0518"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="/css/site.css"><link rel="stylesheet" href="/css/nav.css"><link rel="stylesheet" href="/css/app.css">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="JHOOMWAVE">
+<title>My JHOOMWAVE · Sign in</title>
+<meta name="description" content="Your JHOOMWAVE account: ask for a song in seconds, track your songs, save your people's names and dates.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://jhoomwave.com/account/">
+<style>
+.acc{max-width:560px;margin:0 auto;padding:36px 0 120px}
+.acc h1{font-size:clamp(28px,6vw,40px);font-weight:900;line-height:1.05}
+.acc .lead{color:var(--mute);margin:8px 0 22px}
+.card{background:var(--night-2);border:1px solid var(--line);border-radius:22px;padding:20px}
+.card+.card{margin-top:14px}
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.f label,.f>span{font-size:13px;font-weight:600;color:var(--mute)}
+.f input,.f select,.f textarea{width:100%;min-width:0;height:48px;border-radius:12px;border:1px solid rgb(255 255 255/.14);background:var(--night);color:var(--ink);padding:0 14px;font:500 16px var(--body)}
+.f textarea{height:auto;padding:12px 14px;resize:vertical}
+.btnw{width:100%}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:50px;border-radius:12px;border:1px solid rgb(255 255 255/.2);background:#fff;color:#1f1f1f;font:600 16px var(--body);cursor:pointer}
+.or{display:flex;align-items:center;gap:10px;color:var(--soft);font-size:12px;margin:16px 0}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.msg{min-height:20px;font-size:14px;color:#FFB0B0;margin:8px 0 0}.msg.ok{color:var(--ok)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{min-height:42px;padding:0 14px;border-radius:999px;border:1px solid rgb(255 255 255/.16);background:none;color:var(--ink);font:600 14px var(--body);cursor:pointer}
+.chips button[aria-pressed="true"]{background:linear-gradient(100deg,#7B2FF7,#FF2E88);border-color:transparent}
+.tick{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--mute)}.tick input{width:20px;height:20px;margin-top:2px;accent-color:#FF2E88;flex:none}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:0 -4px 16px;padding:0 4px 4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--night-2);color:var(--mute);font:600 14px var(--body);cursor:pointer}
+.tabs button[aria-selected="true"]{color:#fff;border-color:#FF2E88;box-shadow:0 0 0 3px rgb(255 46 136/.18)}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.row:first-child{border-top:0}
+.row .t{flex:1;min-width:0}.row b{display:block}.row small{color:var(--mute)}
+.st{font:600 12px var(--body);padding:4px 10px;border-radius:999px;background:#24123E;color:#D9CCF0;white-space:nowrap}
+.st.delivered{background:rgb(61 255 162/.15);color:var(--ok)}
+.empty{color:var(--mute);font-size:14.5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media (max-width:420px){.two{grid-template-columns:1fr}}
+.x{background:none;border:0;color:var(--soft);font-size:20px;cursor:pointer;min-width:44px;min-height:44px}
+.soon{display:inline-block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:#24123E;color:var(--gold)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<nav class="jn" aria-label="Main">
+  <div class="jn-in">
+    <a class="jn-brand" href="/" aria-label="JHOOMWAVE home"><svg viewBox="0 0 260 240" aria-hidden="true"><defs><linearGradient id="jng" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B2FF7"/><stop offset=".55" stop-color="#FF2E88"/><stop offset="1" stop-color="#FF8A00"/></linearGradient></defs><path d="M68 52 V150 a27 27 0 0 1 -54 0" fill="none" stroke="url(#jng)" stroke-width="30" stroke-linecap="round"/><rect x="100" y="45" width="22" height="150" rx="11" fill="url(#jng)"/><rect x="132" y="70" width="22" height="100" rx="11" fill="url(#jng)"/><rect x="164" y="52" width="22" height="136" rx="11" fill="url(#jng)"/><rect x="196" y="83" width="22" height="74" rx="11" fill="url(#jng)"/><rect x="228" y="65" width="22" height="110" rx="11" fill="url(#jng)"/></svg><span>JHOOMWAVE</span></a>
+    <div class="jn-links">
+      <div class="jn-dd"><button class="jn-l jn-ddb" type="button" aria-expanded="false" aria-haspopup="true">Products <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+        <div class="jn-menu" role="menu"><a class="jn-di" href="/#shop" role="menuitem"><span class="jn-ic">🎂</span><span><b>Song Shop</b><small>A song for one person, with their name</small></span></a><a class="jn-di" href="/music/" role="menuitem"><span class="jn-ic">🎙</span><span><b>JHOOMWAVE Music</b><small>Our own songs: Chaand Se Zyada, the Anthem</small></span></a><a class="jn-di" href="/anthem/" role="menuitem"><span class="jn-ic">🎶</span><span><b>JHOOMWAVE Anthem</b><small>Watch our official music video</small></span></a><a class="jn-di" href="/studio/" role="menuitem"><span class="jn-ic">🎧</span><span><b>Studio · hear samples</b><small>Songs, characters, anthems, announcements</small></span></a><a class="jn-di" href="/studio/#announce" role="menuitem"><span class="jn-ic">✈️</span><span><b>Fun announcements</b><small>Airline, station, cricket… with your names</small></span></a><a class="jn-di" href="/console/" role="menuitem"><span class="jn-ic">🎛</span><span><b>Booth (for parties)</b><small>The DJ and host that runs your night</small></span></a></div></div>
+      <a class="jn-l" href="/weddings/">Weddings</a><a class="jn-l" href="/kids/">Kids</a><a class="jn-l" href="/business/">For Business</a><a class="jn-l" href="/pricing/">Pricing</a>
+    </div>
+    <div class="jn-cta"><a class="jn-ig" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener" aria-label="JHOOMWAVE on Instagram (@jhoomwave)"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg></a><a class="jn-ghost" href="/business/#demo">Book a demo</a><a class="jn-pri" href="/#make">Make my song</a></div>
+    <button class="jn-burger" type="button" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
+  </div>
+  <div class="jn-sheet" hidden><a href="/#shop"><span>🎂</span>Song Shop</a><a href="/music/"><span>🎙</span>JHOOMWAVE Music</a><a href="/anthem/"><span>🎶</span>JHOOMWAVE Anthem</a><a href="/studio/"><span>🎧</span>Studio · hear samples</a><a href="/studio/#announce"><span>✈️</span>Fun announcements</a><a href="/console/"><span>🎛</span>Booth (for parties)</a><a href="/weddings/"><span>💍</span>Weddings</a><a href="/kids/"><span>🧸</span>Kids</a><a href="/business/"><span>💼</span>For Business</a><a href="/pricing/"><span>🏷</span>Pricing</a><a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener"><span>📸</span>Follow @jhoomwave on Instagram</a><div class="jn-sc"><a class="jn-ghost" href="/business/#demo">Book a demo</a><a class="jn-pri" href="/#make">Make my song</a></div></div>
+</nav>
+<main class="wrap">
+<div class="acc">
+
+  <!-- signed out -->
+  <section id="v-in" hidden>
+    <span class="eb">My JHOOMWAVE</span>
+    <h1>Sign in or <span class="g">create your account</span></h1>
+    <p class="lead">One account for your songs, your people's names and dates, and quick re-orders. No password needed.</p>
+    <div class="card">
+      <button class="gbtn" id="b-google" type="button" hidden><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Continue with Google</button>
+      <div class="or" id="or" hidden>or with email</div>
+      <form id="f-email" novalidate>
+        <div class="f"><label for="in-email">Your email</label><input id="in-email" type="email" inputmode="email" autocomplete="email" required placeholder="you@example.com"></div>
+        <button class="btn pri btnw" type="submit" id="b-send">Email me a sign-in link</button>
+      </form>
+      <form id="f-code" hidden novalidate>
+        <p class="lead" style="margin:0 0 12px">📩 Check your inbox (and spam). <b>Tap the link</b> in the email and you are in. Got a 6-digit code instead? Type it here.</p>
+        <div class="f"><label for="in-code">Code from the email</label><input id="in-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+        <button class="btn pri btnw" type="submit">Sign in</button>
+        <p style="margin:10px 0 0"><button class="x" style="font-size:14px;text-decoration:underline" type="button" id="b-back">Use another email</button></p>
+      </form>
+      <p class="msg" id="m-in" role="status"></p>
+    </div>
+    <p class="lead" style="font-size:13px;margin-top:14px">By continuing you agree to our <a href="/terms/">Terms</a> and <a href="/privacy/">Privacy policy</a>. Your Office/staff login is separate.</p>
+  </section>
+
+  <!-- first time: 20-second setup -->
+  <section id="v-setup" hidden>
+    <span class="eb">Welcome 👋</span>
+    <h1>Quick setup, <span class="g">20 seconds</span></h1>
+    <p class="lead">So we know what to call you and how to send your free previews.</p>
+    <form class="card" id="f-setup" novalidate>
+      <div class="f"><label for="s-name">Your name</label><input id="s-name" autocomplete="name" maxlength="80" required></div>
+      <div class="f"><label for="s-phone">WhatsApp number (for your previews)</label><input id="s-phone" type="tel" autocomplete="tel" maxlength="30" placeholder="+91 98xxxxxx10"></div>
+      <div class="f"><span>Songs mostly in</span><div class="chips" id="s-lang" role="group" aria-label="Language"></div></div>
+      <label class="tick"><input type="checkbox" id="s-offers"> Send me festival offers and new songs (you can stop any time)</label>
+      <button class="btn pri btnw" type="submit" style="margin-top:16px">Save and continue</button>
+      <p class="msg" id="m-setup" role="status"></p>
+    </form>
+  </section>
+
+  <!-- account -->
+  <section id="v-app" hidden>
+    <span class="eb">My JHOOMWAVE</span>
+    <h1 id="hello">Namaste</h1>
+    <p class="lead">Ask for a song in seconds. We send a free preview on WhatsApp, you pay only if you love it.</p>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-t="make" aria-selected="true">🎵 Make a song</button>
+      <button role="tab" data-t="songs">📜 My songs</button>
+      <button role="tab" data-t="people">👨‍👩‍👧 My people</button>
+      <button role="tab" data-t="voice">🎙️ My voice</button>
+      <button role="tab" data-t="me">⚙️ Profile</button>
+    </div>
+
+    <form class="card" id="t-make" novalidate>
+      <div class="f"><label for="mk-for">Who is it for? (name, the way you say it)</label><input id="mk-for" maxlength="120" list="dl-people" placeholder="e.g. Riya (REE-yaa)"><datalist id="dl-people"></datalist></div>
+      <div class="f"><span>Occasion</span><div class="chips" id="mk-occ" role="group" aria-label="Occasion"></div></div>
+      <div class="two">
+        <div class="f"><label for="mk-lang">Language</label><select id="mk-lang"><option value="Hinglish">Hinglish</option><option>Hindi</option><option>Punjabi</option><option>English</option></select></div>
+        <div class="f"><label for="mk-style">Style</label><select id="mk-style"><option>Bollywood</option><option>Romantic</option><option>Punjabi dhol</option><option>Sufi</option><option>Party / EDM</option><option>Devotional</option><option>Kids</option></select></div>
+      </div>
+      <div class="f"><label for="mk-story">A few words about them (optional)</label><textarea id="mk-story" rows="3" maxlength="1200" placeholder="Funny habits, how you met, a nickname…"></textarea></div>
+      <button class="btn pri btnw" type="submit" id="mk-go">Get my free preview</button>
+      <p class="msg" id="m-make" role="status"></p>
+    </form>
+
+    <div class="card" id="t-songs" hidden><div id="songs"></div></div>
+
+    <div class="card" id="t-people" hidden>
+      <p class="empty" style="margin-top:0">Save names once: pick them in one tap next time. Add birthdays and anniversaries and we can remind you a week before (only if you want).</p>
+      <div id="people"></div>
+      <form id="f-person" novalidate style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
+        <div class="two">
+          <div class="f"><label for="p-name">Name</label><input id="p-name" maxlength="60" required></div>
+          <div class="f"><label for="p-rel">Relation</label><input id="p-rel" maxlength="40" placeholder="Wife, Dadi, Best friend…"></div>
+        </div>
+        <div class="f"><label for="p-say">How to say it (optional)</label><input id="p-say" maxlength="80" placeholder="e.g. MEE-raa"></div>
+        <div class="two">
+          <div class="f"><label for="p-bday">Birthday</label><input id="p-bday" type="date"></div>
+          <div class="f"><label for="p-anniv">Anniversary</label><input id="p-anniv" type="date"></div>
+        </div>
+        <button class="btn btnw" type="submit">➕ Add person</button>
+        <p class="msg" id="m-person" role="status"></p>
+      </form>
+    </div>
+
+    <div class="card" id="t-voice" hidden>
+      <span class="soon">Coming soon</span>
+      <h3 style="margin:10px 0 6px">A song in <span class="g">your own voice</span> 🎙️</h3>
+      <p class="empty">Record 2 minutes of your voice once. Then hear birthday wishes, lullabies and songs in your voice, for your family, in the car or across the world. Only you control it.</p>
+      <ul class="empty" style="padding-left:18px;margin:10px 0">
+        <li>Only your own voice, recorded by you, with your clear consent.</li>
+        <li>Never someone else's voice, never a celebrity's.</li>
+        <li>Delete it any time, and it is gone.</li>
+      </ul>
+      <label class="tick"><input type="checkbox" id="v-interest"> Tell me first when "My voice" opens</label>
+      <p class="msg" id="m-voice" role="status"></p>
+    </div>
+
+    <form class="card" id="t-me" hidden novalidate>
+      <div class="f"><label for="me-name">Name</label><input id="me-name" maxlength="80"></div>
+      <div class="f"><label for="me-phone">WhatsApp number</label><input id="me-phone" type="tel" maxlength="30"></div>
+      <div class="f"><label for="me-lang">Songs mostly in</label><select id="me-lang"><option value="hinglish">Hinglish</option><option value="hindi">Hindi</option><option value="punjabi">Punjabi</option><option value="english">English</option></select></div>
+      <label class="tick"><input type="checkbox" id="me-offers"> Festival offers and new songs</label>
+      <button class="btn pri btnw" type="submit" style="margin-top:16px">Save</button>
+      <p class="msg" id="m-me" role="status"></p>
+      <p style="margin:16px 0 0;display:flex;gap:16px;flex-wrap:wrap"><button class="x" style="font-size:14px;text-decoration:underline" type="button" id="b-out">Sign out</button><a href="#" data-chat style="font-size:14px;color:var(--mute);align-self:center">Delete my account (chat with us)</a></p>
+    </form>
+  </section>
+
+</div>
+</main>
+<footer class="ft"><div class="wrap">
+  <div class="ft-in">
+    <div><span class="brand">JHOOMWAVE</span><p class="muted">Songs, voices and party sound for every celebration. Made in India.</p><a class="ig-btn" href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor"/></svg> Follow @jhoomwave</a></div>
+    <div><b>Products</b><a href="/#shop">Song Shop</a><a href="/weddings/">Weddings &amp; family</a><a href="/kids/">Kids</a><a href="/music/">JHOOMWAVE Music</a><a href="/anthem/">JHOOMWAVE Anthem</a><a href="/studio/">Hear samples</a><a href="/console/">Booth</a></div>
+    <div><b>Company</b><a href="/business/">For Business</a><a href="/pricing/">Pricing</a><a href="https://www.instagram.com/jhoomwave/" target="_blank" rel="noopener">Instagram</a><a href="/#how">How it works</a><a href="/#vision">Vision</a><a href="#" data-chat>Chat with us</a></div>
+    <div><b>Policies</b><a href="/terms/">Terms</a><a href="/refund/">Refunds &amp; cancellations</a><a href="/privacy/">Privacy</a></div>
+  </div>
+  <div class="disc"><span>© 2026 JHOOMWAVE</span><span>Vocals are AI-generated synthetic voices (JHOOMWAVE Voices) made with a licensed AI music provider, on lyrics we write. We label AI content wherever platforms allow.</span></div>
+</div></footer>
+<script src="/js/vendor/supabase-2.45.4.js"></script>
+<script src="/js/account.js"></script>
+<nav class="tb" aria-label="Quick"><a href="/"><span aria-hidden="true">🏠</span>Home</a><a href="/#shop"><span aria-hidden="true">🎵</span>Songs</a><a href="/#make" class="mk"><span aria-hidden="true">＋</span>Make</a><a href="/weddings/"><span aria-hidden="true">💍</span>Weddings</a><a href="/kids/"><span aria-hidden="true">🧸</span>Kids</a></nav>
+<script src="/js/nav.js"></script>
+<script src="/js/jhoomi.js" defer></script>
+<script src="/js/livechat.js" defer></script>
+</body>
+</html>
