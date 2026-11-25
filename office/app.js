@@ -201,9 +201,9 @@
     if (m < 1) return 'just now'; if (m < 60) return m + ' min ago'; const h = Math.round(m / 60); if (h < 24) return h + 'h ago';
     return new Date(s).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
   }
-  function nextHuddle() { // autopilot runs every 4 hours at minute 19 (UTC 00,04,08…)
+  function nextHuddle() { // autopilot runs every hour at minute 19
     const n = new Date(), t = new Date(n); t.setUTCMinutes(19, 0, 0);
-    while (t <= n || t.getUTCHours() % 4) t.setUTCHours(t.getUTCHours() + 1);
+    while (t <= n) t.setUTCHours(t.getUTCHours() + 1);
     const m = Math.round((t - n) / 60000); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + ' min';
   }
   function greet() { const h = Number(new Date().toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: 'Asia/Kolkata' }));
@@ -373,32 +373,34 @@
     kids.push(h('section', { class: 'pantry' }, h('div', { class: 'sech' }, h('h2', {}, '🍽️ Pantry today'), h('small', {}, 'fresh every day at the rooftop café')),
       h('div', { class: 'menu' }, pick.map(([e, n]) => h('span', { class: 'dish' }, h('b', {}, e), n))), h('p', { class: 'small mut' }, '🪴 34 plants · 🎶 lo-fi on the speakers · 🌊 sea view from every desk')));
     const online = agents.filter((x) => x.status !== 'planned').length;
-    kids.push(h('div', { class: 'sech' }, h('h2', {}, '🎛️ On the floor'), h('small', {}, `${online} online · ${agents.length} on the team · green light = in the zone`)));
+    const floorKids = [h('div', { class: 'sech' }, h('h2', {}, '🎛️ On the floor'), h('small', {}, `${online} online · ${agents.length} on the team · tap More on a card for details`))];
     const deskCard = (x) => {
       const av = avatar(x.id); av.append(h('span', { class: 'lt' }));
       return h('article', { class: 'desk2 ' + x.status, id: 'desk-' + x.id },
         h('div', { class: 'who' }, av, h('div', {}, h('div', { class: 'nm' }, x.name, h('span', { class: 'aitag', title: x.id === 'dog' ? 'Studio dog' : (x.id || '').startsWith('creator-') ? 'Virtual creator' : 'AI teammate' }, x.id === 'dog' ? '🐾 Dog' : (x.id || '').startsWith('creator-') ? '✦ Virtual' : '✦ AI')), h('div', { class: 'rl' }, x.role))),
         h('div', { class: 'mood' }, x.status === 'working' ? h('span', { class: 'mini', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i')) : null, MOOD[x.status] || x.status),
         x.now_doing ? h('div', { class: 'bubble' }, x.now_doing) : null,
+        todoOf(x.id).length ? h('div', { class: 'tdmini' }, `📋 ${todoOf(x.id).filter((t) => t.status === 'done').length}/${todoOf(x.id).length} to-dos done today`) : null,
+        h('details', { class: 'more' }, h('summary', {}, 'More'),
         h('div', { class: 'dl' }, x.last_done ? h('div', {}, h('span', {}, '✅ Just finished: '), x.last_done) : null, x.next_up ? h('div', {}, h('span', {}, '⏭️ Up next: '), x.next_up) : null, x.goal ? h('div', {}, h('span', {}, '🎯 Goal: '), x.goal) : null),
         h('div', { class: 'when' }, (x.base_city ? '📍 ' + x.base_city + ' · ' : '') + 'updated ' + ago(x.updated_at)),
         x.vibe ? h('div', { class: 'offduty' }, '🎈 Off duty: ' + x.vibe) : null,
-        todoOf(x.id).length ? h('details', { class: 'tdc' }, h('summary', {}, `📋 Today ${todoOf(x.id).filter((t) => t.status === 'done').length}/${todoOf(x.id).length} done`), h('ul', {}, todoOf(x.id).map((t) => h('li', { class: t.status }, TICK[t.status] + ' ' + t.title)))) : null,
+        todoOf(x.id).length ? h('ul', { class: 'tdc' }, todoOf(x.id).map((t) => h('li', { class: t.status }, TICK[t.status] + ' ' + t.title))) : null,
         x.desk ? h('div', { class: 'desktop', title: 'On the desk' }, h('span', { class: 'chair', 'aria-hidden': 'true' }, '🪑'), h('span', {}, x.desk)) : null,
-        x.bio ? h('details', { class: 'persona' }, h('summary', {}, 'About ' + x.name), h('p', {}, x.bio)) : null);
+        x.bio ? h('p', { class: 'persona' }, x.bio) : null));
     };
     for (const t of [...TEAMS, null]) {
       const group = agents.filter((x) => (t ? x.team === t : !TEAMS.includes(x.team)));
       if (!group.length) continue;
-      kids.push(h('h3', { class: 'teamh' }, t || 'Team'), h('div', { class: 'floor' }, group.map(deskCard)));
+      floorKids.push(h('h3', { class: 'teamh' }, t || 'Team'), h('div', { class: 'floor' }, group.map(deskCard)));
     }
+    kids.push(h('section', { class: 'floorsec' }, floorKids));
 
     if (todos.length) {
       const doneN = todos.filter((t) => t.status === 'done').length, doingN = todos.filter((t) => t.status === 'doing').length;
-      kids.push(h('div', { class: 'sech' }, h('h2', {}, "📋 Today's to-dos"), h('small', {}, `${doneN} done · ${doingN} in progress · ${todos.length - doneN - doingN} up next`)));
-      kids.push(h('div', { class: 'todoboard' }, agents.filter((x) => todoOf(x.id).length).map((x) => h('div', { class: 'tdcard' },
+      kids.push(h('details', { class: 'todosec' }, h('summary', { class: 'sech' }, h('h2', {}, "📋 Today's to-dos"), h('small', {}, `${doneN} done · ${doingN} in progress · ${todos.length - doneN - doingN} up next · tap to open`)), h('div', { class: 'todoboard' }, agents.filter((x) => todoOf(x.id).length).map((x) => h('div', { class: 'tdcard' },
         h('div', { class: 'tdh' }, avatar(x.id, 28), h('b', {}, x.name), h('small', { class: 'mut' }, `${todoOf(x.id).filter((t) => t.status === 'done').length}/${todoOf(x.id).length}`)),
-        h('ul', {}, todoOf(x.id).map((t) => h('li', { class: t.status }, h('span', {}, TICK[t.status]), t.title, t.status === 'done' && t.proof ? h('small', { class: 'proof' }, '📎 ' + t.proof) : null)))))));
+        h('ul', {}, todoOf(x.id).map((t) => h('li', { class: t.status }, h('span', {}, TICK[t.status]), t.title, t.status === 'done' && t.proof ? h('small', { class: 'proof' }, '📎 ' + t.proof) : null))))))));
     }
     const radio = h('ul', { class: 'radio' }, (act.data || []).length ? act.data.map((x) => {
       const id = byName[x.who]; const d = DESK[id] || ['📣', '#7B2FF7', '#FF2E88'];
@@ -410,19 +412,34 @@
     if (ME.role === 'owner') {
       const open = (fa.data || []).filter((x) => x.status !== 'done').length;
       right.append(h('div', { class: 'sech' }, h('h2', {}, `🎯 For you, ${first}`), h('small', {}, open ? `${open} waiting` : 'all clear ✨')));
-      right.append(h('div', { class: 'desk' }, (fa.data || []).map((x) => h('div', { class: 'task' + (x.status === 'done' ? ' done' : '') },
+      const taskEl = (x) => h('div', { class: 'task' + (x.status === 'done' ? ' done' : '') },
         h('span', { class: 'u u' + x.urgency, title: ['', 'Urgent', 'This week', 'Later'][x.urgency] }),
         h('div', {}, h('b', {}, x.title), h('div', { class: 'mut small' }, x.how || ''),
           h('div', { class: 'mut small' }, [x.cost && 'Cost: ' + x.cost, x.unblocks && 'Unblocks: ' + x.unblocks, x.owner && 'With: ' + x.owner].filter(Boolean).join(' · '))),
         h('button', { class: 'btn2', type: 'button', onclick: async (ev) => {
           const done = x.status !== 'done'; const r = ev.currentTarget.getBoundingClientRect();
           if (await save('founder_actions', x.id, done ? { status: 'done', done_at: new Date().toISOString().slice(0, 10) } : { status: 'todo', done_at: null })) {
-            if (done) { confetti(r.left + r.width / 2, r.top); toast('Done! The team can move 🎉'); } rerender(); } } }, x.status === 'done' ? 'Undo' : 'Mark done')))));
+            if (done) { confetti(r.left + r.width / 2, r.top); toast('Done! The team can move 🎉'); } rerender(); } } }, x.status === 'done' ? 'Undo' : 'Mark done'));
+      const fd = fa.data || [], doneL = fd.filter((x) => x.status === 'done');
+      right.append(h('div', { class: 'desk' }, fd.filter((x) => x.status !== 'done').map(taskEl)),
+        ...(doneL.length ? [h('details', { class: 'donelist' }, h('summary', {}, `✅ ${doneL.length} done`), h('div', { class: 'desk' }, doneL.map(taskEl)))] : []));
     } else {
       right.append(h('div', { class: 'sech' }, h('h2', {}, '👋 Welcome to the studio')), h('p', { class: 'mut' }, 'Pick your section from the menu above. Everything you change is saved for the whole team.'));
     }
-    kids.push(h('div', { class: 'split' }, left, right));
-    page.replaceChildren(...kids);
+    // order: what needs you first, then the team, then office life
+    let needs = null;
+    if (WC_ROLES.includes(ME.role)) {
+      const [lc, en] = await Promise.all([sb.from('live_chats').select('id,status,last_visitor_at,last_staff_at').eq('status', 'open'), sb.from('enquiries').select('id').eq('status', 'open')]);
+      const waitingChats = (lc.data || []).filter((c) => !c.last_staff_at || new Date(c.last_visitor_at) > new Date(c.last_staff_at)).length, openEnq = (en.data || []).length;
+      const ab = h('button', { type: 'button', class: 'availbtn', onclick: () => { setAvail(!availOn()); } }); paintAvail(ab);
+      needs = h('div', { class: 'needs' }, h('a', { class: 'need' + (waitingChats ? ' hot' : ''), href: '#webchat' }, h('b', {}, String(waitingChats)), ' website chats waiting'),
+        h('a', { class: 'need' + (openEnq ? ' hot' : ''), href: '#enquiries' }, h('b', {}, String(openEnq)), ' open enquiries'), ab);
+    }
+    const pick2 = (cls) => kids.filter((n) => n.classList && n.classList.contains(cls));
+    const order = [...pick2('hero'), needs, ME.role === 'owner' ? h('section', { class: 'foryou' }, right) : null, ...pick2('chips2'), ...pick2('party'),
+      ...pick2('todosec'), ...pick2('floorsec'), h('div', { class: 'split' }, left, ME.role === 'owner' ? h('section', {}, pick2('goals')) : right),
+      ME.role === 'owner' ? null : pick2('goals')[0], ...pick2('fame'), ...pick2('clocks'), ...pick2('pantry')].filter(Boolean);
+    page.replaceChildren(...order);
   }
 
   // ---------------------------------------------------------------- Team chat (Slack-style: channels, DMs, reactions, replies, live)
@@ -502,7 +519,7 @@
   // ---------------------------------------------------------------- Website chat (visitors on jhoomwave.com ↔ a real person here)
   const WC_ROLES = ['owner', 'support', 'sales'];
   const firstName = () => String((ME && (ME.name || ME.email)) || 'Team').split(/[ @]/)[0].slice(0, 30) || 'Team';
-  const availOn = () => { try { return localStorage.getItem('jw_avail') === 'on'; } catch (e) { return false; } };
+  const availOn = () => { let v = null; try { v = localStorage.getItem('jw_avail'); } catch (e) {} return v === 'on' || (v === null && !!ME && ME.role === 'owner'); }; // the founder is available whenever the Office is open, unless he taps Away
   let wcBeat = 0, wcAlert = null, wcUnread = 0;
   async function heartbeat(on) {
     if (!ME || !WC_ROLES.includes(ME.role)) return;
@@ -518,6 +535,15 @@
   function paintAvail(b) { const on = availOn(); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = on ? '🟢 Available for website chat' : '⚪ Away (tap to go available)'; }
   function wcBadge() { const a = document.querySelector('#nav a[data-r="webchat"] .nl'); if (!a) return; let b = a.querySelector('.nbadge'); if (!b) { b = h('span', { class: 'nbadge' }); a.append(b); } b.textContent = wcUnread || ''; b.hidden = !wcUnread; }
   function ping() { try { const AC = window.AudioContext || window.webkitAudioContext; const c = new AC(); const o = c.createOscillator(), g = c.createGain(); o.frequency.value = 880; g.gain.setValueAtTime(0.0001, c.currentTime); g.gain.exponentialRampToValueAtTime(0.2, c.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.35); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime + 0.4); } catch (e) {} }
+  function chatPopup(m) { // big popup in the Office for every new visitor message
+    document.querySelectorAll('.chatpop').forEach((x) => x.remove());
+    const go = () => { sessionStorage.setItem('jw_wc', m.chat_id); pop.remove(); if (location.hash.slice(1) === 'webchat') rerender(); else location.hash = 'webchat'; };
+    const pop = h('div', { class: 'chatpop', role: 'alertdialog', 'aria-label': 'New website chat message' },
+      h('div', { class: 'cph' }, h('span', { class: 'cpdot' }), h('b', {}, '💬 New message on jhoomwave.com'), h('small', {}, 'just now')),
+      h('p', {}, String(m.text || '').slice(0, 240)),
+      h('div', { class: 'cpb' }, h('button', { type: 'button', class: 'btn', onclick: go }, 'Reply now'), h('button', { type: 'button', class: 'lnk', onclick: () => pop.remove() }, 'Later')));
+    document.body.append(pop);
+  }
   function webchatBoot() {
     if (!ME || !WC_ROLES.includes(ME.role)) return;
     if (availOn()) setAvail(true);
@@ -526,7 +552,7 @@
       wcAlert = sb.channel('office-webchat-alert').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_chat_messages' }, (pl) => {
         const m = pl.new; if (!m || m.sender !== 'visitor') return;
         if (location.hash.slice(1) === 'webchat') { const open = sessionStorage.getItem('jw_wc'); if (open === m.chat_id) return; }
-        wcUnread++; wcBadge(); ping(); toast('💬 New message on the website chat');
+        wcUnread++; wcBadge(); ping(); chatPopup(m);
         if (document.hidden && window.Notification && Notification.permission === 'granted') { try { const n = new Notification('JHOOMWAVE · website chat', { body: String(m.text).slice(0, 120), icon: 'logo.svg', tag: 'jw-chat' }); n.onclick = () => { focus(); location.hash = 'webchat'; n.close(); }; } catch (e) {} }
       }).subscribe();
     } catch (e) { console.warn('chat alerts off', e); }

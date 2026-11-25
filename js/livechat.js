@@ -33,6 +33,7 @@
     <input class="lc-trap" tabindex="-1" autocomplete="off" aria-hidden="true">
     <button class="lc-go" type="submit">Start chat</button>
   </form>
+  <form class="lc-contact" hidden><span>📞 Get the reply on WhatsApp/email too</span><div><input maxlength="120" autocomplete="tel" placeholder="WhatsApp number or email" aria-label="WhatsApp number or email"><button type="submit">Save</button></div><small>By saving, you agree we can contact you about this chat.</small></form>
   <form class="lc-send" hidden><input maxlength="1000" placeholder="Type a message…" aria-label="Message"><button type="submit" aria-label="Send">➜</button></form>
   <p class="lc-err" role="status"></p>
   <p class="lc-note">Real people from the JHOOMWAVE team reply here; our AI may help draft some answers. <a href="/privacy/">Privacy</a> · <button class="lc-new" type="button" hidden>New chat</button></p>`;
@@ -59,7 +60,7 @@
 
   function setStatus(on) {
     online = on; pan.classList.toggle('on', on);
-    $('.lc-st span').textContent = on ? 'Online now · usually replies in a minute' : 'Away right now · we reply on WhatsApp/email';
+    $('.lc-st span').textContent = on ? 'Online now · usually replies in a minute' : 'A real person replies right here';
     document.querySelectorAll('.jh-chat').forEach((b) => b.classList.toggle('on', on));
   }
   async function checkStatus() { try { const r = await rpc('chat_status'); setStatus(!!(r && r.online)); } catch (e) { setStatus(false); } }
@@ -73,6 +74,7 @@
   }
   function view() {
     const has = !!chat; start.hidden = has; send.hidden = !has; log.hidden = !has; $('.lc-new').hidden = !has;
+    $('.lc-contact').hidden = !has || !!chat.contact;
   }
   async function poll() {
     if (!chat) return;
@@ -109,7 +111,7 @@
     const go = $('.lc-go'); go.disabled = true; go.textContent = 'Starting…';
     try {
       const r = await rpc('chat_start', { p_name: nameIn.value.trim(), p_contact: contact, p_consent: !!contact, p_text: text, p_page: location.pathname.slice(0, 200) });
-      chat = { id: r.id, token: r.token, last: 0 }; store.set(chat); start.reset(); view(); await poll(); schedule();
+      chat = { id: r.id, token: r.token, last: 0, contact: !!contact }; store.set(chat); start.reset(); view(); await poll(); schedule();
       try { window.track && window.track('chat_start'); } catch (x) {}
     } catch (x) { err.textContent = 'Could not start the chat right now. Please DM @jhoomwave on Instagram.'; }
     go.disabled = false; go.textContent = 'Start chat';
@@ -120,6 +122,12 @@
     inp.value = '';
     try { await rpc('chat_send', { p_id: chat.id, p_token: chat.token, p_text: text }); await poll(); }
     catch (x) { inp.value = text; err.textContent = /slow/.test(x.message) ? 'Too many messages at once. Wait a minute.' : 'Not sent. Check your internet and try again.'; }
+  });
+  $('.lc-contact').addEventListener('submit', async (e) => {
+    e.preventDefault(); err.textContent = '';
+    const inp = $('.lc-contact input'), c = inp.value.trim(); if (!chat || c.length < 6) { err.textContent = 'Please type a WhatsApp number or email.'; return; }
+    try { await rpc('chat_send', { p_id: chat.id, p_token: chat.token, p_text: '📞 You can also reach me at: ' + c, p_contact: c }); chat.contact = true; store.set(chat); inp.value = ''; view(); await poll(); }
+    catch (x) { err.textContent = 'Not saved. Try again.'; }
   });
   $('.lc-new').addEventListener('click', () => { chat = null; seen = []; cursor = 0; store.set(null); log.textContent = ''; view(); msgIn.focus(); });
 

@@ -101,3 +101,7 @@ video,audio{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none
 .lc-solo{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45}
 @media (max-width:760px){.lc-solo{bottom:calc(76px + env(safe-area-inset-bottom,0px));right:12px}}
 .lc-fab{position:relative;width:58px;height:58px;border-radius:50%;border:0;background:linear-gradient(135deg,#7B2FF7,#FF2E88 60%,#FF8A00);font-size:26px;cursor:pointer;box-shadow:0 10px 30px rgb(0 0 0/.5)}
+.lc-contact{display:flex;flex-direction:column;gap:6px;margin-top:8px;padding:10px;border-radius:14px;background:#1F1035;font-size:13px}.lc-contact[hidden]{display:none}
+.lc-contact div{display:flex;gap:6px}.lc-contact input{flex:1;min-width:0;height:40px;border-radius:10px;border:1px solid rgb(255 255 255/.14);background:#0E0518;color:#F6F1FF;padding:0 10px;font:500 14px "Inter",system-ui,sans-serif}
+.lc-contact button{height:40px;padding:0 14px;border:0;border-radius:10px;background:linear-gradient(100deg,#7B2FF7,#FF2E88);color:#fff;font-weight:700;cursor:pointer}
+.lc-contact small{color:#9F92BA;font-size:11px}

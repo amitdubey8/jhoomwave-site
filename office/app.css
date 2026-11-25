@@ -456,3 +456,37 @@ body[data-theme="neon80s"] .ava{border:3px solid #000}
 .wcdraft span{flex:1}
 .nbadge{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:999px;background:#FF2E88;color:#fff;font-size:11px;line-height:18px;text-align:center}
 .nbadge[hidden]{display:none}
+/* Office page: what needs you first, compact team cards */
+.needs{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}
+.need{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:14px;background:#1F1035;border:1px solid rgb(255 255 255/.1);color:#D9CCF0;text-decoration:none;font-size:14px}
+.need b{font:800 18px "Poppins",system-ui,sans-serif;color:#fff}
+.need.hot{border-color:#FF2E88;box-shadow:0 0 0 3px rgb(255 46 136/.18);color:#fff}
+.foryou{margin:6px 0 18px}
+.donelist{margin-top:8px}.donelist summary{cursor:pointer;color:#B3A6CC;font-size:13px;padding:6px 0}
+.desk2 .more{margin-top:6px}.desk2 .more summary{cursor:pointer;color:#B3A6CC;font-size:12.5px;padding:4px 0;list-style:none}
+.desk2 .more summary::before{content:'▸ '}.desk2 .more[open] summary::before{content:'▾ '}
+.desk2 .more summary::-webkit-details-marker{display:none}
+.desk2 p.persona{margin:8px 0 0;font-size:12.5px;color:#B3A6CC;line-height:1.45}
+.desk2 ul.tdc{list-style:none;margin:8px 0 0;padding:0;font-size:12.5px}.desk2 ul.tdc li{padding:2px 0}
+.tdmini{margin-top:6px;font-size:12px;color:#B3A6CC}
+.todosec{margin:18px 0}.todosec>summary{cursor:pointer;list-style:none}.todosec>summary::-webkit-details-marker{display:none}
+.todosec>summary h2::after{content:' ▸';font-size:.8em;opacity:.6}.todosec[open]>summary h2::after{content:' ▾'}
+.chatpop{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:76px;z-index:90;width:min(360px,calc(100vw - 32px));padding:14px 16px;border-radius:18px;background:#1F1035;border:1.5px solid #FF2E88;box-shadow:0 20px 60px rgb(0 0 0/.6),0 0 30px rgb(255 46 136/.35);animation:cpin .35s ease}
+.chatpop .cph{display:flex;align-items:center;gap:8px}.chatpop .cph small{margin-left:auto;color:#B3A6CC;font-size:11px}
+.cpdot{width:10px;height:10px;border-radius:50%;background:#3ddc97;box-shadow:0 0 0 0 rgb(61 220 151/.6);animation:cpp 1.4s infinite}
+.chatpop p{margin:10px 0 12px;font-size:15px;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.chatpop .cpb{display:flex;gap:12px;align-items:center}
+@keyframes cpin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@keyframes cpp{to{box-shadow:0 0 0 10px rgb(61 220 151/0)}}
+@media (max-width:760px){.chatpop{top:auto;bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
+/* phone: team floor as a compact 2-column grid */
+@media (max-width:760px){
+  .floor{grid-template-columns:1fr 1fr;gap:10px}
+  .desk2{padding:12px;gap:6px;border-radius:18px}
+  .desk2 .who{flex-direction:column;align-items:flex-start;gap:6px}
+  .desk2 .rl{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11.5px}
+  .desk2 .nm{font-size:15px}
+  .desk2 .bubble{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;padding:8px 10px}
+  .desk2 .mood{font-size:12px}
+  .desk2 .more[open]{grid-column:1/-1}
+}
