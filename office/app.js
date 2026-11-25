@@ -259,12 +259,15 @@
   const radioPref = () => { try { return localStorage.getItem('jw_radio') !== 'off'; } catch (e) { return true; } };
   const setRadioPref = (on) => { try { localStorage.setItem('jw_radio', on ? 'on' : 'off'); } catch (e) {} };
   // browsers allow sound only after a tap: the first tap anywhere in the Office starts the radio (unless you turned it off)
-  addEventListener('pointerdown', () => { if (ME && radioPref() && (!radio.el || (!radio.el.src))) radioPlay(0); }, { once: true, capture: true });
+  // iPhone: play through the silent switch like a music app (Safari 16.4+), so the radio is not muted by the ringer switch
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+  const firstTap = () => { if (!ME) return; removeEventListener('pointerdown', firstTap, true); if (radioPref() && (!radio.el || !radio.el.src)) radioPlay(0); };
+  addEventListener('pointerdown', firstTap, true); // waits until you are signed in; a tap on the login screen does not use it up
   function radioPlay(i) {
     radio.list = radioList(); radio.i = ((i % radio.list.length) + radio.list.length) % radio.list.length;
     if (!radio.el) { radio.el = new Audio(); radio.el.volume = 0.35; radio.el.addEventListener('ended', () => radioPlay(radio.i + 1)); radio.el.addEventListener('error', () => { radio.fails = (radio.fails || 0) + 1; if (radio.fails < radio.list.length) radioPlay(radio.i + 1); else { radio.el.removeAttribute('src'); radioUI(); } }); radio.el.addEventListener('playing', () => { radio.fails = 0; }); }
     hookAnalyser(); if (actx && actx.state === 'suspended') actx.resume();
-    radio.el.src = radio.list[radio.i].src; radio.el.play().catch(() => toast('Tap play again to start the music')); radioUI();
+    radio.el.src = radio.list[radio.i].src; radio.el.play().then(() => { if (actx && actx.state !== 'running') actx.resume(); }).catch(() => toast('Tap ▶ Studio radio (top bar) to start the music')); radioUI();
   }
   function radioUI() { document.querySelectorAll('.radioplayer').forEach((w) => { const on = radio.el && !radio.el.paused;
     w.querySelector('.rp-play').textContent = on ? '⏸' : '▶'; w.querySelector('.rp-name').textContent = radio.el && radio.list[radio.i] ? '🎵 ' + radio.list[radio.i].name : '🎵 Studio radio'; w.classList.toggle('on', !!on); }); }
@@ -499,6 +502,7 @@
   const CAMS = [['CAM 01 · STUDIO FLOOR', 1, '50% 50%'], ['CAM 02 · SEA LOUNGE', 1.9, '56% 52%'], ['CAM 03 · DJ CORNER', 2.1, '80% 56%'], ['CAM 04 · PANTRY', 2.2, '88% 68%']];
   let liveTimers = [], soundOn = false, helloAudio = null;
   async function pageLive(page) {
+    soundOn = !!(radio.el && !radio.el.paused); // the Sound button shows the real state of the studio music
     liveTimers.forEach((t) => (t && t.clear ? t.clear() : clearInterval(t))); liveTimers = [];
     const [ag, msgs] = await Promise.all([sb.from('agents').select('*').order('sort'), sb.from('messages').select('author,text,at,room').like('room', '%').order('at', { ascending: false }).limit(30)]);
     (ag.data || []).forEach((x) => { if (x.avatar) AV[x.id] = x.avatar; });
@@ -528,7 +532,7 @@
     const feed = (msgs.data || []).slice(0, 12);
     const camBtns = h('div', { class: 'cambtns' }, CAMS.map((c, i) => h('button', { type: 'button', onclick: () => { cam = i; setCam(); } }, 'CAM ' + (i + 1))),
       h('button', { type: 'button', onclick: () => { (stage.requestFullscreen ? stage.requestFullscreen() : Promise.reject()).catch(() => toast('Full screen is not available here')); } }, '⛶ Full screen'),
-      h('button', { type: 'button', 'aria-pressed': String(soundOn), onclick: (e) => { soundOn = !soundOn; e.currentTarget.textContent = soundOn ? '🔊 Sound on' : '🔈 Sound off'; e.currentTarget.setAttribute('aria-pressed', String(soundOn)); } }, soundOn ? '🔊 Sound on' : '🔈 Sound off'));
+      h('button', { type: 'button', 'aria-pressed': String(soundOn), onclick: (e) => { soundOn = !soundOn; setRadioPref(soundOn); if (soundOn) { if (!radio.el || !radio.el.src) radioPlay(0); else { if (actx && actx.state !== 'running') actx.resume(); if (radio.el.paused) radio.el.play().catch(() => {}); radioUI(); } } else if (radio.el && !radio.el.paused) { radio.el.pause(); radioUI(); } e.currentTarget.textContent = soundOn ? '🔊 Sound on' : '🔈 Sound off'; e.currentTarget.setAttribute('aria-pressed', String(soundOn)); } }, soundOn ? '🔊 Sound on' : '🔈 Sound off'));
     stage.append(world, h('div', { class: 'scan', 'aria-hidden': 'true' }), h('div', { class: 'vig', 'aria-hidden': 'true' }),
       h('div', { class: 'hud tl' }, h('span', { class: 'rec' }, '● REC'), label), h('div', { class: 'hud tr' }, clock), h('div', { class: 'hud bl' }, camBtns),
       h('div', { class: 'hud br' }, h('span', { class: 'mut small' }, 'Virtual studio cam · built live from the team’s real status and chat')), ticker);
