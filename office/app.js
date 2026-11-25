@@ -113,7 +113,7 @@
   // sign out after inactivity
   let lastAct = Date.now();
   ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach((ev) => addEventListener(ev, () => { lastAct = Date.now(); }, { passive: true }));
-  setInterval(() => { if (ME && Date.now() - lastAct > (C.idleMinutes || 30) * 60000) signOut('Signed out after ' + (C.idleMinutes || 30) + ' minutes without activity.'); }, 30000);
+  setInterval(() => { if (ME && !(availOn() && WC_ROLES.includes(ME.role)) && Date.now() - lastAct > (C.idleMinutes || 30) * 60000) signOut('Signed out after ' + (C.idleMinutes || 30) + ' minutes without activity.'); }, 30000);
 
   // ---------------------------------------------------------------- sections by role
   const ALL = ['owner', 'marketing', 'sales', 'support', 'viewer'];
@@ -191,9 +191,9 @@
     'creator-jhoomi': ['💃', '#FF2E88', '#FFD23F'], 'creator-veer': ['🎧', '#7B2FF7', '#2EE59D'], 'creator-noor': ['🌙', '#3D7BFF', '#FF2E88'],
     'support-anaya': ['💬', '#2EE59D', '#FF8A00'], 'support-sam': ['🧰', '#00C2FF', '#FF8A00'],
     hr: ['🌸', '#FF2E88', '#2EE59D'], perf: ['🎯', '#FF8A00', '#7B2FF7'], seo: ['🔎', '#00C2FF', '#FFD23F'], community: ['🤳', '#FF2E88', '#00C2FF'], video: ['🎬', '#7B2FF7', '#FF8A00'],
-    ops: ['📦', '#FF8A00', '#2EE59D'], trust: ['🛡️', '#3D7BFF', '#2EE59D'],
+    ops: ['📦', '#FF8A00', '#2EE59D'], trust: ['🛡️', '#3D7BFF', '#2EE59D'], product: ['🧭', '#00C2FF', '#FF2E88'], ideation: ['💡', '#FFD23F', '#7B2FF7'],
   };
-  const TEAMS = ['Leadership', 'Tech squad', 'Music studio', 'Marketing & creators', 'Sales & global', 'Support desk', 'Operations & trust', 'Finance', 'People & culture'];
+  const TEAMS = ['Leadership', 'Product & ideas', 'Tech squad', 'Music studio', 'Marketing & creators', 'Sales & global', 'Support desk', 'Operations & trust', 'Finance', 'People & culture'];
   const monday = (d) => { const x = new Date(d); const k = (x.getDay() + 6) % 7; x.setDate(x.getDate() - k); return x.toISOString().slice(0, 10); };
   const MOOD = { working: '🎧 In the zone', waiting: '☕ Waiting on someone', blocked: '🚧 Blocked', planned: '🪑 Joining soon' };
   function ago(s) {
@@ -512,6 +512,7 @@
   function setAvail(on) {
     try { localStorage.setItem('jw_avail', on ? 'on' : 'off'); } catch (e) {}
     clearInterval(wcBeat); heartbeat(on); if (on) wcBeat = setInterval(() => heartbeat(true), 45000);
+    if (on && window.Notification && Notification.permission === 'default') { try { Notification.requestPermission(); } catch (e) {} }
     document.querySelectorAll('.availbtn').forEach(paintAvail);
   }
   function paintAvail(b) { const on = availOn(); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = on ? '🟢 Available for website chat' : '⚪ Away (tap to go available)'; }
@@ -526,6 +527,7 @@
         const m = pl.new; if (!m || m.sender !== 'visitor') return;
         if (location.hash.slice(1) === 'webchat') { const open = sessionStorage.getItem('jw_wc'); if (open === m.chat_id) return; }
         wcUnread++; wcBadge(); ping(); toast('💬 New message on the website chat');
+        if (document.hidden && window.Notification && Notification.permission === 'granted') { try { const n = new Notification('JHOOMWAVE · website chat', { body: String(m.text).slice(0, 120), icon: 'logo.svg', tag: 'jw-chat' }); n.onclick = () => { focus(); location.hash = 'webchat'; n.close(); }; } catch (e) {} }
       }).subscribe();
     } catch (e) { console.warn('chat alerts off', e); }
   }
