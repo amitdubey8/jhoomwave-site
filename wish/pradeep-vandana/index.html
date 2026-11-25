@@ -84,6 +84,27 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
 .foot{text-align:center;color:var(--mute);font-size:12px;margin-top:24px}.foot a{color:var(--gold)}
 .eq{display:none}
 @media (prefers-reduced-motion:reduce){.petal,.tw{animation:none!important}.art{transition:none}}
+.eng{display:flex;align-items:center;gap:10px;margin:14px 0 0;flex-wrap:wrap}
+.hb{display:flex;align-items:center;gap:8px;border-radius:99px;padding:10px 18px;font:700 16px/1 Poppins;cursor:pointer;color:#fff;background:rgb(255 255 255/.12);border:1px solid rgb(255 255 255/.2);transition:transform .15s}
+.hb:active{transform:scale(.92)}.hb .h{font-size:22px;line-height:1}
+.hb.on{background:linear-gradient(90deg,#E0245E,#FF6B9E);border-color:transparent}
+.eng .vw{margin-left:auto;font-size:13px;color:var(--mute)}
+.eng .bl{border:0;background:none;color:var(--gold);font:700 14px Poppins;cursor:pointer;padding:8px 4px}
+.fly{position:fixed;pointer-events:none;font-size:26px;z-index:50;animation:fly 1.6s ease-out forwards}
+@keyframes fly{0%{opacity:1;transform:translate(0,0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),-260px) scale(1.4) rotate(var(--r))}}
+.bw input,.bw textarea{width:100%;border-radius:12px;border:1px solid rgb(255 255 255/.22);background:rgb(0 0 0/.25);color:#fff;font:400 16px/1.5 Poppins,'Tiro Devanagari Hindi',sans-serif;padding:11px 12px;margin-bottom:8px}
+.bw textarea{min-height:76px;resize:vertical}.bw .hint2{margin:0 0 12px;font-size:13px;color:var(--mute)}
+.qk{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px;scrollbar-width:none}
+.qk button{flex:none;border:1px solid rgb(246 196 83/.45);background:rgb(246 196 83/.08);color:var(--ink);border-radius:99px;padding:6px 11px;font:400 14px 'Tiro Devanagari Hindi',Poppins,serif;cursor:pointer}
+.bw .send{width:100%;border:0;cursor:pointer;display:block;text-align:center;padding:14px;border-radius:14px;font:700 16px Poppins;color:#1a0f00;background:linear-gradient(90deg,var(--gold),var(--marigold))}
+.bw .msg{min-height:20px;margin:8px 0 0;font-size:14px;text-align:center}
+.bl-list{display:grid;gap:10px;margin-top:14px}
+.bl-item{padding:12px 14px;border-radius:14px;background:rgb(255 255 255/.06);border-left:3px solid var(--gold);animation:pop .4s ease}
+.bl-item p{margin:0;font:400 17px/1.6 'Tiro Devanagari Hindi',Poppins,serif;white-space:pre-wrap;word-break:break-word}
+.bl-item b{display:block;margin-top:4px;color:var(--gold);font-size:14px}.bl-item b small{color:var(--mute);font-weight:400}
+.bl-empty{text-align:center;color:var(--mute);font-size:14px;margin:8px 0 0}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fly{display:none}.bl-item{animation:none}}
 </style>
 </head>
 <body>
@@ -116,6 +137,11 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
     <button class="sm" id="fwd" type="button" aria-label="Forward 10 seconds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
   </div>
   <p class="hint" id="hint">▶ dabaiye, gaana shuru ho jaayega 🎶</p>
+  <div class="eng">
+    <button class="hb" id="hb" type="button" aria-pressed="false" aria-label="प्यार भेजें"><span class="h">🤍</span><span id="hc">प्यार भेजें</span></button>
+    <button class="bl" type="button" id="goBless">🙏 आशीर्वाद दें</button>
+    <span class="vw" id="vw"></span>
+  </div>
 
   <section class="card pl" aria-label="A song for you"><h2>🎁 A song for you · 6 gaane</h2><ol id="pl"></ol></section>
 
@@ -130,10 +156,25 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
     </div>
   </section>
 
+  <section class="card" aria-label="Shayari"><h2>✨ एक शायरी, आपके नाम</h2>
+    <div class="note" lang="hi" style="text-align:center;font-size:1.12em;line-height:1.9"><p>एक नाम में रोशनी, एक नाम में आराधना,<br>एक जीवन का उजाला, दूजे की हर दुआ।<br>यूँ ही महकता रहे मोहब्बत का ये सफ़र,<br>हर जन्म में साथ हों प्रदीप और वंदना। ❤️</p><p class="sig" style="text-align:center">💐 शादी की सालगिरह की ढेरों शुभकामनाएँ!</p></div>
+  </section>
   <section class="card" aria-label="Message"><h2>Amit ki taraf se</h2>
     <div class="note" lang="hi"><p>मम्मी पापा,</p><p>आपकी उँगली पकड़ के चलना सीखा, आपकी दुआओं से सपने बुने। आज आपकी शादी की सालगिरह पर बस इतना कहना है: आप दोनों यूँ ही मुस्कुराते रहें, साथ रहें, हमेशा।</p><p class="sig">आपका, <b>अमित</b> ❤️</p></div>
   </section>
 
+  <section class="card bw" id="bless" aria-label="आशीर्वाद">
+    <h2>🙏 आशीर्वाद की किताब</h2>
+    <p class="hint2">मम्मी-पापा के लिए अपनी दुआ लिखिए, वे यहाँ सबके आशीर्वाद पढ़ेंगे।</p>
+    <form id="bf" autocomplete="on">
+      <input id="bn" name="name" maxlength="40" placeholder="आपका नाम (जैसे: बुआ, मामा जी, स्वाति)" required>
+      <div class="qk" id="qk"><button type="button">सदा सुहागन रहो 🙏</button><button type="button">जोड़ी सलामत रहे ❤️</button><button type="button">बहुत सुंदर गाना! 🎶</button><button type="button">सालगिरह मुबारक 💐</button><button type="button">भगवान सदा साथ रहें 🪔</button></div>
+      <textarea id="bm" maxlength="280" placeholder="अपना आशीर्वाद लिखें…" required></textarea>
+      <button class="send" type="submit" id="bs">💌 आशीर्वाद भेजें</button>
+      <p class="msg" id="bmsg" role="status"></p>
+    </form>
+    <div class="bl-list" id="bll"></div>
+  </section>
   <div class="btns">
     <a class="btn wa" id="wa" href="#">📲 WhatsApp par bhejo</a>
     <a class="btn dl" href="/audio/wish/mummy_papa_anniversary_from_amit.mp4" download="Happy_Anniversary_Mummy_Papa.mp4">⬇️ Video download karo (WhatsApp ke liye)</a>
@@ -177,14 +218,44 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border:0;border-radiu
   a.addEventListener('ended',()=>{rain(30);if(cur<TRACKS.length-1){pick(cur+1,true);}else{ui();$('hint').textContent='💐 Happy Anniversary Mummy Papa! Dobara sunne ke liye ▶';}});
   seek.addEventListener('input',()=>{seek.dragging=true;seek.style.setProperty('--p',seek.value+'%');$('cur').textContent=fmt(seek.value/100*(a.duration||0));});
   seek.addEventListener('change',()=>{if(a.duration)a.currentTime=seek.value/100*a.duration;seek.dragging=false;});
-  $('heart').addEventListener('click',e=>{const b=e.currentTarget;b.classList.toggle('on');b.textContent=b.classList.contains('on')?'♥':'♡';if(b.classList.contains('on'))rain(12);});
+  window.__rain=rain;
+  // ---- hearts, views, blessings
+  (function(){
+  var SB='https://srcclctqfkagpolhocqf.supabase.co/rest/v1/rpc/',KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyY2NsY3RxZmthZ3BvbGhvY3FmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NDY1OTYsImV4cCI6MjExMTEyMjU5Nn0.0_T3iBE2ssrABWWbL8hkLqOOvpany5uP2LSFlhi0G54',SLUG='pradeep-vandana';
+  function rpc(fn,body){return fetch(SB+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY,Authorization:'Bearer '+KEY},body:JSON.stringify(body)}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
+  var anon;try{anon=localStorage.getItem('jw_wish_id')}catch(e){}
+  if(!anon){anon=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now()).replace(/-/g,'').slice(0,24);try{localStorage.setItem('jw_wish_id',anon)}catch(e){}}
+  var hb=document.getElementById('hb'),hc=document.getElementById('hc'),vw=document.getElementById('vw'),bll=document.getElementById('bll'),top=document.getElementById('heart'),liked=false,hearts=0;
+  function heartUI(){hb.classList.toggle('on',liked);hb.setAttribute('aria-pressed',liked);hb.querySelector('.h').textContent=liked?'❤️':'🤍';hc.textContent=hearts?(hearts+' प्यार'):'प्यार भेजें';if(top){top.classList.toggle('on',liked);top.textContent=liked?'♥':'♡'}}
+  function ago(iso){var m=Math.round((Date.now()-new Date(iso))/60000);if(m<1)return 'अभी';if(m<60)return m+' मिनट पहले';var h=Math.round(m/60);if(h<24)return h+' घंटे पहले';return Math.round(h/24)+' दिन पहले'}
+  function item(b,first){var d=document.createElement('div');d.className='bl-item';var p=document.createElement('p');p.textContent=b.msg;var n=document.createElement('b');n.textContent='– '+b.name+' ';var sm=document.createElement('small');sm.textContent='· '+ago(b.at);n.appendChild(sm);d.append(p,n);if(first)bll.prepend(d);else bll.append(d)}
+  function empty(){if(!bll.children.length){var e=document.createElement('p');e.className='bl-empty';e.id='ble';e.textContent='सबसे पहला आशीर्वाद आप दीजिए 🙏';bll.append(e)}}
+  rpc('wish_stats',{p_slug:SLUG,p_anon:anon}).then(function(d){if(!d){empty();return}hearts=d.hearts;liked=d.liked;heartUI();if(d.views>1)vw.textContent='👀 '+d.views+' बार देखा गया';(d.blessings||[]).forEach(function(b){item(b)});empty()});
+  function burst(x,y){for(var i=0;i<9;i++){var s=document.createElement('span');s.className='fly';s.textContent=['❤️','💖','💕','🌸','✨'][i%5];s.style.left=(x-13)+'px';s.style.top=(y-13)+'px';s.style.setProperty('--dx',(Math.random()*160-80)+'px');s.style.setProperty('--r',(Math.random()*90-45)+'deg');s.style.animationDelay=(i*60)+'ms';document.body.append(s);setTimeout(function(n){n.remove()}.bind(null,s),2000)}}
+  function love(el){var r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+10);if(navigator.vibrate)navigator.vibrate(20);if(liked)return;liked=true;hearts++;heartUI();rpc('wish_heart',{p_slug:SLUG,p_anon:anon}).then(function(n){if(typeof n==='number'){hearts=n;heartUI()}})}
+  hb.addEventListener('click',function(){love(hb)});
+  if(top){var t2=top.cloneNode(true);top.replaceWith(t2);top=t2;top.addEventListener('click',function(){love(top);if(typeof window.__rain==='function')window.__rain(12)})}
+  document.getElementById('goBless').addEventListener('click',function(){document.getElementById('bless').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){document.getElementById('bn').focus({preventScroll:true})},500)});
+  var bn=document.getElementById('bn'),bm=document.getElementById('bm'),bs=document.getElementById('bs'),bmsg=document.getElementById('bmsg');
+  try{bn.value=localStorage.getItem('jw_wish_name')||''}catch(e){}
+  document.getElementById('qk').addEventListener('click',function(e){if(e.target.tagName==='BUTTON'){bm.value=(bm.value?bm.value.trim()+' ':'')+e.target.textContent;bm.focus()}});
+  var ERR={name:'अपना नाम लिखिए 🙂',msg:'थोड़ा सा आशीर्वाद लिखिए 🙂',link:'कृपया लिंक न डालें 🙏',words:'कृपया अच्छे शब्दों में लिखें 🙏',limit:'आज के लिए आपके 3 आशीर्वाद पहुँच गए ❤️',busy:'अभी बहुत लोग लिख रहे हैं, थोड़ी देर में कोशिश करें',closed:'यह पेज अभी आशीर्वाद नहीं ले रहा'};
+  document.getElementById('bf').addEventListener('submit',function(e){e.preventDefault();var n=bn.value.trim(),m=bm.value.trim();if(!n){bmsg.textContent=ERR.name;return}if(m.length<2){bmsg.textContent=ERR.msg;return}
+    bs.disabled=true;bmsg.textContent='भेज रहे हैं…';
+    rpc('wish_bless',{p_slug:SLUG,p_anon:anon,p_name:n,p_msg:m}).then(function(r){bs.disabled=false;
+      if(!r){bmsg.textContent='नेटवर्क की दिक्कत, दोबारा भेजें';return}
+      if(r.error){bmsg.textContent=ERR[r.error]||'दोबारा कोशिश करें';return}
+      try{localStorage.setItem('jw_wish_name',n)}catch(e){}
+      var em=document.getElementById('ble');if(em)em.remove();item(r,true);bm.value='';bmsg.textContent='आपका आशीर्वाद पहुँच गया! 🙏❤️';var rr=bs.getBoundingClientRect();burst(rr.left+rr.width/2,rr.top)})});
+  })();
+
   if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:'Happy Anniversary Mummy Papa',artist:'Amit · JHOOMWAVE',album:'Pradeep & Vandana · 25 Nov',artwork:[{src:'/img/wish/mummy_papa.jpg',sizes:'1040x1300',type:'image/jpeg'}]});
     navigator.mediaSession.setActionHandler('play',go);navigator.mediaSession.setActionHandler('pause',()=>a.pause());
     navigator.mediaSession.setActionHandler('seekbackward',()=>{a.currentTime=Math.max(0,a.currentTime-10);});navigator.mediaSession.setActionHandler('seekforward',()=>{a.currentTime=Math.min(a.duration,a.currentTime+10);});}catch(e){}}
   pick(0,false);
   go();
   document.addEventListener('pointerdown',e=>{if(a.paused&&!a.dataset.rained&&!e.target.closest('a,button,input'))go();},{once:true});
-  const msg='💐 Happy Anniversary Mummy Papa (Pradeep & Vandana)! 25 November, Indore 🎶\n\nUnke liye ek special gaana, suniye 👇\n'+location.href.split('#')[0]+'\n\n– Amit ❤️\n\n🎵 Made with love by JHOOMWAVE\nApno ke naam ka gaana banwaiye: https://jhoomwave.com\n📸 Follow: https://instagram.com/jhoomwave';
+  const msg='💐 Happy Anniversary Mummy Papa (Pradeep & Vandana)! 25 November, Indore 🎶\n\nएक नाम में रोशनी, एक नाम में आराधना,\nएक जीवन का उजाला, दूजे की हर दुआ।\nयूँ ही महकता रहे मोहब्बत का ये सफ़र,\nहर जन्म में साथ हों प्रदीप और वंदना। ❤️\n\nUnke liye special gaane, suniye 👇\n'+location.href.split('#')[0]+'\n\n– Amit ❤️\n\n🎵 Made with love by JHOOMWAVE\nApno ke naam ka gaana banwaiye: https://jhoomwave.com\n📸 Follow: https://instagram.com/jhoomwave';
   $('wa').href='https://wa.me/?text='+encodeURIComponent(msg);
   $('share')&&$('share').addEventListener('click',async()=>{const url=location.href.split('#')[0];if(navigator.share){try{await navigator.share({title:'Happy Anniversary Mummy Papa',text:'💐 Pradeep & Vandana ke liye ek special gaana 🎶',url});}catch(e){}}else{try{await navigator.clipboard.writeText(url);$('hint').textContent='Link copy ho gaya ✓';}catch(e){}}});
   const to=document.createElement('div');to.className='toran';document.body.append(to);
