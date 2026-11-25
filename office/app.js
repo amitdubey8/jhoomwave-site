@@ -392,7 +392,7 @@
       kids.push(h('div', { class: 'sech' }, h('h2', {}, "📋 Today's to-dos"), h('small', {}, `${doneN} done · ${doingN} in progress · ${todos.length - doneN - doingN} up next`)));
       kids.push(h('div', { class: 'todoboard' }, agents.filter((x) => todoOf(x.id).length).map((x) => h('div', { class: 'tdcard' },
         h('div', { class: 'tdh' }, avatar(x.id, 28), h('b', {}, x.name), h('small', { class: 'mut' }, `${todoOf(x.id).filter((t) => t.status === 'done').length}/${todoOf(x.id).length}`)),
-        h('ul', {}, todoOf(x.id).map((t) => h('li', { class: t.status }, h('span', {}, TICK[t.status]), t.title)))))));
+        h('ul', {}, todoOf(x.id).map((t) => h('li', { class: t.status }, h('span', {}, TICK[t.status]), t.title, t.status === 'done' && t.proof ? h('small', { class: 'proof' }, '📎 ' + t.proof) : null)))))));
     }
     const radio = h('ul', { class: 'radio' }, (act.data || []).length ? act.data.map((x) => {
       const id = byName[x.who]; const d = DESK[id] || ['📣', '#7B2FF7', '#FF2E88'];
@@ -638,7 +638,10 @@
         { k: 'need', label: 'What they need', area: true },
       ], async (v) => { const { error: e } = await sb.from('leads').insert(v); if (e) { fail(e); return false; } toast('Lead added'); return true; }),
       table([
-        { t: 'Lead', v: (r) => [h('b', {}, r.name), r.business ? h('div', { class: 'sub' }, r.business) : null, h('div', { class: 'sub' }, `${r.segment} · ${r.source}${r.city ? ' · ' + r.city : ''}`)] },
+        { t: 'Lead', v: (r) => [h('b', {}, r.name), ' ', r.source === 'ai_research' ? h('span', { class: 'chip ' + (r.verified ? 'ok' : 'warn'), title: r.verify_note || 'Not checked yet' }, r.verified ? '✓ Verified real' : 'Not verified') : null,
+          r.business && r.business !== r.name ? h('div', { class: 'sub' }, r.business) : null, h('div', { class: 'sub' }, `${r.segment} · ${r.source}${r.city ? ' · ' + r.city : ''}`),
+          /^https:\/\//.test(r.source_url || '') ? h('a', { class: 'sub', href: r.source_url, target: '_blank', rel: 'noopener noreferrer' }, 'Source ↗') : null,
+          r.verify_note ? h('div', { class: 'sub' }, r.verify_note) : null] },
         { t: 'Contact', v: (r) => [r.phone ? h('div', {}, r.phone) : null, r.email ? h('div', {}, r.email) : null, h('div', { class: 'sub' }, r.consent ? 'OK to contact' : 'No consent yet')] },
         { t: 'Need', v: (r) => [r.need || '', r.ai_summary ? h('div', { class: 'sub' }, 'AI: ' + r.ai_summary) : null] },
         { t: 'Status', v: (r) => statusSelect(r.status, LEAD_ST, (s) => save('leads', r.id, { status: s })) },

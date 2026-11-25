@@ -439,3 +439,6 @@ body[data-theme="neon80s"] .ava{border:3px solid #000}
 .tfeed li{color:#e8def9;line-height:1.35}.tfeed small{color:var(--mute)}
 .camstage:fullscreen .taskhud{width:min(380px,30%)}
 @media (max-width:640px){.taskhud{left:8px;right:8px;top:auto;bottom:96px;width:auto;max-height:42%}}
+/* truth checks: verified leads, proof on done to-dos */
+.chip.ok{color:#3ddc97}.chip.warn{color:#ffb347}
+.todoboard li .proof{display:block;font-size:11px;opacity:.7;margin:2px 0 0 22px;word-break:break-word}
