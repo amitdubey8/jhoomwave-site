@@ -109,13 +109,7 @@
   </div>
   <div class="disc"><span>© 2026 JHOOMWAVE</span><span>Vocals are AI-generated synthetic voices (JHOOMWAVE Voices) made with a licensed AI music provider, on lyrics we write. We label AI content wherever platforms allow.</span></div>
 </div></footer>
-<script>
-(function(){let a=null,cur=null;document.querySelectorAll('.pb[data-src]').forEach(b=>b.addEventListener('click',()=>{
- if(cur===b&&a&&!a.paused){a.pause();return}
- if(a)a.pause();a=new Audio(b.dataset.src);cur=b;window.jwSolo&&jwSolo(a);a.play().catch(()=>{});
- const lbl=b.textContent;document.querySelectorAll('.pb').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');
- a.addEventListener('pause',()=>b.setAttribute('aria-pressed','false'));try{window.gtag&&gtag('event','music_play',{src:b.dataset.src})}catch(e){}}))})();
-</script>
+<script src="/js/jw-player.js?v=1" defer></script>
 <nav class="tb" aria-label="Quick"><a href="/"><span aria-hidden="true">🏠</span>Home</a><a href="/#shop"><span aria-hidden="true">🎵</span>Songs</a><a href="/#make" class="mk"><span aria-hidden="true">＋</span>Make</a><a href="/weddings/"><span aria-hidden="true">💍</span>Weddings</a><a href="/kids/"><span aria-hidden="true">🧸</span>Kids</a></nav>
 <script src="/js/nav.js"></script>
 <script src="/js/jhoomi.js" defer></script>
